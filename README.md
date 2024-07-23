@@ -29,5 +29,6 @@ node.js
     3. git reset --hard origin/branch-name, discard all local changes
     4. git clean -fd, remove untracked files and directories
     5. git status, ensure everything is clean 
-10.
+10. Delete everthing in a new branch
+11. npx create-react-app my-app
 
