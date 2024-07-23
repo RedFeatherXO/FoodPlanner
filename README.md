@@ -24,5 +24,10 @@ node.js
                         object { allowedHosts?, bonjour?, client?, compress?, devMiddleware?, headers?, historyApiFallback?, host?, hot?, ipc?, liveReload?, onListening?, open?, port?, proxy?, server?, setupExitSignals?, setupMiddlewares?, static?, watchFiles?, webSocketServer? }
                         PS D:\_Projects\FoodWebsite\FoodWebsite>"
 9. Throw everthing i had out the window and start from scratch and simpler
+    1. Check branch your on with git branch
+    2. git fetch origin To ensure you have the most recent version of the repository from GitHub
+    3. git reset --hard origin/branch-name, discard all local changes
+    4. git clean -fd, remove untracked files and directories
+    5. git status, ensure everything is clean 
 10.
 
