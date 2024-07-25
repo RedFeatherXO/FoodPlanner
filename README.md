@@ -40,4 +40,5 @@ node.js
 18. Weekday menu as left and right buttons size and position needs to be fixed
 19. is Fixed
 20. Firefox scrollbar is weird
+21. Added Checkbox
 

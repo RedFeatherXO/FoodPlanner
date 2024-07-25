@@ -1,5 +1,5 @@
 import React from 'react';
-import { Layout, Menu, Button } from 'antd';
+import { Layout, Menu, Button, Checkbox} from 'antd';
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
 import './App.css';
 
@@ -27,12 +27,44 @@ function App() {
       <Content className="content">
         <div className="food-preview">
           <div className="food-details">
-            <h1>Lasagne (vegan)</h1>
+            <h1>Thai-Curry (Omnivore)</h1>
           </div>
           <div className="boxes-container">
             <div className="box box1">
-              <h2 className='Hbox'>Ingredients</h2>
-              <div className="box-content">
+              <div className='Hbox'>
+                <h2>Zutaten (11 Stück)</h2> 
+              </div>                            
+              <div className="box-content2">
+                <Checkbox className='ZutatenCheck'>
+                  <div className="checkbox-content">
+                    <span className='first-column'>75g</span>
+                    <span className="second-column">Basmatireis</span>
+                  </div>
+                </Checkbox>
+                <Checkbox className='ZutatenCheck'>
+                  <div className="checkbox-content">
+                    <span className='first-column'>125g</span>
+                    <span className="second-column">Hähnchenbrustfilet</span>
+                  </div>                  
+                </Checkbox>
+                <Checkbox className='ZutatenCheck'>
+                  <div className="checkbox-content">
+                    <span className='first-column'>2</span>
+                    <span className="second-column">Frühlingszwiebeln</span>
+                  </div>
+                </Checkbox>
+                <Checkbox className='ZutatenCheck'>
+                  <div className="checkbox-content">
+                    <span className='first-column'>0,5</span>
+                    <span className="second-column">rote Paprika</span>
+                  </div>
+                </Checkbox>
+                <Checkbox className='ZutatenCheck'>
+                  <div className="checkbox-content">
+                    <span className='first-column'>75g</span>
+                    <span className="second-column">Basmatireis</span>
+                  </div>
+                </Checkbox>
               </div>
             </div>
             <div className="box box2">
@@ -41,7 +73,9 @@ function App() {
               </div>
             </div>
             <div className="box box3">
-              <h2 className='Hbox'>Instructions</h2>
+              <div className='Hbox'>
+                <h2 className='Hbox'>Zubereitung (25 min)</h2>
+              </div>             
               <div className="box-content">
                 
               </div>
