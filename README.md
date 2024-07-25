@@ -41,4 +41,5 @@ node.js
 19. is Fixed
 20. Firefox scrollbar is weird
 21. Added Checkbox
+22. Use antd Pagnation for week change, Use antd Steps for Zubereitung but vertical
 
