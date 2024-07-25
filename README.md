@@ -31,4 +31,13 @@ node.js
     5. git status, ensure everything is clean 
 10. Delete everthing in a new branch
 11. npx create-react-app my-app
+12. Forgot to update it - Created a Branch NewStack
+13. Ask chatgpt to create a layout in react antd for me based on a sketch
+14. Styled it i a way that looks good
+15. I got really no idea what i am doing
+16. Got 3 Boxes that are next to each other with the middle one having a picture that displays the food of the day, ok thats not implemented it just has a picture with some food from google
+17. Adjusted the header
+18. Weekday menu as left and right buttons size and position needs to be fixed
+19. is Fixed
+20. Firefox scrollbar is weird
 
