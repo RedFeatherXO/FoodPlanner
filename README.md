@@ -8,7 +8,7 @@ MongoDB
 node.js
 
 # Color Palette
-https://coolors.co/ecebe4-f7f6f3-ed6a5a-429ea6-153b50
+https://coolors.co/ecebe4-f7f6f3-ed6a5a-429ea6-50b0b9-153b50
 
 # Start
 1. node.js install (comes with npm)
@@ -50,4 +50,6 @@ https://coolors.co/ecebe4-f7f6f3-ed6a5a-429ea6-153b50
 25. Added antd Steps
 26. Day specific content is loaded for each day selected in menu
 27. Color palette added subject to change
+28. Put ingredients and Recipe steps jsx layout in seperat file so that it can be importat later from a Database
+29. Improved styling
 

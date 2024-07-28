@@ -1,4 +1,6 @@
 :root {
+  --whiteCream: #ECEBE4;
+  --whiteLight: #F7F6F3;
   --MenuColor: #ED6A5A;
   --ContentBoxColor: #153B50; 
   /*#153B50  */
@@ -8,7 +10,7 @@
   height: 100vh;
   display: flex;
   flex-direction: column;
-  background-color: #ECEBE4 ;
+  background-color: var(--whiteCream) ;
 }
 
 .header {
@@ -33,7 +35,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background: #F7F6F3;
+  background: var(--whiteLight);
   margin: 10px;
   margin-bottom: 5px;
   border-radius: 20px;
@@ -93,7 +95,7 @@ ul.week-menu li.selected {
   padding-right: 0; /* remove padding to make room for scrollbar */
   scrollbar-width: thin;
   margin-bottom: 0px;
-  background: #F7F6F3;
+  background: var(--whiteLight);
 }
 
 .content::-webkit-scrollbar {
@@ -150,7 +152,7 @@ ul.week-menu li.selected {
 .Hbox {
   height: fit-content;
   text-align: center;
-  font-size: 20px;
+  /* font-size: 20px; */
   color: #f0f2f5;
   background-color: #429EA6;
   padding: 2px;
@@ -161,25 +163,33 @@ ul.week-menu li.selected {
   margin: 6px;
 }
 
-.box1 {
-  background-color: var(--ContentBoxColor);
-  text-align: left;
-  padding-left: 15px;
-  padding-right: 15px;
-  padding: 15px;
+.ZutatenCheck{
+  font-size: 17px;
+  color: #000000;
+  padding-left: 10px;
+  margin-bottom: 1px;
+  background-color: #429EA6;
+  border-radius: 10px;
 }
 
-.ZutatenCheck{
-  font-size: 25px;
-  color: #dbdbdb;
+.ZutatenCheck:hover{
+  font-size: 20px;
+  color: #000000;
+  padding-left: 10px;
+  margin-bottom: 1px;
+  background-color: #50B0B9;
+  border-radius: 10px;
+  transition: background-color 0.3s ease, 
+    color 0.3s ease, font-size 0.2s ease-in-out;
 }
+
 :where(.css-dev-only-do-not-override-1uq9j6g).ant-checkbox + span {
   width: 100%;
 }
 
 .ZutatenCheck .checkbox-content {
   display: grid;
-  grid-template-columns: 20% 1fr; /* Two columns, second column takes remaining space */
+  grid-template-columns: 30% 1fr; /* Two columns, second column takes remaining space */
   column-gap: 10px; /* Gap between the columns */
   align-items: center; /* Align items vertically in the center */
 }
@@ -193,6 +203,20 @@ ul.week-menu li.selected {
   padding-left: 15px;
   padding-right: 15px;
   padding: 15px;
+  display: flex;
+  flex-direction: column;
+  font-size: 15px;
+}
+
+.box1 {
+  background-color: var(--ContentBoxColor);
+  text-align: left;
+  padding-left: 15px;
+  padding-right: 15px;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  font-size: 15px;
 }
 
 
@@ -202,19 +226,39 @@ ul.week-menu li.selected {
   display: flex;
   justify-content: center; /* Center horizontally */
   align-items: center;
+
 }
 
 .box-content2 {
   width: auto;
-  height: auto;
   display: flex;
+  flex: 1;
   flex-direction: column;
-  justify-content: left; /* Center horizontally */
+  justify-content: left;
   align-items: left;
   background-color: #429EA6;
   border-radius: 15px;
   margin-top: 15px;
   padding: 15px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--whiteCream) #ffffff00;
+}
+
+.box-content3 {
+  width: auto;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  background-color: #429EA6;
+  border-radius: 15px;
+  margin-top: 15px;
+  padding: 15px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--whiteCream) #ffffff00;
 }
 
 .LRButton {
