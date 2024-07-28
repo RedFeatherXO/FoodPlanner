@@ -7,6 +7,9 @@ Redux
 MongoDB
 node.js
 
+# Color Palette
+https://coolors.co/ecebe4-f7f6f3-ed6a5a-429ea6-153b50
+
 # Start
 1. node.js install (comes with npm)
 2. create github repository
@@ -42,4 +45,9 @@ node.js
 20. Firefox scrollbar is weird
 21. Added Checkbox
 22. Use antd Pagnation for week change, Use antd Steps for Zubereitung but vertical
+23. Scrapped Pagnation because its changing in size when going past a number to make room for 3 dots
+24. Built a Custom Pagnation (ChatGPT) 
+25. Added antd Steps
+26. Day specific content is loaded for each day selected in menu
+27. Color palette added subject to change
 

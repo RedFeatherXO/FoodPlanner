@@ -1,28 +1,65 @@
-import React from 'react';
-import { Layout, Menu, Button, Checkbox} from 'antd';
+import React, {useState } from 'react';
+import { Layout, Menu, Button, Checkbox,Pagination,Steps  } from 'antd';
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
 import './App.css';
+
+import Mo from './components/days/Mo';
+// import Di from './components/days/Di';
+// import Mi from './components/days/Mi';
+// import Do from './components/days/Do';
+// import Fr from './components/days/Fr';
+// import Sa from './components/days/Sa';
+// import So from './components/days/So';
 
 const { Header, Content } = Layout;
 
 const days = ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'];
+const dayComponents = [Mo];//, Di, Mi, Do, Fr, Sa, So];
 
-function App() {
+const App = () => {
+  const [selectedIndex, setSelectedIndex] = useState(null);
+  const changeColor = (index) => {
+    setSelectedIndex(index);
+  };
+  const handlePrevClick = () => {
+    setSelectedIndex((prevIndex) => 
+      (prevIndex !== null && prevIndex > 0 ? prevIndex - 1 : days.length - 1));
+  };
+
+  const handleNextClick = () => {
+    setSelectedIndex((prevIndex) => 
+      (prevIndex !== null && prevIndex < days.length - 1 ? prevIndex + 1 : 0));
+  };
+
+  const SelectedDayComponent = selectedIndex !== null ? dayComponents[selectedIndex] : null;
   return (
     <Layout className="layout">
       <Header className="header">
         <div className="CreateRec"> Create new recipe</div>
-        <h2 style={{color: "white"}}> Food planer </h2>
+        <h2 style={{color: "var(--MenuColor)"}}> Food planer </h2>
         <div className="Account"> Account</div>        
       </Header>
       <div className="week-selection">
-        <Button icon={<LeftOutlined />} className='LRButton' />
-        <Menu mode="horizontal" defaultSelectedKeys={['1']} className="week-menu">
+        <Pagination className='WeekJumper'
+          total={85}
+          pageSize={1}
+          responsive={false}
+          showSizeChanger={false}
+          simple={true}
+        />
+        <Button icon={<LeftOutlined />} className='LRButton' onClick={handlePrevClick} />
+        <ul className='week-menu'>
           {days.map((day, index) => (
-            <Menu.Item key={index + 1} className="week-menu-item">{day}</Menu.Item>
+            <li
+              key={index}
+              onClick={() => changeColor(index)}
+              className={selectedIndex === index ? 'selected' : ''}
+            >
+              {day}
+            </li>
           ))}
-        </Menu>
-        <Button icon={<RightOutlined />} className='LRButton'/>
+        </ul>
+        <Button icon={<RightOutlined />} className='LRButton' onClick={handleNextClick} />
       </div>
       <Content className="content">
         <div className="food-preview">
@@ -76,8 +113,8 @@ function App() {
               <div className='Hbox'>
                 <h2 className='Hbox'>Zubereitung (25 min)</h2>
               </div>             
-              <div className="box-content">
-                
+              <div className="box-content2">
+                {SelectedDayComponent && <SelectedDayComponent />}
               </div>
             </div>
           </div>
@@ -88,5 +125,7 @@ function App() {
 }
 
 export default App;
+
+
 
 //<Image className="food-image" src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"/>
