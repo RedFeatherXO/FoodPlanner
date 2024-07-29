@@ -3,7 +3,7 @@ import { Layout, Button, Pagination } from "antd";
 import { LeftOutlined, RightOutlined } from "@ant-design/icons";
 import "./App.css";
 
-import { MoSteps, MoList } from "./components/days/Mo";
+import { MoSteps, MoList, MoPic, MoHead } from "./components/days/Mo";
 // import Di from './components/days/Di';
 // import Mi from './components/days/Mi';
 // import Do from './components/days/Do';
@@ -16,6 +16,8 @@ const { Header, Content } = Layout;
 const days = ["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"];
 const dayComponentsSteps = [MoSteps]; //, Di, Mi, Do, Fr, Sa, So];
 const dayComponentsLists = [MoList];
+const dayComponentsPics = [MoPic];
+const dayComponentsHeads = [MoHead];
 
 const App = () => {
   const [selectedIndex, setSelectedIndex] = useState(null);
@@ -38,7 +40,10 @@ const App = () => {
     selectedIndex !== null ? dayComponentsSteps[selectedIndex] : null;
   const SelectedDayComponentList =
     selectedIndex !== null ? dayComponentsLists[selectedIndex] : null;
-  console.log(SelectedDayComponentList);
+  const SelectedDayComponentPic =
+    selectedIndex !== null ? dayComponentsPics[selectedIndex] : null;
+  const SelectedDayComponentHead =
+    selectedIndex !== null ? dayComponentsHeads[selectedIndex] : null;
   return (
     <Layout className="layout">
       <Header className="header">
@@ -79,9 +84,7 @@ const App = () => {
       </div>
       <Content className="content">
         <div className="food-preview">
-          <div className="food-details">
-            <h1>Thai-Curry (Omnivore)</h1>
-          </div>
+          {SelectedDayComponentHead && <SelectedDayComponentHead />}
           <div className="boxes-container">
             <div className="box box1">
               <div className="Hbox">
@@ -91,21 +94,14 @@ const App = () => {
             </div>
             <div className="box box2">
               <div className="box-content">
-                <img
-                  className="food-image"
-                  alt="Food"
-                  src="https://img.chefkoch-cdn.de/rezepte/2589581406492572/bilder/1532344/crop-640x800/nudel-haehnchen-pfanne.jpg"
-                />
+                {SelectedDayComponentPic && <SelectedDayComponentPic />}
               </div>
             </div>
             <div className="box box3">
               <div className="Hbox">
-                <h2>Zutaten (11 Stück) </h2>
-                {/* Zubereitung (25 min) */}
+                <h2>Zubereitung (25 min) </h2>
               </div>
-              <div className="box-content3">
-                {SelectedDayComponent && <SelectedDayComponent />}
-              </div>
+              {SelectedDayComponent && <SelectedDayComponent />}
             </div>
           </div>
         </div>

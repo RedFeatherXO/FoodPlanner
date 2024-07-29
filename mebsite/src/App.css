@@ -1,6 +1,6 @@
 :root {
-  --whiteCream: #ECEBE4;
-  --whiteLight: #F7F6F3;
+  --whiteLight: #ECEBE4;
+  --whiteCream: #F7F6F3;
   --MenuColor: #ED6A5A;
   --ContentBoxColor: #153B50; 
   /*#153B50  */
@@ -133,6 +133,7 @@ ul.week-menu li.selected {
   margin: 5px 0;
   max-width: 800px;
   width: 100%;
+  color: var(--MenuColor);
 }
 
 .boxes-container {
@@ -156,7 +157,7 @@ ul.week-menu li.selected {
   color: #f0f2f5;
   background-color: #429EA6;
   padding: 2px;
-  border-radius: 15px;
+  border-radius: 15px 15px 0cm 15px;
 }
 
 .Hbox h2 {
@@ -173,7 +174,7 @@ ul.week-menu li.selected {
 }
 
 .ZutatenCheck:hover{
-  font-size: 20px;
+  font-size: 18px;
   color: #000000;
   padding-left: 10px;
   margin-bottom: 1px;
@@ -237,7 +238,7 @@ ul.week-menu li.selected {
   justify-content: left;
   align-items: left;
   background-color: #429EA6;
-  border-radius: 15px;
+  border-radius: 15px 0px 15px 15px;
   margin-top: 15px;
   padding: 15px;
   overflow-y: auto;
@@ -259,6 +260,22 @@ ul.week-menu li.selected {
   overflow-y: auto;
   scrollbar-width: thin;
   scrollbar-color: var(--whiteCream) #ffffff00;
+}
+
+.fixed-buttons {
+  display: flex;
+  justify-content: flex-start;
+  gap: 10px;
+  position: sticky;
+  bottom: 0;
+  background-color: #429EA6;
+  padding: 10px;
+  border-radius: 15px 0px 15px 15px;
+  margin-top: 15px;
+}
+
+.fixed-buttons button {
+  width: 50%;
 }
 
 .LRButton {
