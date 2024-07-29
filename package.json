@@ -1,6 +1,0 @@
-{
-  "dependencies": {
-    "antd": "^5.19.3",
-    "mongodb": "^6.8.0"
-  }
-}

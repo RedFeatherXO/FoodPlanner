@@ -52,4 +52,7 @@ https://coolors.co/ecebe4-f7f6f3-ed6a5a-429ea6-50b0b9-153b50
 27. Color palette added subject to change
 28. Put ingredients and Recipe steps jsx layout in seperat file so that it can be importat later from a Database
 29. Improved styling
+30. Installed dotenv
+31. Added environment variables
+32. wenn eine Variable in .env geändert wird muss npm neugestartet werden
 

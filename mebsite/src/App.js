@@ -20,6 +20,7 @@ const dayComponentsPics = [MoPic];
 const dayComponentsHeads = [MoHead];
 
 const App = () => {
+  // console.log(process.env.REACT_APP_MONGO_PASS);
   const [selectedIndex, setSelectedIndex] = useState(null);
   const changeColor = (index) => {
     setSelectedIndex(index);
@@ -44,6 +45,8 @@ const App = () => {
     selectedIndex !== null ? dayComponentsPics[selectedIndex] : null;
   const SelectedDayComponentHead =
     selectedIndex !== null ? dayComponentsHeads[selectedIndex] : null;
+
+
   return (
     <Layout className="layout">
       <Header className="header">
@@ -111,5 +114,3 @@ const App = () => {
 };
 
 export default App;
-
-//<Image className="food-image" src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"/>
