@@ -3,7 +3,7 @@ import { Layout, Button, Pagination } from "antd";
 import { LeftOutlined, RightOutlined } from "@ant-design/icons";
 import "./App.css";
 
-import { MoSteps, MoList, MoPic, MoHead } from "./components/days/Mo";
+import { MoSteps, MoList, MoPic, MoHead } from "./components/days/Mo.js";
 // import Di from './components/days/Di';
 // import Mi from './components/days/Mi';
 // import Do from './components/days/Do';
@@ -20,7 +20,7 @@ const dayComponentsPics = [MoPic];
 const dayComponentsHeads = [MoHead];
 
 const App = () => {
-  // console.log(process.env.REACT_APP_MONGO_PASS);
+  // console.log(process.env.REACT_APP_CON_STRING);
   const [selectedIndex, setSelectedIndex] = useState(null);
   const changeColor = (index) => {
     setSelectedIndex(index);
