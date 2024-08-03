@@ -1,0 +1,89 @@
+npm init -y
+npm install --save-dev webpack webpack-cli webpack-dev-server 
+add in package.json "start": "webpack serve", in scripts
+Create a webpack.config.js file and insert basic setup
+    const path = require('path');
+    module.exports = {
+    entry: './src/index.js',
+    output: {
+        filename: 'main.js',
+        path: path.resolve(__dirname, 'dist'),
+    }, 
+    };
+install webpack css loader and other loader if needed: npm install --save-dev style-loader css-loader
+add rule to config: module: {
+    rules: [
+      {
+        test: /\.css$/i,
+        use: ['style-loader', 'css-loader'],
+      },
+    ],
+  },
+install npm install --save-dev babel-loader @babel/core
+add rules to webpack.config.js {
+        test: /\.m?js$/,
+        exclude: /node_modules/,
+        use: {
+          loader: "babel-loader",
+          options: {
+            presets: ['@babel/preset-env']
+          }
+        }
+      }
+install npm install @babel/preset-env --save-dev  & npm install @babel/preset-react --save-dev
+create babel.config.json fill it with {  "presets": ["@babel/preset-env", "@babel/preset-react"]  }
+delete in package.json ""main": "index.js"" and add ""private": true,"
+add to package.json in scripts ""test": "echo \"Error: no test specified\" && exit 1",    "build": "webpack"" to be able to use npm run build
+npm install react react-dom
+dist folder -> index.html
+src folder -> index.js, App.js, index.css, App.css, server.js
+npm install dotenv
+add in package.json in "scripts": "server": "node ./src/server.js" -> npm server
+add in webpack.config.js: "devServer: {
+    static: {
+        directory: path.join(__dirname, "dist"),
+      },
+    compress: true,
+    port: 9000,
+    open: true,
+  },"
+change in webpack.config.js output -> filename from main.js to bundle.js
+npm install mongodb
+npm install antd --save
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
