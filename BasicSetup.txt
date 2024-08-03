@@ -37,3 +37,4 @@ add to package.json in scripts ""test": "echo \"Error: no test specified\" && ex
 npm install react react-dom
 dist folder -> index.html
 src folder -> index.js, App.js, index.css, App.css
+npm install dotenv

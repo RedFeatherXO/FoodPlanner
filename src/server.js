@@ -1,9 +1,10 @@
+require('dotenv').config();
 const express = require('express');
 const { MongoClient,ServerApiVersion  } = require('mongodb');
 
 // Verwende die tatsächlichen Anmeldeinformationen
-const username = encodeURIComponent("meikklein123");
-const password = encodeURIComponent("Test");
+const username = encodeURIComponent(process.env.REACT_APP_USERNAME_MONG);
+const password = encodeURIComponent(process.env.REACT_APP_PASSWORD_MONG);
 
 // Korrekt formatierte URI
 const uri = `mongodb+srv://${username}:${password}@cluster0.g3cqb7j.mongodb.net/mydatabase?retryWrites=true&w=majority&appName=Cluster0`;
