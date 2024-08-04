@@ -19,17 +19,44 @@ const client = new MongoClient(uri, {
 });
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+// Set headers to ensure UTF-8 encoding
+app.use((req, res, next) => {
+  res.setHeader('Content-Type', 'application/json; charset=utf-8');
+  next();
+});
 
 // Beispiel-Endpunkt für eine Datenbankabfrage
-app.get("/api/movie", async (req, res) => {
+app.get("/api/recipe", async (req, res) => {
   try {
     await client.connect();
-    const database = client.db("sample_mflix");
-    const movies = database.collection("movies");
-    const query = { title: "Back to the Future" };
+    const database = client.db("Rezeptverwaltung");
+    const movies = database.collection("rezepte");
+    console.log(movies);
+    const query = { name: "Spaghetti Bolognese" };
+    console.log(query);
     const movie = await movies.findOne(query);
     console.log('Movie found:', movie);
     res.json(movie);
+  } catch (error) {
+    console.error("Connection failed", error);
+    res.status(500).send("Internal Server Error");
+  } finally {
+    await client.close();
+  }
+});
+
+app.post("/api/recipe", async (req, res) => {
+  try {
+    await client.connect();
+    const database = client.db("Rezeptverwaltung");
+    const recipes = database.collection("rezepte");
+    
+    const doc = req.body; // Annahme, dass das Rezept im Anfragekörper gesendet wird
+    const result = await recipes.insertOne(doc);
+    
+    console.log(`A document was inserted with the _id: ${result.insertedId}`);
+    res.status(201).json({ message: "Recipe inserted", id: result.insertedId });
   } catch (error) {
     console.error("Connection failed", error);
     res.status(500).send("Internal Server Error");
@@ -42,26 +69,3 @@ app.get("/api/movie", async (req, res) => {
 app.listen(port, () => {
   console.log(`Server läuft auf http://localhost:${port}`);
 });
-
-// async function run() {
-//   try {
-//     // Verbinde den Client mit der Datenbank
-//     await client.connect();
-
-//     // Wähle die Datenbank und die Sammlung
-//     const database = client.db('sample_mflix');
-//     const movies = database.collection('movies');
-
-//     // Abfrage für einen Film mit dem Titel 'Back to the Future'
-//     const query = { title: 'Back to the Future' };
-//     const movie = await movies.findOne(query);
-//     console.log(movie);
-//   } catch (error) {
-//     console.error('Connection failed', error);
-//   } finally {
-//     // Schließe den Client, wenn du fertig bist
-//     await client.close();
-//   }
-// }
-
-// run().catch(console.dir);

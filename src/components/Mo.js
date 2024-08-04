@@ -1,5 +1,6 @@
 // src/components/days/Mo.js
-import React, { useState } from "react";
+import React from "react";
+import { useEffect, useState } from "react";
 import { Steps, Checkbox, Button, message } from "antd";
 
 const steps = [
@@ -31,7 +32,7 @@ function MoHead() {
       <h1>Thai-Curry (Omnivore)</h1>
     </div>
   );
-};
+}
 
 function MoSteps() {
   const [current, setCurrent] = useState(0);
@@ -84,72 +85,102 @@ function MoPic() {
       src="https://imgs.search.brave.com/JaLw0ucv8iTF8twxsIf7I25IuKvvBM6b358vpVoHqJA/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly90aGVm/bGF2b3Vyc29ma2l0/Y2hlbi5jb20vd3At/Y29udGVudC91cGxv/YWRzLzIwMjEvMDgv/VGhhaS1SZWQtQ3Vy/cnktMS01MDB4NzUw/LmpwZw"
     />
   );
-};
+}
 
 function MoList() {
+  const [rezept, setRezept] = useState(null);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    fetch("/api/recipe")
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then((data) => setRezept(data))
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+        setError(error.toString());
+      });
+  }, []);
+  if (!rezept) {
+    return <div>Loading...</div>;
+  }
   return (
     <div className="box-content2">
-      <Checkbox className="ZutatenCheck">
-        <div className="checkbox-content">
-          <span className="first-column">75g</span>
-          <span className="second-column">Basmatireis</span>
-        </div>
-      </Checkbox>
-      <Checkbox className="ZutatenCheck">
-        <div className="checkbox-content">
-          <span className="first-column">125g</span>
-          <span className="second-column">Hähnchenbrustfilet</span>
-        </div>
-      </Checkbox>
-      <Checkbox className="ZutatenCheck">
-        <div className="checkbox-content">
-          <span className="first-column">2</span>
-          <span className="second-column">Frühlingszwiebeln</span>
-        </div>
-      </Checkbox>
-      <Checkbox className="ZutatenCheck">
-        <div className="checkbox-content">
-          <span className="first-column">0,5</span>
-          <span className="second-column">rote Paprika</span>
-        </div>
-      </Checkbox>
-      <Checkbox className="ZutatenCheck">
-        <div className="checkbox-content">
-          <span className="first-column">1 EL</span>
-          <span className="second-column">Sonnenblumenöl</span>
-        </div>
-      </Checkbox>
-      <Checkbox className="ZutatenCheck">
-        <div className="checkbox-content">
-          <span className="first-column">0,5 EL</span>
-          <span className="second-column">rote Thai-Currypaste</span>
-        </div>
-      </Checkbox>
-      <Checkbox className="ZutatenCheck">
-        <div className="checkbox-content">
-          <span className="first-column">1 Dose</span>
-          <span className="second-column">Kokosmilch</span>
-        </div>
-      </Checkbox>
-      <Checkbox className="ZutatenCheck">
-        <div className="checkbox-content">
-          <span className="first-column">0,5 EL</span>
-          <span className="second-column">Sojasauce</span>
-        </div>
-      </Checkbox>
-      <Checkbox className="ZutatenCheck">
-        <div className="checkbox-content">
-          <span className="first-column">0,5 EL</span>
-          <span className="second-column">Limettensaft</span>
-        </div>
-      </Checkbox>
-      <Checkbox className="ZutatenCheck">
-        <div className="checkbox-content">
-          <span className="first-column">½ Bund</span>
-          <span className="second-column">Koriandergrün</span>
-        </div>
-      </Checkbox>
+      {rezept.zutaten.map((item, index) => (
+        <Checkbox className="ZutatenCheck" key={index}>
+          <div className="checkbox-content">
+            <span className="first-column">{item.menge}</span>
+            <span className="second-column">{item.name}</span>
+          </div>
+        </Checkbox>
+      ))}
     </div>
+    // <div className="box-content2">
+    //   <Checkbox className="ZutatenCheck">
+    //     <div className="checkbox-content">
+    //       <span className="first-column">75g</span>
+    //       <span className="second-column">Basmatireis</span>
+    //     </div>
+    //   </Checkbox>
+    //   <Checkbox className="ZutatenCheck">
+    //     <div className="checkbox-content">
+    //       <span className="first-column">125g</span>
+    //       <span className="second-column">Hähnchenbrustfilet</span>
+    //     </div>
+    //   </Checkbox>
+    //   <Checkbox className="ZutatenCheck">
+    //     <div className="checkbox-content">
+    //       <span className="first-column">2</span>
+    //       <span className="second-column">Frühlingszwiebeln</span>
+    //     </div>
+    //   </Checkbox>
+    //   <Checkbox className="ZutatenCheck">
+    //     <div className="checkbox-content">
+    //       <span className="first-column">0,5</span>
+    //       <span className="second-column">rote Paprika</span>
+    //     </div>
+    //   </Checkbox>
+    //   <Checkbox className="ZutatenCheck">
+    //     <div className="checkbox-content">
+    //       <span className="first-column">1 EL</span>
+    //       <span className="second-column">Sonnenblumenöl</span>
+    //     </div>
+    //   </Checkbox>
+    //   <Checkbox className="ZutatenCheck">
+    //     <div className="checkbox-content">
+    //       <span className="first-column">0,5 EL</span>
+    //       <span className="second-column">rote Thai-Currypaste</span>
+    //     </div>
+    //   </Checkbox>
+    //   <Checkbox className="ZutatenCheck">
+    //     <div className="checkbox-content">
+    //       <span className="first-column">1 Dose</span>
+    //       <span className="second-column">Kokosmilch</span>
+    //     </div>
+    //   </Checkbox>
+    //   <Checkbox className="ZutatenCheck">
+    //     <div className="checkbox-content">
+    //       <span className="first-column">0,5 EL</span>
+    //       <span className="second-column">Sojasauce</span>
+    //     </div>
+    //   </Checkbox>
+    //   <Checkbox className="ZutatenCheck">
+    //     <div className="checkbox-content">
+    //       <span className="first-column">0,5 EL</span>
+    //       <span className="second-column">Limettensaft</span>
+    //     </div>
+    //   </Checkbox>
+    //   <Checkbox className="ZutatenCheck">
+    //     <div className="checkbox-content">
+    //       <span className="first-column">½ Bund</span>
+    //       <span className="second-column">Koriandergrün</span>
+    //     </div>
+    //   </Checkbox>
+    // </div>
   );
-};
+}
 export { MoSteps, MoList, MoPic, MoHead };
