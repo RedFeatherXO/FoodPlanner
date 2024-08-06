@@ -18,6 +18,8 @@ const client = new MongoClient(uri, {
   },
 });
 
+let db;
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 // Set headers to ensure UTF-8 encoding
@@ -26,42 +28,42 @@ app.use((req, res, next) => {
   next();
 });
 
+client.connect()
+  .then(() => {
+    db = client.db("Rezeptverwaltung");
+    console.log("connected to Mongodb")
+  })
+  .catch(error => {
+    console.error("Failed to connect to Mongodb", error);
+    console.log("Server is now shutdown")
+    process.exit(1);
+  })
+
 // Beispiel-Endpunkt für eine Datenbankabfrage
 app.get("/api/recipe", async (req, res) => {
   try {
-    await client.connect();
-    const database = client.db("Rezeptverwaltung");
-    const movies = database.collection("rezepte");
-    console.log(movies);
+    const Rezepte = db.collection("rezepte");
     const query = { name: "Spaghetti Bolognese" };
     console.log(query);
-    const movie = await movies.findOne(query);
-    console.log('Movie found:', movie);
-    res.json(movie);
+    const rezept = await Rezepte.findOne(query);
+    console.log('rezept found:', rezept);
+    res.json(rezept);
   } catch (error) {
     console.error("Connection failed", error);
     res.status(500).send("Internal Server Error");
-  } finally {
-    await client.close();
   }
 });
 
 app.post("/api/recipe", async (req, res) => {
   try {
-    await client.connect();
-    const database = client.db("Rezeptverwaltung");
-    const recipes = database.collection("rezepte");
-    
+    const recipes = db.collection("rezepte");
     const doc = req.body; // Annahme, dass das Rezept im Anfragekörper gesendet wird
     const result = await recipes.insertOne(doc);
-    
     console.log(`A document was inserted with the _id: ${result.insertedId}`);
     res.status(201).json({ message: "Recipe inserted", id: result.insertedId });
   } catch (error) {
     console.error("Connection failed", error);
     res.status(500).send("Internal Server Error");
-  } finally {
-    await client.close();
   }
 });
 

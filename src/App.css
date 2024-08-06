@@ -194,7 +194,7 @@
 }
   .ZutatenCheck .checkbox-content {
     display: grid;
-    grid-template-columns: 25% 1fr; /* Two columns, second column takes remaining space */
+    grid-template-columns: 40% 1fr; /* Two columns, second column takes remaining space */
     column-gap: 10px; /* Gap between the columns */
     align-items: center; /* Align items vertically in the center */
     width: 100%;
@@ -242,6 +242,22 @@
     flex-direction: column;
     justify-content: left;
     align-items: left;
+    background-color: #429EA6;
+    border-radius: 15px 0px 15px 15px;
+    margin-top: 15px;
+    padding: 15px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--whiteCream) #ffffff00;
+  }
+
+  .box-content2-spin {
+    width: auto;
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     background-color: #429EA6;
     border-radius: 15px 0px 15px 15px;
     margin-top: 15px;
