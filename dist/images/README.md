@@ -1,0 +1,1 @@
+This folder is gonna be deleted when i implement images that are stored in Mongodb

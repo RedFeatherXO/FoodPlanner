@@ -4,7 +4,14 @@ import { Layout, Button, Pagination } from "antd";
 import { LeftOutlined, RightOutlined } from "@ant-design/icons";
 import "./App.css";
 
-import { MoSteps, MoList, MoPic, MoHead } from "./components/Mo.js";
+import {
+  MoSteps,
+  MoList,
+  MoPic,
+  MoHead,
+  MoCount,
+  MoTime,
+} from "./components/Mo.js";
 
 const { Header, Content } = Layout;
 
@@ -13,40 +20,8 @@ const dayComponentsSteps = [MoSteps]; //, Di, Mi, Do, Fr, Sa, So];
 const dayComponentsLists = [MoList];
 const dayComponentsPics = [MoPic];
 const dayComponentsHeads = [MoHead];
-
-// export default function App() {
-//   const [movie, setMovie] = useState(null);
-//   const [error, setError] = useState(null);
-
-//   useEffect(() => {
-//     fetch("/api/recipe")
-//       .then((response) => {
-//         if (!response.ok) {
-//           throw new Error(`HTTP error! status: ${response.status}`);
-//         }
-//         return response.json();
-//       })
-//       .then((data) => setMovie(data))
-//       .catch((error) => {
-//         console.error("Error fetching data:", error);
-//         setError(error.toString());
-//       });
-//   }, []);
-
-//   return (
-//     <div>
-//       <h1>Hello, world!</h1>
-//       {movie ? (
-//         <div>
-//           <h2>{movie.name}</h2>
-//           <p>{movie.zubereitungsschritte}</p>
-//         </div>
-//       ) : (
-//         <p>Loading...</p>
-//       )}
-//     </div>
-//   );
-// }
+const dayComponentsCounts = [MoCount];
+const dayComponentsTimes = [MoTime];
 
 export default function App() {
   const [selectedIndex, setSelectedIndex] = useState(null);
@@ -73,6 +48,10 @@ export default function App() {
     selectedIndex !== null ? dayComponentsPics[selectedIndex] : null;
   const SelectedDayComponentHead =
     selectedIndex !== null ? dayComponentsHeads[selectedIndex] : null;
+  const SelectedDayComponentCount =
+    selectedIndex !== null ? dayComponentsCounts[selectedIndex] : null;
+  const SelectedDayComponentTime =
+    selectedIndex !== null ? dayComponentsTimes[selectedIndex] : null;
   return (
     <>
       <Layout className="layout">
@@ -118,7 +97,7 @@ export default function App() {
             <div className="boxes-container">
               <div className="box box1">
                 <div className="Hbox">
-                  <h2>Zutaten (11 Stück)</h2>
+                  {SelectedDayComponentCount && <SelectedDayComponentCount />}
                 </div>
                 {SelectedDayComponentList && <SelectedDayComponentList />}
               </div>
@@ -129,7 +108,7 @@ export default function App() {
               </div>
               <div className="box box3">
                 <div className="Hbox">
-                  <h2>Zubereitung (25 min) </h2>
+                  {SelectedDayComponentTime && <SelectedDayComponentTime />}
                 </div>
                 {SelectedDayComponent && <SelectedDayComponent />}
               </div>

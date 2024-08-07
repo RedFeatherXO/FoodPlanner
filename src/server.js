@@ -67,6 +67,10 @@ app.post("/api/recipe", async (req, res) => {
   }
 });
 
+app.get('/api/health', (req, res) => {
+  res.status(200).send('Server is healthy');
+});
+
 // Starte den Server
 app.listen(port, () => {
   console.log(`Server läuft auf http://localhost:${port}`);

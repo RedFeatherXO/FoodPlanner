@@ -128,6 +128,14 @@
     border-radius: 25px;
     border: 5px solid var(--ContentBoxColor);
   }
+
+  .food-image .ant-spin {
+    width: auto;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
   
   .food-details {
     margin: 5px 0;
@@ -160,7 +168,7 @@
     border-radius: 15px 15px 0cm 15px;
   }
   
-  .Hbox h2 {
+  .Hbox h2,.ant-spin {
     margin: 6px;
   }
   
@@ -251,20 +259,12 @@
     scrollbar-color: var(--whiteCream) #ffffff00;
   }
 
-  .box-content2-spin {
-    width: auto;
+  .box-content2 .ant-spin {
     display: flex;
     flex: 1;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background-color: #429EA6;
-    border-radius: 15px 0px 15px 15px;
-    margin-top: 15px;
-    padding: 15px;
-    overflow-y: auto;
-    scrollbar-width: thin;
-    scrollbar-color: var(--whiteCream) #ffffff00;
   }
   
   .box-content3 {

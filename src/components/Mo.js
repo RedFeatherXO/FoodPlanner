@@ -4,39 +4,32 @@ import { useEffect, useState } from "react";
 import { LoadingOutlined } from "@ant-design/icons";
 import { Steps, Checkbox, Button, message, Flex, Spin } from "antd";
 
-const steps = [
-  {
-    title: "Schritt 1",
-    description:
-      "300 ml Wasser im Wasserkocher aufkochen, in einen Topf umfüllen, 0,25 TL Salz zugeben und erneut aufkochen. Reis nach Packungsanweisung ca. 15 Min. zugedeckt darin garen. Inzwischen das Fleisch trocken tupfen, erst in ca. 3 cm dicke Scheiben, dann in ca. 3 cm große Würfel schneiden. Frühlingszwiebeln putzen, waschen und mit Grün schräg in ca. 3 cm große Stücke schneiden. Paprika waschen, vierteln, putzen und in mundgerechte Streifen schneiden.",
-  },
-  {
-    title: "Schritt 2",
-    description:
-      "Eine Pfanne mit 1 EL Öl erhitzen, Fleisch ca. 3 Min. darin anbraten. Herausnehmen und übriges Öl 1 EL darin erhitzen, die Paprika ca. 1 Min. darin braten. Currypaste einrühren, ca. 5 Sek. mitbraten, dann Fleisch und Kokosmilch zugeben. Aufkochen lassen, die Frühlingszwiebeln zugeben und ca. 4 Min. bei schwacher Hitze köcheln. Mit der Sojasauce und dem Limettensaft abschmecken. Koriander waschen und trocken schütteln, Blättchen abzupfen, klein hacken und über das Thai-Curry streuen. Mit dem Reis servieren.",
-  },
-  {
-    title: "Schritt 2",
-    description:
-      "Eine Pfanne mit 1 EL Öl erhitzen, Fleisch ca. 3 Min. darin anbraten. Herausnehmen und übriges Öl 1 EL darin erhitzen, die Paprika ca. 1 Min. darin braten. Currypaste einrühren, ca. 5 Sek. mitbraten, dann Fleisch und Kokosmilch zugeben. Aufkochen lassen, die Frühlingszwiebeln zugeben und ca. 4 Min. bei schwacher Hitze köcheln. Mit der Sojasauce und dem Limettensaft abschmecken. Koriander waschen und trocken schütteln, Blättchen abzupfen, klein hacken und über das Thai-Curry streuen. Mit dem Reis servieren.",
-  },
-  {
-    title: "Schritt 2",
-    description:
-      "Eine Pfanne mit 1 EL Öl erhitzen, Fleisch ca. 3 Min. darin anbraten. Herausnehmen und übriges Öl 1 EL darin erhitzen, die Paprika ca. 1 Min. darin braten. Currypaste einrühren, ca. 5 Sek. mitbraten, dann Fleisch und Kokosmilch zugeben. Aufkochen lassen, die Frühlingszwiebeln zugeben und ca. 4 Min. bei schwacher Hitze köcheln. Mit der Sojasauce und dem Limettensaft abschmecken. Koriander waschen und trocken schütteln, Blättchen abzupfen, klein hacken und über das Thai-Curry streuen. Mit dem Reis servieren.",
-  },
-];
-
 function MoHead() {
+  var rezept = GetData();
+  if (!rezept) {
+    return (
+      <div className="food-details">
+        <Spin indicator={<LoadingOutlined style={{ fontSize: 50 }} spin />} />
+      </div>
+    );
+  }
   return (
     <div className="food-details">
-      <h1>Thai-Curry (Omnivore)</h1>
+      <h1>{rezept.name}</h1>
     </div>
   );
 }
 
 function MoSteps() {
-  const [current, setCurrent] = useState(0);
+  const [current, setCurrent] = useState(0); //Hook muss immer ausgeführt werden sonst kommt fehler da sich die Hooks anzahl in verschieden Rendern ändert
+  var rezept = GetData();
+  if (!rezept) {
+    return (
+      <div className="box-content3">
+        <Spin indicator={<LoadingOutlined style={{ fontSize: 50 }} spin />} />
+      </div>
+    );
+  }
   const next = () => {
     setCurrent(current + 1);
   };
@@ -45,10 +38,10 @@ function MoSteps() {
       setCurrent(current - 1);
     }
   };
-  const items = steps.map((item) => ({
-    key: item.title,
-    title: item.title,
-    description: item.description,
+  const items = rezept.zubereitungsschritte.map((item, index) => ({
+    key: "Schritt " + String(index),
+    title: "Schritt " + String(index),
+    description: item,
   }));
   return (
     <>
@@ -56,12 +49,12 @@ function MoSteps() {
         <Steps direction="vertical" current={current} items={items} />
       </div>
       <div className="fixed-buttons">
-        {current < steps.length - 1 && ( //&& used in JSX for conditional rendering
+        {current < items.length - 1 && ( //&& used in JSX for conditional rendering
           <Button type="primary" onClick={() => next()}>
             Next
           </Button>
         )}
-        {current === steps.length - 1 && (
+        {current === items.length - 1 && (
           <Button
             type="primary"
             onClick={() => message.success("Processing complete!")}
@@ -70,7 +63,7 @@ function MoSteps() {
           </Button>
         )}
 
-        <Button style={{ margin: "0 8px" }} onClick={() => prev()}>
+        <Button style={{ margin: "0" }} onClick={() => prev()}>
           Previous
         </Button>
       </div>
@@ -87,20 +80,15 @@ function MoPic() {
       </div>
     );
   }
-  return (
-    <img
-      className="food-image"
-      alt="Food"
-      src={rezept.name}
-    />
-  );
+  let imagePath = rezept.bild;
+  return <img className="food-image" alt="Food" src={imagePath} />;
 }
 
 function MoList() {
   var rezept = GetData();
   if (!rezept) {
     return (
-      <div className="box-content2-spin">
+      <div className="box-content2">
         <Spin indicator={<LoadingOutlined style={{ fontSize: 148 }} spin />} />
       </div>
     );
@@ -119,25 +107,89 @@ function MoList() {
   );
 }
 
+function MoCount() {
+  var rezept = GetData();
+  if (!rezept) {
+    return (
+      <>
+        <Spin indicator={<LoadingOutlined style={{ fontSize: 33 }} spin />} />
+      </>
+    );
+  }
+
+  return (
+    <>
+      <h2>Zutaten ({rezept.zutaten.length} Stück)</h2>
+    </>
+  );
+}
+
+function MoTime() {
+  var rezept = GetData();
+  if (!rezept) {
+    return (
+      <>
+        <Spin indicator={<LoadingOutlined style={{ fontSize: 33 }} spin />} />
+      </>
+    );
+  }
+
+  return (
+    <>
+      <h2>Zubereitung ({rezept.zubreitungszeit}) </h2>
+    </>
+  );
+}
+
 function GetData() {
   const [rezept, setRezept] = useState(null);
   const [error, setError] = useState(null);
+  const isServerAvailable = useServerStatus(5000); // Überprüfe den Serverstatus alle 5 Sekunden
 
   useEffect(() => {
-    fetch("/api/recipe")
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        return response.json();
-      })
-      .then((data) => setRezept(data))
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-        setError(error.toString());
-      });
-  }, []);
+    if (isServerAvailable) {
+      fetch("/api/recipe")
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          return response.json();
+        })
+        .then((data) => setRezept(data))
+        .catch((error) => {
+          console.error("Error fetching data:", error);
+          setError(error.toString());
+        });
+    }
+  }, [isServerAvailable]);
+
   return rezept;
 }
 
-export { MoSteps, MoList, MoPic, MoHead };
+function useServerStatus(pollingInterval = 5000) {
+  const [isServerAvailable, setIsServerAvailable] = useState(false);
+
+  useEffect(() => {
+    const checkServerStatus = async () => {
+      try {
+        const response = await fetch("/api/health"); // Ein einfacher Health-Check-Endpunkt
+        if (response.ok) {
+          setIsServerAvailable(true);
+        } else {
+          setIsServerAvailable(false);
+        }
+      } catch (error) {
+        setIsServerAvailable(false);
+      }
+    };
+
+    const intervalId = setInterval(checkServerStatus, pollingInterval);
+
+    // Cleanup function to clear the interval when the component unmounts
+    return () => clearInterval(intervalId);
+  }, [pollingInterval]);
+
+  return isServerAvailable;
+}
+
+export { MoSteps, MoList, MoPic, MoHead, MoCount, MoTime };
