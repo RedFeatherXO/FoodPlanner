@@ -25,6 +25,7 @@
   },
   "dependencies": {
     "antd": "^5.19.4",
+    "dayjs": "^1.11.12",
     "dotenv": "^16.4.5",
     "mongodb": "^6.8.0",
     "react": "^18.3.1",

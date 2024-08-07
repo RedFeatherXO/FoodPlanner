@@ -3,6 +3,8 @@ A Website to see the food you want to cook. Food gets randomly selected or you c
 
 # Stack
 React
+    dayjs -> For Date processing
+    antd -> Templates
 Redux
 MongoDB
 node.js

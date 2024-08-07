@@ -1,0 +1,11 @@
+{
+    "_comment": "Template für User ausgewählten Rezepte",
+    "_id": {"$oid": "ID-Generiert"},
+    "name": "dev",
+    "ausgewählteRezepte": [
+        {
+            "datum": "2024-08-07",
+            "rezept_id": {"$oid": "66af31e4f7517807ed2f7e78"}
+        }
+    ]
+}

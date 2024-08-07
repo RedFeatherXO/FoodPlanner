@@ -1,9 +1,12 @@
 import React from "react";
 import { useEffect, useState } from "react";
-import { Layout, Button, Pagination } from "antd";
+import { Layout, Button, Pagination, DatePicker } from "antd";
 import { LeftOutlined, RightOutlined } from "@ant-design/icons";
 import "./App.css";
-
+import dayjs from "dayjs";
+import advancedFormat from "dayjs/plugin/advancedFormat";
+import isoWeek from "dayjs/plugin/isoWeek";
+import {ZubSteps, List, Pic, Head, Count, Time} from "./components/RetrieveData.js"
 import {
   MoSteps,
   MoList,
@@ -12,7 +15,8 @@ import {
   MoCount,
   MoTime,
 } from "./components/Mo.js";
-
+dayjs.extend(advancedFormat); //https://day.js.org/docs/en/plugin/advanced-format
+dayjs.extend(isoWeek);
 const { Header, Content } = Layout;
 
 const days = ["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"];
@@ -23,23 +27,34 @@ const dayComponentsHeads = [MoHead];
 const dayComponentsCounts = [MoCount];
 const dayComponentsTimes = [MoTime];
 
+
+
 export default function App() {
-  const [selectedIndex, setSelectedIndex] = useState(null);
+  const [selectedDate, setSelectedDate] = useState(dayjs().format('YYYY-MM-DD')); //ISO8601 2019-01-25 -> 25.01.2019
+  const [selectedIndex, setSelectedIndex] = useState(0); // (0) -> Default value
   const changeColor = (index) => {
     setSelectedIndex(index);
   };
-  const handlePrevClick = () => {
-    setSelectedIndex((prevIndex) =>
-      prevIndex !== null && prevIndex > 0 ? prevIndex - 1 : days.length - 1
-    );
-  };
 
-  const handleNextClick = () => {
-    setSelectedIndex((prevIndex) =>
-      prevIndex !== null && prevIndex < days.length - 1 ? prevIndex + 1 : 0
-    );
+  const onChange = (date, dateString) => {
+    if(date) {
+      setSelectedDate(date);
+    }
   };
-
+  // {
+  //   "$L": "en",
+  //   "$d": "2024-05-06T22:00:00.000Z",
+  //   "$y": 2024,
+  //   "$M": 4,
+  //   "$D": 7,
+  //   "$W": 2,
+  //   "$H": 0,
+  //   "$m": 0,
+  //   "$s": 0,
+  //   "$ms": 0,
+  //   "$x": {},
+  //   "$isDayjsObject": true
+  // }
   const SelectedDayComponent =
     selectedIndex !== null ? dayComponentsSteps[selectedIndex] : null;
   const SelectedDayComponentList =
@@ -60,36 +75,47 @@ export default function App() {
           <h2 style={{ color: "var(--MenuColor)" }}> Food planer </h2>
           <div className="Account"> Account</div>
         </Header>
-        <div className="week-selection">
-          <Pagination
-            className="WeekJumper"
-            total={85}
-            pageSize={1}
-            responsive={false}
-            showSizeChanger={false}
-            simple={true}
-          />
-          <Button
-            icon={<LeftOutlined />}
-            className="LRButton"
-            onClick={handlePrevClick}
-          />
-          <ul className="week-menu">
-            {days.map((day, index) => (
-              <li
-                key={index}
-                onClick={() => changeColor(index)}
-                className={selectedIndex === index ? "selected" : ""}
-              >
-                {day}
-              </li>
-            ))}
-          </ul>
-          <Button
-            icon={<RightOutlined />}
-            className="LRButton"
-            onClick={handleNextClick}
-          />
+
+        <div className="DateSelection">
+          <div className="DateBox MonthSelection">
+            <div>
+              <DatePicker
+                defaultValue={dayjs()}
+                format="MMMM"
+                onChange={onChange}
+                picker="month"
+              />
+            </div>
+            <div>
+              <DatePicker
+                defaultValue={dayjs()}
+                format="wo"
+                onChange={onChange}
+                picker="week"
+              />
+            </div>
+          </div>
+          <div className="DateBox DaySelection">
+            <ul className="week-menu">
+              {days.map((day, index) => (
+                <li
+                  key={index}
+                  onClick={() => changeColor(index)}
+                  className={selectedIndex === index ? "selected" : ""}
+                >
+                  {day}
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div className="DateBox YearSelection">
+            <DatePicker
+              defaultValue={dayjs()}
+              format="YYYY"
+              onChange={onChange}
+              picker="year"
+            />
+          </div>
         </div>
         <Content className="content">
           <div className="food-preview">
@@ -110,7 +136,7 @@ export default function App() {
                 <div className="Hbox">
                   {SelectedDayComponentTime && <SelectedDayComponentTime />}
                 </div>
-                {SelectedDayComponent && <SelectedDayComponent />}
+                {ZubSteps(selectedDate) && <ZubSteps />}
               </div>
             </div>
           </div>

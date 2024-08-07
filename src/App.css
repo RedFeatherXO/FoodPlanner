@@ -1,6 +1,6 @@
 :root {
-    --whiteLight: #ECEBE4;
-    --whiteCream: #F7F6F3;
+    --whiteCream: #ECEBE4;
+    --whiteLight: #F7F6F3;
     --MenuColor: #ED6A5A;
     --ContentBoxColor: #153B50; 
     /*#153B50  */
@@ -10,7 +10,7 @@
     height: 100vh;
     display: flex;
     flex-direction: column;
-    background-color: var(--whiteCream) ;
+    background-color: var(--whiteLight) ;
   }
   
   .header {
@@ -35,7 +35,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background: var(--whiteLight);
+    background: var(--whiteCream);
     margin: 10px;
     margin-bottom: 5px;
     border-radius: 20px;
@@ -95,7 +95,7 @@
     padding-right: 0; /* remove padding to make room for scrollbar */
     scrollbar-width: thin;
     margin-bottom: 0px;
-    background: var(--whiteLight);
+    background: var(--whiteCream);
   }
   
   .content::-webkit-scrollbar {
@@ -256,7 +256,7 @@
     padding: 15px;
     overflow-y: auto;
     scrollbar-width: thin;
-    scrollbar-color: var(--whiteCream) #ffffff00;
+    scrollbar-color: var(--whiteLight) #ffffff00;
   }
 
   .box-content2 .ant-spin {
@@ -280,25 +280,43 @@
     padding: 15px;
     overflow-y: auto;
     scrollbar-width: thin;
-    scrollbar-color: var(--whiteCream) #ffffff00;
+    scrollbar-color: var(--whiteLight) #ffffff00;
   }
+
+.DateSelection {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin: 10px 0;
+}
+
+.DateBox {
+  width: 33%;
+  height: auto;
+  margin: 10px;
+  background-color: var(--whiteCream);
+  border-radius: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.MonthSelection > div {
+  width: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: auto;
+}
+
+/* .DaySelection {
   
-  .fixed-buttons {
-    display: flex;
-    justify-content: flex-start;
-    gap: 10px;
-    position: sticky;
-    bottom: 0;
-    background-color: #429EA6;
-    padding: 10px;
-    border-radius: 15px 0px 15px 15px;
-    margin-top: 15px;
-  }
+} */
+
+/* .YearSelection {
   
-  .fixed-buttons button {
-    width: 50%;
-  }
-  
-  .LRButton {
-    align-items: center;
-  }
+} */
+
+:where(.css-dev-only-do-not-override-1pg9a38).ant-picker .ant-picker-input > input {
+  font-size: 25px;
+}
