@@ -20,10 +20,9 @@ function Head() {
   );
 }
 
-function ZubSteps(month=0) {
+function ZubSteps(date = null) {
   const [current, setCurrent] = useState(0); //Hook muss immer ausgeführt werden sonst kommt fehler da sich die Hooks anzahl in verschieden Rendern ändert
-  var rezept = GetData();
-  console.log(month);
+  var rezept = GetData(date);
   if (!rezept) {
     return (
       <div className="box-content3">
@@ -142,15 +141,14 @@ function Time() {
   );
 }
 
-function GetData() {
+function GetData(date = null) {
   const [rezept, setRezept] = useState(null);
   const [error, setError] = useState(null);
   const isServerAvailable = useServerStatus(5000); // Überprüfe den Serverstatus alle 5 Sekunden
 
   useEffect(() => {
     if (isServerAvailable) {
-      fetch("/api/recipe")
-        .then((response) => {
+      fetch("/api/recipe").then((response) => {
           if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
           }

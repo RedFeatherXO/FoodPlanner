@@ -309,13 +309,13 @@
   height: auto;
 }
 
-/* .DaySelection {
+.DaySelection {
   
-} */
+}
 
-/* .YearSelection {
+.YearSelection {
   
-} */
+}
 
 :where(.css-dev-only-do-not-override-1pg9a38).ant-picker .ant-picker-input > input {
   font-size: 25px;

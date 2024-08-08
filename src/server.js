@@ -44,9 +44,9 @@ app.get("/api/recipe", async (req, res) => {
   try {
     const Rezepte = db.collection("rezepte");
     const query = { name: "Spaghetti Bolognese" };
-    console.log(query);
+    console.log(Rezepte);
     const rezept = await Rezepte.findOne(query);
-    console.log('rezept found:', rezept);
+    // console.log('rezept found:', rezept);
     res.json(rezept);
   } catch (error) {
     console.error("Connection failed", error);
@@ -75,3 +75,10 @@ app.get('/api/health', (req, res) => {
 app.listen(port, () => {
   console.log(`Server läuft auf http://localhost:${port}`);
 });
+
+// app.get('/api/Test', (req, res) => {
+//   try {
+//     const recipes = db.collection("user");
+//     const query = { name: "dev" };
+//   }
+// });

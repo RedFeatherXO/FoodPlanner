@@ -6,7 +6,14 @@ import "./App.css";
 import dayjs from "dayjs";
 import advancedFormat from "dayjs/plugin/advancedFormat";
 import isoWeek from "dayjs/plugin/isoWeek";
-import {ZubSteps, List, Pic, Head, Count, Time} from "./components/RetrieveData.js"
+import {
+  ZubSteps,
+  List,
+  Pic,
+  Head,
+  Count,
+  Time,
+} from "./components/RetrieveData.js";
 import {
   MoSteps,
   MoList,
@@ -27,34 +34,30 @@ const dayComponentsHeads = [MoHead];
 const dayComponentsCounts = [MoCount];
 const dayComponentsTimes = [MoTime];
 
-
-
 export default function App() {
-  const [selectedDate, setSelectedDate] = useState(dayjs().format('YYYY-MM-DD')); //ISO8601 2019-01-25 -> 25.01.2019
+  const [selectedDate, setSelectedDate] = useState(
+    dayjs().format("YYYY-MM-DD")
+  ); //ISO8601 2019-01-25 -> 25.01.2019
   const [selectedIndex, setSelectedIndex] = useState(0); // (0) -> Default value
+
   const changeColor = (index) => {
     setSelectedIndex(index);
+    // console.log("^^^^^^ changeColor ^^^^^^");
+    // console.log(dayjs(String(selectedDate.year())+"-"+String(selectedDate.month()+1)+"-"+selectedDate.isoWeekday(index+1).date()));
+    // console.log("----- changeColor -----");
+    setSelectedDate(dayjs(String(dayjs(selectedDate).year())+"-"+String(dayjs(selectedDate).month()+1)+"-"+dayjs(selectedDate).isoWeekday(index+1).date()));
   };
 
+  //
+
   const onChange = (date, dateString) => {
-    if(date) {
-      setSelectedDate(date);
+    if (date) {
+      // console.log("^^^^^^ OnChange ^^^^^^");
+      // console.log(dayjs(String(date.year())+"-"+String(date.month()+1)+"-"+date.isoWeekday(selectedIndex+1).date()));
+      // console.log("----- OnChange -----");
+      setSelectedDate(dayjs(String(date.year())+"-"+String(date.month()+1)+"-"+date.isoWeekday(selectedIndex+1).date()));
     }
   };
-  // {
-  //   "$L": "en",
-  //   "$d": "2024-05-06T22:00:00.000Z",
-  //   "$y": 2024,
-  //   "$M": 4,
-  //   "$D": 7,
-  //   "$W": 2,
-  //   "$H": 0,
-  //   "$m": 0,
-  //   "$s": 0,
-  //   "$ms": 0,
-  //   "$x": {},
-  //   "$isDayjsObject": true
-  // }
   const SelectedDayComponent =
     selectedIndex !== null ? dayComponentsSteps[selectedIndex] : null;
   const SelectedDayComponentList =
@@ -77,23 +80,14 @@ export default function App() {
         </Header>
 
         <div className="DateSelection">
-          <div className="DateBox MonthSelection">
-            <div>
+          <div className="DateBox YearSelection">
               <DatePicker
                 defaultValue={dayjs()}
-                format="MMMM"
+                format="YYYY"
                 onChange={onChange}
-                picker="month"
+                picker="year"
+                value={dayjs(selectedDate)}
               />
-            </div>
-            <div>
-              <DatePicker
-                defaultValue={dayjs()}
-                format="wo"
-                onChange={onChange}
-                picker="week"
-              />
-            </div>
           </div>
           <div className="DateBox DaySelection">
             <ul className="week-menu">
@@ -108,13 +102,25 @@ export default function App() {
               ))}
             </ul>
           </div>
-          <div className="DateBox YearSelection">
-            <DatePicker
-              defaultValue={dayjs()}
-              format="YYYY"
-              onChange={onChange}
-              picker="year"
-            />
+          <div className="DateBox MonthSelection">
+            <div>
+                <DatePicker
+                  defaultValue={dayjs()}
+                  format="MMMM"
+                  onChange={onChange}
+                  picker="month"
+                  value={dayjs(selectedDate)}
+                />
+            </div>
+            <div>
+                <DatePicker
+                  defaultValue={dayjs()}
+                  format="wo"
+                  onChange={onChange}
+                  picker="week"
+                  value={dayjs(selectedDate)}
+                />
+            </div>
           </div>
         </div>
         <Content className="content">
@@ -136,7 +142,7 @@ export default function App() {
                 <div className="Hbox">
                   {SelectedDayComponentTime && <SelectedDayComponentTime />}
                 </div>
-                {ZubSteps(selectedDate) && <ZubSteps />}
+                {SelectedDayComponent && <SelectedDayComponent />}
               </div>
             </div>
           </div>
