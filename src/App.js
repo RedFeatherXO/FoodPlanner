@@ -13,6 +13,7 @@ import {
   Head,
   Count,
   Time,
+  Devbtn,
 } from "./components/RetrieveData.js";
 import {
   MoSteps,
@@ -49,7 +50,6 @@ export default function App() {
   };
 
   //
-
   const onChange = (date, dateString) => {
     if (date) {
       // console.log("^^^^^^ OnChange ^^^^^^");
@@ -58,6 +58,7 @@ export default function App() {
       setSelectedDate(dayjs(String(date.year())+"-"+String(date.month()+1)+"-"+date.isoWeekday(selectedIndex+1).date()));
     }
   };
+
   const SelectedDayComponent =
     selectedIndex !== null ? dayComponentsSteps[selectedIndex] : null;
   const SelectedDayComponentList =
@@ -88,6 +89,7 @@ export default function App() {
                 picker="year"
                 value={dayjs(selectedDate)}
               />
+              {Devbtn(selectedDate) && <Devbtn/>}
           </div>
           <div className="DateBox DaySelection">
             <ul className="week-menu">

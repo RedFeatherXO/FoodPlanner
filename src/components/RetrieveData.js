@@ -191,4 +191,51 @@ function useServerStatus(pollingInterval = 5000) {
   return isServerAvailable;
 }
 
-export { ZubSteps, List, Pic, Head, Count, Time };
+function TestGetData(date = null) {
+  const [user, setUser] = useState(null);
+  const [error, setError] = useState(null);
+  const isServerAvailable = useServerStatus(5000); // Überprüfe den Serverstatus alle 5 Sekunden
+  //useEffect runs on every render. That means that when the count changes, a render happens, which then triggers another effect.
+  useEffect(() => {//Wird durch useEffect beim jedem Rendern ausgeführt und dannn ochmal alle 5000ms durch dependency value change isServerAvailable
+    console.log(date);
+    if (isServerAvailable) {
+      const query = '?name=dev&date=09.07.2024';
+      fetch(`/api/Test${query}`).then((response) => {
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          return response.json();
+        })
+        .then((data) => setUser(data))
+        .catch((error) => {
+          console.error("Error fetching data:", error);
+          setError(error.toString());
+        });
+    }
+  }, [isServerAvailable]); 
+
+  return user;
+}
+
+function devLog(user){
+  console.log(user);
+}
+
+function Devbtn(date=null){
+  var user = TestGetData(date);
+  if (!user) {
+    return (
+      <>
+        <Spin indicator={<LoadingOutlined style={{ fontSize: 33 }} spin />} />
+      </>
+    );
+  }
+
+  return (
+    <>
+      <Button type="primary" onClick={() => devLog(user)}>Primary Button</Button>
+    </>
+  );
+}
+
+export { ZubSteps, List, Pic, Head, Count, Time, Devbtn };

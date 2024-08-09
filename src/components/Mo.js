@@ -162,7 +162,7 @@ function GetData() {
         });
     }
   }, [isServerAvailable]);
-  console.log(rezept);
+  // console.log(rezept);
   return rezept;
 }
 

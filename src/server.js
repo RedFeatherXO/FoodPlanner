@@ -44,13 +44,37 @@ app.get("/api/recipe", async (req, res) => {
   try {
     const Rezepte = db.collection("rezepte");
     const query = { name: "Spaghetti Bolognese" };
-    console.log(Rezepte);
+    // console.log(Rezepte);
     const rezept = await Rezepte.findOne(query);
     // console.log('rezept found:', rezept);
     res.json(rezept);
   } catch (error) {
     console.error("Connection failed", error);
     res.status(500).send("Internal Server Error");
+  }
+});
+
+app.get('/api/Test', async (req, res) => {
+  try {
+    const Users = db.collection("user");
+    console.log("-------------------");
+    console.log(req.query.name);
+    var date = req.query.date;
+    console.log(date);
+    console.log("-------------------");
+    const query = { name: "dev", "ausgewählteRezepte.datum": date };
+    const user = await Users.findOne(query,{
+      projection: {
+        "ausgewählteRezepte":{ //Durch "$elemMatch" verwendet, um nur das Element in ausgewählteRezepte zurückzugeben, das dem gesuchten Datum entspricht
+          $elemMatch: { "datum": date } 
+        }
+      }
+  });
+    console.log(user)
+    res.json(user);
+  } catch (error) {
+      console.error("Connection failed", error);
+      res.status(500).send("Internal Server Error");
   }
 });
 
@@ -76,9 +100,4 @@ app.listen(port, () => {
   console.log(`Server läuft auf http://localhost:${port}`);
 });
 
-// app.get('/api/Test', (req, res) => {
-//   try {
-//     const recipes = db.collection("user");
-//     const query = { name: "dev" };
-//   }
-// });
+

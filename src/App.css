@@ -310,11 +310,11 @@
 }
 
 .DaySelection {
-  
+  height: auto;
 }
 
-.YearSelection {
-  
+.YearSelection > Button{
+  margin-left: 100px;
 }
 
 :where(.css-dev-only-do-not-override-1pg9a38).ant-picker .ant-picker-input > input {
