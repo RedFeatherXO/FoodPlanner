@@ -15,25 +15,11 @@ import {
   Time,
   Devbtn,
 } from "./components/RetrieveData.js";
-import {
-  MoSteps,
-  MoList,
-  MoPic,
-  MoHead,
-  MoCount,
-  MoTime,
-} from "./components/Mo.js";
 dayjs.extend(advancedFormat); //https://day.js.org/docs/en/plugin/advanced-format
 dayjs.extend(isoWeek);
 const { Header, Content } = Layout;
 
 const days = ["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"];
-const dayComponentsSteps = [MoSteps]; //, Di, Mi, Do, Fr, Sa, So];
-const dayComponentsLists = [MoList];
-const dayComponentsPics = [MoPic];
-const dayComponentsHeads = [MoHead];
-const dayComponentsCounts = [MoCount];
-const dayComponentsTimes = [MoTime];
 
 export default function App() {
   const [selectedDate, setSelectedDate] = useState(
@@ -59,19 +45,6 @@ export default function App() {
       setSelectedDate(dayjs(String(date.year())+"-"+String(date.month()+1)+"-"+date.isoWeekday(selectedIndex+1).date()));
     }
   };
-
-  const SelectedDayComponent =
-    selectedIndex !== null ? dayComponentsSteps[selectedIndex] : null;
-  const SelectedDayComponentList =
-    selectedIndex !== null ? dayComponentsLists[selectedIndex] : null;
-  const SelectedDayComponentPic =
-    selectedIndex !== null ? dayComponentsPics[selectedIndex] : null;
-  const SelectedDayComponentHead =
-    selectedIndex !== null ? dayComponentsHeads[selectedIndex] : null;
-  const SelectedDayComponentCount =
-    selectedIndex !== null ? dayComponentsCounts[selectedIndex] : null;
-  const SelectedDayComponentTime =
-    selectedIndex !== null ? dayComponentsTimes[selectedIndex] : null;
   return (
     <>
       <Layout className="layout">
