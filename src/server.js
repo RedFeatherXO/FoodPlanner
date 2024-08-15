@@ -1,6 +1,6 @@
 require("dotenv").config();
 const express = require("express");
-const { MongoClient, ServerApiVersion } = require("mongodb");
+const { MongoClient, ServerApiVersion, ObjectId  } = require("mongodb");
 const app = express();
 const port = 3000; // Port für den Server
 
@@ -54,30 +54,6 @@ app.get("/api/recipe", async (req, res) => {
   }
 });
 
-app.get('/api/Test', async (req, res) => {
-  try {
-    const Users = db.collection("user");
-    console.log("-------------------");
-    console.log(req.query.name);
-    var date = req.query.date;
-    console.log(date);
-    console.log("-------------------");
-    const query = { name: "dev", "ausgewählteRezepte.datum": date };
-    const user = await Users.findOne(query,{
-      projection: {
-        "ausgewählteRezepte":{ //Durch "$elemMatch" verwendet, um nur das Element in ausgewählteRezepte zurückzugeben, das dem gesuchten Datum entspricht
-          $elemMatch: { "datum": date } 
-        }
-      }
-  });
-    console.log(user)
-    res.json(user);
-  } catch (error) {
-      console.error("Connection failed", error);
-      res.status(500).send("Internal Server Error");
-  }
-});
-
 app.post("/api/recipe", async (req, res) => {
   try {
     const recipes = db.collection("rezepte");
@@ -99,5 +75,77 @@ app.get('/api/health', (req, res) => {
 app.listen(port, () => {
   console.log(`Server läuft auf http://localhost:${port}`);
 });
+
+
+
+
+// ----------------------------------- TEST -----------------------------------------------------
+
+app.get('/api/Test', async (req, res) => {
+  try {
+    const Users = db.collection("user");
+    // console.log("-------------------");
+    // console.log(req.query.name);
+    var date = String(req.query.date);
+    // console.log(date);
+    // console.log("-------------------");
+    const query = { name: "dev", "ausgewählteRezepte.datum": date };
+    const user = await Users.findOne(query,{
+      projection: {
+        "ausgewählteRezepte":{ //Durch "$elemMatch" verwendet, um nur das Element in ausgewählteRezepte zurückzugeben, das dem gesuchten Datum entspricht
+          $elemMatch: { "datum": date } 
+        }
+      }
+  });
+    // console.log(user)
+    res.json(user);
+  } catch (error) {
+      console.error("Connection failed", error);
+      res.status(500).send("Internal Server Error");
+  }
+});
+
+app.get('/api/Test2', async (req, res) => {
+  try {
+    const Users = db.collection("user");
+    // console.log("-------------------");
+    // console.log(req.query.name);
+    // console.log("-------------------");
+    const query = { name: "dev"};
+    const user = await Users.findOne(query);
+    // console.log(user)
+    res.json(user);
+  } catch (error) {
+      console.error("Connection failed", error);
+      res.status(500).send("Internal Server Error");
+  }
+});
+
+app.get("/api/recipeTest", async (req, res) => {
+  try {
+    const Rezepte = db.collection("rezepte");
+    var Recipe_id = String(req.query.Recipe_id);
+    var x = new ObjectId(Recipe_id);
+    console.log(typeof(Recipe_id));
+    console.log(typeof('66af31e4f75170870ed2fe78'));
+    const query = { _id: x };
+    console.log(query)
+    const rezept = await Rezepte.findOne(x);
+    console.log('rezept found:', rezept);
+  // const user = await Users.findOne(query,{
+  //     projection: {
+  //       "ausgewählteRezepte":{ //Durch "$elemMatch" verwendet, um nur das Element in ausgewählteRezepte zurückzugeben, das dem gesuchten Datum entspricht
+  //         $elemMatch: { "datum": date } 
+  //       }
+  //     }
+  // });
+    res.json(rezept);
+  } catch (error) {
+    console.error("Connection failed", error);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+
 
 

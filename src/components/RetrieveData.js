@@ -1,12 +1,42 @@
 // src/components/days/Mo.js
 import React from "react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useReducer } from "react";
 import { LoadingOutlined } from "@ant-design/icons";
 import { Steps, Checkbox, Button, message, Flex, Spin } from "antd";
 
-function Head() {
-  var rezept = GetData();
-  if (!rezept) {
+function Head({date = "2024-07-09", name = "dev"}) {
+  const [HeadText, setHeadText] = useState("-");
+  // const query = `?name=dev&date=${date || '2024-07-09'}`;
+  const query = `?name=dev`;
+  const {data: user, error, isServerAvailable,} = useFetchData(`/api/Test2${query}`);
+
+  function CheckforDate(choosenRecipe) {
+    return choosenRecipe.datum === date;
+  }
+
+  useEffect(() => {
+    if (isServerAvailable) {
+      if (user) {
+        console.log(user.name, "Server is available, data loaded:", user);
+        var _id = user.ausgewählteRezepte.find(CheckforDate).rezepte_id;
+        const query = `?Recipe_id=${_id}`;
+        const fetchRez = async () => {
+          try {
+            const response = await fetch(`/api/recipeTest${query}`);
+            const rez = await response.json();
+            setHeadText(rez.name);
+            console.log(rez);
+          } catch (error) {
+            console.error(error);
+          }
+        };
+
+        fetchRez();
+      }
+    }
+  }, [isServerAvailable, user]);
+
+  if (!user) {
     return (
       <div className="food-details">
         <Spin indicator={<LoadingOutlined style={{ fontSize: 50 }} spin />} />
@@ -15,15 +45,45 @@ function Head() {
   }
   return (
     <div className="food-details">
-      <h1>{rezept.name}</h1>
+      <h1>{HeadText}</h1>
     </div>
   );
 }
 
-function ZubSteps(date = null) {
+function ZubSteps({date = "2024-07-09", name = "dev"}) {
   const [current, setCurrent] = useState(0); //Hook muss immer ausgeführt werden sonst kommt fehler da sich die Hooks anzahl in verschieden Rendern ändert
-  var rezept = GetData(date);
-  if (!rezept) {
+  const [StepsArr, setStepsArr] = useState(["-"]);
+  // const query = `?name=dev&date=${date || '2024-07-09'}`;
+  const query = `?name=dev`;
+  const {data: user, error, isServerAvailable,} = useFetchData(`/api/Test2${query}`);
+
+  function CheckforDate(choosenRecipe) {
+    return choosenRecipe.datum === date;
+  }
+
+  useEffect(() => {
+    if (isServerAvailable) {
+      if (user) {
+        console.log(user.name, "Server is available, data loaded:", user);
+        var _id = user.ausgewählteRezepte.find(CheckforDate).rezepte_id;
+        const query = `?Recipe_id=${_id}`;
+        const fetchRez = async () => {
+          try {
+            const response = await fetch(`/api/recipeTest${query}`);
+            const rez = await response.json();
+            setStepsArr(rez.zubereitungsschritte);
+            console.log(rez);
+          } catch (error) {
+            console.error(error);
+          }
+        };
+
+        fetchRez();
+      }
+    }
+  }, [isServerAvailable, user]);
+
+  if (!user) {
     return (
       <div className="box-content3">
         <Spin indicator={<LoadingOutlined style={{ fontSize: 50 }} spin />} />
@@ -38,7 +98,7 @@ function ZubSteps(date = null) {
       setCurrent(current - 1);
     }
   };
-  const items = rezept.zubereitungsschritte.map((item, index) => ({
+  const items = StepsArr.map((item, index) => ({
     key: "Schritt " + String(index),
     title: "Schritt " + String(index),
     description: item,
@@ -71,22 +131,82 @@ function ZubSteps(date = null) {
   );
 }
 
-function Pic() {
-  var rezept = GetData();
-  if (!rezept) {
+function Pic({date = "2024-07-09", name = "dev"}) {
+  const [bildUrl, setbildUrl] = useState([{menge:"-",name:"-"}]);
+  // const query = `?name=dev&date=${date || '2024-07-09'}`;
+  const query = `?name=dev`;
+  const {data: user, error, isServerAvailable,} = useFetchData(`/api/Test2${query}`);
+
+  function CheckforDate(choosenRecipe) {
+    return choosenRecipe.datum === date;
+  }
+
+  useEffect(() => {
+    if (isServerAvailable) {
+      if (user) {
+        console.log(user.name, "Server is available, data loaded:", user);
+        var _id = user.ausgewählteRezepte.find(CheckforDate).rezepte_id;
+        const query = `?Recipe_id=${_id}`;
+        const fetchRez = async () => {
+          try {
+            const response = await fetch(`/api/recipeTest${query}`);
+            const rez = await response.json();
+            setbildUrl(rez.bild);
+            console.log(rez);
+          } catch (error) {
+            console.error(error);
+          }
+        };
+
+        fetchRez();
+      }
+    }
+  }, [isServerAvailable, user]);
+
+  if (!user) {
     return (
       <div className="food-image">
         <Spin indicator={<LoadingOutlined style={{ fontSize: 148 }} spin />} />
       </div>
     );
   }
-  let imagePath = rezept.bild;
+  let imagePath = bildUrl;
   return <img className="food-image" alt="Food" src={imagePath} />;
 }
 
-function List() {
-  var rezept = GetData();
-  if (!rezept) {
+function List({date = "2024-07-09", name = "dev"}) {
+  const [ListArr, setListArr] = useState([{menge:"-",name:"-"}]);
+  // const query = `?name=dev&date=${date || '2024-07-09'}`;
+  const query = `?name=dev`;
+  const {data: user, error, isServerAvailable,} = useFetchData(`/api/Test2${query}`);
+
+  function CheckforDate(choosenRecipe) {
+    return choosenRecipe.datum === date;
+  }
+
+  useEffect(() => {
+    if (isServerAvailable) {
+      if (user) {
+        console.log(user.name, "Server is available, data loaded:", user);
+        var _id = user.ausgewählteRezepte.find(CheckforDate).rezepte_id;
+        const query = `?Recipe_id=${_id}`;
+        const fetchRez = async () => {
+          try {
+            const response = await fetch(`/api/recipeTest${query}`);
+            const rez = await response.json();
+            setListArr(rez.zutaten);
+            console.log(rez);
+          } catch (error) {
+            console.error(error);
+          }
+        };
+
+        fetchRez();
+      }
+    }
+  }, [isServerAvailable, user]);
+
+  if (!user) {
     return (
       <div className="box-content2">
         <Spin indicator={<LoadingOutlined style={{ fontSize: 148 }} spin />} />
@@ -95,7 +215,7 @@ function List() {
   }
   return (
     <div className="box-content2">
-      {rezept.zutaten.map((item, index) => (
+      {ListArr.map((item, index) => (
         <Checkbox className="ZutatenCheck" key={index}>
           <div className="checkbox-content">
             <span className="first-column">{item.menge}</span>
@@ -107,122 +227,38 @@ function List() {
   );
 }
 
-function Count() {
-  var rezept = GetData();
-  if (!rezept) {
-    return (
-      <>
-        <Spin indicator={<LoadingOutlined style={{ fontSize: 33 }} spin />} />
-      </>
-    );
+function Count({date = "2024-07-09", name = "dev"}) {
+  const [CountText, setCountText] = useState("-- Stück");
+  // const query = `?name=dev&date=${date || '2024-07-09'}`;
+  const query = `?name=dev`;
+  const {data: user, error, isServerAvailable,} = useFetchData(`/api/Test2${query}`);
+
+  function CheckforDate(choosenRecipe) {
+    return choosenRecipe.datum === date;
   }
-
-  return (
-    <>
-      <h2>Zutaten ({rezept.zutaten.length} Stück)</h2>
-    </>
-  );
-}
-
-function Time() {
-  var rezept = GetData();
-  if (!rezept) {
-    return (
-      <>
-        <Spin indicator={<LoadingOutlined style={{ fontSize: 33 }} spin />} />
-      </>
-    );
-  }
-
-  return (
-    <>
-      <h2>Zubereitung ({rezept.zubreitungszeit}) </h2>
-    </>
-  );
-}
-
-function GetData(date = null) {
-  const [rezept, setRezept] = useState(null);
-  const [error, setError] = useState(null);
-  const isServerAvailable = useServerStatus(5000); // Überprüfe den Serverstatus alle 5 Sekunden
 
   useEffect(() => {
     if (isServerAvailable) {
-      fetch("/api/recipe").then((response) => {
-          if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+      if (user) {
+        console.log(user.name, "Server is available, data loaded:", user);
+        var _id = user.ausgewählteRezepte.find(CheckforDate).rezepte_id;
+        const query = `?Recipe_id=${_id}`;
+        const fetchRez = async () => {
+          try {
+            const response = await fetch(`/api/recipeTest${query}`);
+            const rez = await response.json();
+            setCountText(rez.zutaten.length);
+            console.log(rez);
+          } catch (error) {
+            console.error(error);
           }
-          return response.json();
-        })
-        .then((data) => setRezept(data))
-        .catch((error) => {
-          console.error("Error fetching data:", error);
-          setError(error.toString());
-        });
-    }
-  }, [isServerAvailable]);
+        };
 
-  return rezept;
-}
-
-function useServerStatus(pollingInterval = 5000) {
-  const [isServerAvailable, setIsServerAvailable] = useState(false);
-
-  useEffect(() => {
-    const checkServerStatus = async () => {
-      try {
-        const response = await fetch("/api/health"); // Ein einfacher Health-Check-Endpunkt
-        if (response.ok) {
-          setIsServerAvailable(true);
-        } else {
-          setIsServerAvailable(false);
-        }
-      } catch (error) {
-        setIsServerAvailable(false);
+        fetchRez();
       }
-    };
-
-    const intervalId = setInterval(checkServerStatus, pollingInterval);
-
-    // Cleanup function to clear the interval when the component unmounts
-    return () => clearInterval(intervalId);
-  }, [pollingInterval]);
-
-  return isServerAvailable;
-}
-
-function TestGetData(date = null) {
-  const [user, setUser] = useState(null);
-  const [error, setError] = useState(null);
-  const isServerAvailable = useServerStatus(5000); // Überprüfe den Serverstatus alle 5 Sekunden
-  //useEffect runs on every render. That means that when the count changes, a render happens, which then triggers another effect.
-  useEffect(() => {//Wird durch useEffect beim jedem Rendern ausgeführt und dannn ochmal alle 5000ms durch dependency value change isServerAvailable
-    console.log(date);
-    if (isServerAvailable) {
-      const query = '?name=dev&date=09.07.2024';
-      fetch(`/api/Test${query}`).then((response) => {
-          if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-          }
-          return response.json();
-        })
-        .then((data) => setUser(data))
-        .catch((error) => {
-          console.error("Error fetching data:", error);
-          setError(error.toString());
-        });
     }
-  }, [isServerAvailable]); 
+  }, [isServerAvailable, user]);
 
-  return user;
-}
-
-function devLog(user){
-  console.log(user);
-}
-
-function Devbtn(date=null){
-  var user = TestGetData(date);
   if (!user) {
     return (
       <>
@@ -233,9 +269,157 @@ function Devbtn(date=null){
 
   return (
     <>
-      <Button type="primary" onClick={() => devLog(user)}>Primary Button</Button>
+      <h2>Zutaten ({CountText} Stück)</h2>
     </>
   );
+}
+
+function Time({date = "2024-07-09", name = "dev"}) {
+  const [TimeText, setTimeText] = useState("-- min");
+  // const query = `?name=dev&date=${date || '2024-07-09'}`;
+  const query = `?name=dev`;
+  const {data: user, error, isServerAvailable,} = useFetchData(`/api/Test2${query}`);
+
+  function CheckforDate(choosenRecipe) {
+    return choosenRecipe.datum === date;
+  }
+
+  useEffect(() => {
+    if (isServerAvailable) {
+      if (user) {
+        console.log(user.name, "Server is available, data loaded:", user);
+        var _id = user.ausgewählteRezepte.find(CheckforDate).rezepte_id;
+        const query = `?Recipe_id=${_id}`;
+        const fetchRez = async () => {
+          try {
+            const response = await fetch(`/api/recipeTest${query}`);
+            const rez = await response.json();
+            setTimeText(rez.zubreitungszeit);
+            console.log(rez);
+          } catch (error) {
+            console.error(error);
+          }
+        };
+
+        fetchRez();
+      }
+    }
+  }, [isServerAvailable, user]);
+
+  if (!user) {
+    return (
+      <>
+        <Spin indicator={<LoadingOutlined style={{ fontSize: 33 }} spin />} />
+      </>
+    );
+  }
+
+  return (
+    <>
+      <h2>Zubereitung ({TimeText}) </h2>
+    </>
+  );
+}
+
+function Devbtn({ date = "2024-07-09", name = "dev" }) {
+  // const query = `?name=dev&date=${date || '2024-07-09'}`;
+  const [ButtonText, setButtonText] = useState("Dev Test");
+  const query = `?name=dev`;
+
+  // Verwende useFetchData einmal, um den Status zu überwachen und die Daten zu laden
+  const {
+    data: user,
+    error,
+    isServerAvailable,
+  } = useFetchData(`/api/Test2${query}`);
+
+  useEffect(() => {
+    if (isServerAvailable) {
+      if (user)
+        console.log(user.name, "Server is available, data loaded:", user);
+    }
+  }, [isServerAvailable, user]);
+
+  function CheckforDate(choosenRecipe) {
+    return choosenRecipe.datum === date;
+  }
+  const devLog = (user) => {
+    var _id = user.ausgewählteRezepte.find(CheckforDate).rezepte_id;
+    const query = `?Recipe_id=${_id}`;
+    const fetchRez = async () => {
+      try {
+        const response = await fetch(`/api/recipeTest${query}`);
+        const rez = await response.json();
+        setButtonText(rez.name);
+        console.log(rez);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchRez();
+  };
+
+  if (!user) {
+    return (
+      <>
+        <Spin indicator={<LoadingOutlined style={{ fontSize: 33 }} spin />} />
+      </>
+    );
+  }
+
+  return (
+    <>
+      <Button type="primary" onClick={() => devLog(user)}>
+        {ButtonText}
+      </Button>
+    </>
+  );
+}
+
+function useFetchData(url, pollingInterval = 50000) {
+  const [data, setData] = useState(null);
+  const [error, setError] = useState(null);
+  const [isServerAvailable, setIsServerAvailable] = useState(false);
+
+  // Überprüfung des Serverstatus
+  useEffect(() => {
+    const checkServerStatus = async () => {
+      try {
+        const response = await fetch("/api/health");
+        setIsServerAvailable(response.ok);
+      } catch (error) {
+        setIsServerAvailable(false);
+      }
+    };
+
+    checkServerStatus();
+    const intervalId = setInterval(checkServerStatus, pollingInterval);
+    return () => clearInterval(intervalId);
+  }, [pollingInterval]);
+
+  // Abruf der Daten, wenn der Server verfügbar ist
+  useEffect(() => {
+    if (isServerAvailable) {
+      const fetchData = async () => {
+        try {
+          const response = await fetch(url);
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          const result = await response.json();
+          setData(result);
+        } catch (error) {
+          setError(error.toString());
+        }
+      };
+      fetchData();
+      const intervalId = setInterval(fetchData, pollingInterval); // Regelmäßiger Abruf der Daten
+      return () => clearInterval(intervalId); // Aufräumen bei Unmount
+    }
+  }, [isServerAvailable, url, pollingInterval]);
+
+  return { data, error, isServerAvailable };
 }
 
 export { ZubSteps, List, Pic, Head, Count, Time, Devbtn };

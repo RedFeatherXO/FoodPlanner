@@ -1,5 +1,5 @@
 import React from "react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useReducer } from "react";
 import { Layout, Button, Pagination, DatePicker } from "antd";
 import { LeftOutlined, RightOutlined } from "@ant-design/icons";
 import "./App.css";
@@ -40,6 +40,7 @@ export default function App() {
     dayjs().format("YYYY-MM-DD")
   ); //ISO8601 2019-01-25 -> 25.01.2019
   const [selectedIndex, setSelectedIndex] = useState(0); // (0) -> Default value
+  
 
   const changeColor = (index) => {
     setSelectedIndex(index);
@@ -89,7 +90,8 @@ export default function App() {
                 picker="year"
                 value={dayjs(selectedDate)}
               />
-              {Devbtn(selectedDate) && <Devbtn/>}
+              {/* {Devbtn && <Devbtn date={selectedDate}/>} */}
+              {Devbtn && <Devbtn/>}
           </div>
           <div className="DateBox DaySelection">
             <ul className="week-menu">
@@ -127,24 +129,24 @@ export default function App() {
         </div>
         <Content className="content">
           <div className="food-preview">
-            {SelectedDayComponentHead && <SelectedDayComponentHead />}
+            {Head && <Head />}
             <div className="boxes-container">
               <div className="box box1">
                 <div className="Hbox">
-                  {SelectedDayComponentCount && <SelectedDayComponentCount />}
+                  {Count && <Count />}
                 </div>
-                {SelectedDayComponentList && <SelectedDayComponentList />}
+                {List && <List />}
               </div>
               <div className="box box2">
                 <div className="box-content">
-                  {SelectedDayComponentPic && <SelectedDayComponentPic />}
+                  {Pic && <Pic />}
                 </div>
               </div>
               <div className="box box3">
                 <div className="Hbox">
-                  {SelectedDayComponentTime && <SelectedDayComponentTime />}
+                  {Time && <Time />}
                 </div>
-                {SelectedDayComponent && <SelectedDayComponent />}
+                {ZubSteps && <ZubSteps />}
               </div>
             </div>
           </div>

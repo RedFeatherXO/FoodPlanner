@@ -283,6 +283,22 @@
     scrollbar-color: var(--whiteLight) #ffffff00;
   }
 
+  .fixed-buttons {
+    display: flex;
+    justify-content: flex-start;
+    gap: 10px;
+    position: sticky;
+    bottom: 0;
+    background-color: #429EA6;
+    padding: 10px;
+    border-radius: 15px 0px 15px 15px;
+    margin-top: 15px;
+  }
+  
+  .fixed-buttons button {
+    width: 50%;
+  }
+
 .DateSelection {
   display: flex;
   justify-content: center;
