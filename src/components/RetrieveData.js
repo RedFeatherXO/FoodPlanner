@@ -3,38 +3,54 @@ import React from "react";
 import { useEffect, useState, useReducer } from "react";
 import { LoadingOutlined } from "@ant-design/icons";
 import { Steps, Checkbox, Button, message, Flex, Spin } from "antd";
+import dayjs from "dayjs";
+import advancedFormat from "dayjs/plugin/advancedFormat";
+import isoWeek from "dayjs/plugin/isoWeek";
 
-function Head({date = "2024-07-09", name = "dev"}) {
+dayjs.extend(advancedFormat); //https://day.js.org/docs/en/plugin/advanced-format
+dayjs.extend(isoWeek);
+
+function Head({ date = "2024-07-09", name = "dev" }) {
   const [HeadText, setHeadText] = useState("-");
   // const query = `?name=dev&date=${date || '2024-07-09'}`;
   const query = `?name=dev`;
-  const {data: user, error, isServerAvailable,} = useFetchData(`/api/Test2${query}`);
+  const {
+    data: user,
+    error,
+    isServerAvailable,
+  } = useFetchData(`/api/Test2${query}`);
 
   function CheckforDate(choosenRecipe) {
-    return choosenRecipe.datum === date;
+    return choosenRecipe.datum === dayjs(date).format("YYYY-MM-DD");
   }
 
   useEffect(() => {
     if (isServerAvailable) {
       if (user) {
-        console.log(user.name, "Server is available, data loaded:", user);
-        var _id = user.ausgewählteRezepte.find(CheckforDate).rezepte_id;
-        const query = `?Recipe_id=${_id}`;
-        const fetchRez = async () => {
-          try {
-            const response = await fetch(`/api/recipeTest${query}`);
-            const rez = await response.json();
-            setHeadText(rez.name);
-            console.log(rez);
-          } catch (error) {
-            console.error(error);
-          }
-        };
+        // Condition ? trueAns : falseAns
+        var _id = user.ausgewählteRezepte.find(CheckforDate)
+          ? user.ausgewählteRezepte.find(CheckforDate).rezepte_id
+          : null;
+        if (_id) {
+          const query = `?Recipe_id=${_id}`;
+          const fetchRez = async () => {
+            try {
+              const response = await fetch(`/api/recipeTest${query}`);
+              const rez = await response.json();
+              setHeadText(rez.name);
+              // console.log(rez);
+            } catch (error) {
+              console.error(error);
+            }
+          };
 
-        fetchRez();
+          fetchRez();
+        } else {
+          setHeadText("Kein Gericht für diesen Tag");
+        }
       }
     }
-  }, [isServerAvailable, user]);
+  }, [isServerAvailable, user, date]);
 
   if (!user) {
     return (
@@ -50,38 +66,48 @@ function Head({date = "2024-07-09", name = "dev"}) {
   );
 }
 
-function ZubSteps({date = "2024-07-09", name = "dev"}) {
+function ZubSteps({ date = "2024-07-09", name = "dev" }) {
   const [current, setCurrent] = useState(0); //Hook muss immer ausgeführt werden sonst kommt fehler da sich die Hooks anzahl in verschieden Rendern ändert
   const [StepsArr, setStepsArr] = useState(["-"]);
   // const query = `?name=dev&date=${date || '2024-07-09'}`;
   const query = `?name=dev`;
-  const {data: user, error, isServerAvailable,} = useFetchData(`/api/Test2${query}`);
+  const {
+    data: user,
+    error,
+    isServerAvailable,
+  } = useFetchData(`/api/Test2${query}`);
 
   function CheckforDate(choosenRecipe) {
-    return choosenRecipe.datum === date;
+    return choosenRecipe.datum === dayjs(date).format("YYYY-MM-DD");
   }
 
   useEffect(() => {
     if (isServerAvailable) {
       if (user) {
-        console.log(user.name, "Server is available, data loaded:", user);
-        var _id = user.ausgewählteRezepte.find(CheckforDate).rezepte_id;
-        const query = `?Recipe_id=${_id}`;
-        const fetchRez = async () => {
-          try {
-            const response = await fetch(`/api/recipeTest${query}`);
-            const rez = await response.json();
-            setStepsArr(rez.zubereitungsschritte);
-            console.log(rez);
-          } catch (error) {
-            console.error(error);
-          }
-        };
+        // Condition ? trueAns : falseAns
+        var _id = user.ausgewählteRezepte.find(CheckforDate)
+          ? user.ausgewählteRezepte.find(CheckforDate).rezepte_id
+          : null;
+        if (_id) {
+          const query = `?Recipe_id=${_id}`;
+          const fetchRez = async () => {
+            try {
+              const response = await fetch(`/api/recipeTest${query}`);
+              const rez = await response.json();
+              setStepsArr(rez.zubereitungsschritte);
+              // console.log(rez);
+            } catch (error) {
+              console.error(error);
+            }
+          };
 
-        fetchRez();
+          fetchRez();
+        } else {
+          setStepsArr(["-"]);
+        }
       }
     }
-  }, [isServerAvailable, user]);
+  }, [isServerAvailable, user, date]);
 
   if (!user) {
     return (
@@ -131,37 +157,47 @@ function ZubSteps({date = "2024-07-09", name = "dev"}) {
   );
 }
 
-function Pic({date = "2024-07-09", name = "dev"}) {
-  const [bildUrl, setbildUrl] = useState([{menge:"-",name:"-"}]);
+function Pic({ date = "2024-07-09", name = "dev" }) {
+  const [bildUrl, setbildUrl] = useState([{ menge: "-", name: "-" }]);
   // const query = `?name=dev&date=${date || '2024-07-09'}`;
   const query = `?name=dev`;
-  const {data: user, error, isServerAvailable,} = useFetchData(`/api/Test2${query}`);
+  const {
+    data: user,
+    error,
+    isServerAvailable,
+  } = useFetchData(`/api/Test2${query}`);
 
   function CheckforDate(choosenRecipe) {
-    return choosenRecipe.datum === date;
+    return choosenRecipe.datum === dayjs(date).format("YYYY-MM-DD");
   }
 
   useEffect(() => {
     if (isServerAvailable) {
       if (user) {
-        console.log(user.name, "Server is available, data loaded:", user);
-        var _id = user.ausgewählteRezepte.find(CheckforDate).rezepte_id;
-        const query = `?Recipe_id=${_id}`;
-        const fetchRez = async () => {
-          try {
-            const response = await fetch(`/api/recipeTest${query}`);
-            const rez = await response.json();
-            setbildUrl(rez.bild);
-            console.log(rez);
-          } catch (error) {
-            console.error(error);
-          }
-        };
+        // Condition ? trueAns : falseAns
+        var _id = user.ausgewählteRezepte.find(CheckforDate)
+          ? user.ausgewählteRezepte.find(CheckforDate).rezepte_id
+          : null;
+        if (_id) {
+          const query = `?Recipe_id=${_id}`;
+          const fetchRez = async () => {
+            try {
+              const response = await fetch(`/api/recipeTest${query}`);
+              const rez = await response.json();
+              setbildUrl(rez.bild);
+              // console.log(rez);
+            } catch (error) {
+              console.error(error);
+            }
+          };
 
-        fetchRez();
+          fetchRez();
+        } else {
+          setbildUrl("/images/Placeholder.jpg");
+        }
       }
     }
-  }, [isServerAvailable, user]);
+  }, [isServerAvailable, user, date]);
 
   if (!user) {
     return (
@@ -174,37 +210,47 @@ function Pic({date = "2024-07-09", name = "dev"}) {
   return <img className="food-image" alt="Food" src={imagePath} />;
 }
 
-function List({date = "2024-07-09", name = "dev"}) {
-  const [ListArr, setListArr] = useState([{menge:"-",name:"-"}]);
+function List({ date = "2024-07-09", name = "dev" }) {
+  const [ListArr, setListArr] = useState([{ menge: "-", name: "-" }]);
   // const query = `?name=dev&date=${date || '2024-07-09'}`;
   const query = `?name=dev`;
-  const {data: user, error, isServerAvailable,} = useFetchData(`/api/Test2${query}`);
+  const {
+    data: user,
+    error,
+    isServerAvailable,
+  } = useFetchData(`/api/Test2${query}`);
 
   function CheckforDate(choosenRecipe) {
-    return choosenRecipe.datum === date;
+    return choosenRecipe.datum === dayjs(date).format("YYYY-MM-DD");
   }
 
   useEffect(() => {
     if (isServerAvailable) {
       if (user) {
-        console.log(user.name, "Server is available, data loaded:", user);
-        var _id = user.ausgewählteRezepte.find(CheckforDate).rezepte_id;
-        const query = `?Recipe_id=${_id}`;
-        const fetchRez = async () => {
-          try {
-            const response = await fetch(`/api/recipeTest${query}`);
-            const rez = await response.json();
-            setListArr(rez.zutaten);
-            console.log(rez);
-          } catch (error) {
-            console.error(error);
-          }
-        };
+        // Condition ? trueAns : falseAns
+        var _id = user.ausgewählteRezepte.find(CheckforDate)
+          ? user.ausgewählteRezepte.find(CheckforDate).rezepte_id
+          : null;
+        if (_id) {
+          const query = `?Recipe_id=${_id}`;
+          const fetchRez = async () => {
+            try {
+              const response = await fetch(`/api/recipeTest${query}`);
+              const rez = await response.json();
+              setListArr(rez.zutaten);
+              // console.log(rez);
+            } catch (error) {
+              console.error(error);
+            }
+          };
 
-        fetchRez();
+          fetchRez();
+        } else {
+          setListArr([{ menge: "-", name: "-" }]);
+        }
       }
     }
-  }, [isServerAvailable, user]);
+  }, [isServerAvailable, user, date]);
 
   if (!user) {
     return (
@@ -227,37 +273,47 @@ function List({date = "2024-07-09", name = "dev"}) {
   );
 }
 
-function Count({date = "2024-07-09", name = "dev"}) {
+function Count({ date = "2024-07-09", name = "dev" }) {
   const [CountText, setCountText] = useState("-- Stück");
   // const query = `?name=dev&date=${date || '2024-07-09'}`;
   const query = `?name=dev`;
-  const {data: user, error, isServerAvailable,} = useFetchData(`/api/Test2${query}`);
+  const {
+    data: user,
+    error,
+    isServerAvailable,
+  } = useFetchData(`/api/Test2${query}`);
 
   function CheckforDate(choosenRecipe) {
-    return choosenRecipe.datum === date;
+    return choosenRecipe.datum === dayjs(date).format("YYYY-MM-DD");
   }
 
   useEffect(() => {
     if (isServerAvailable) {
       if (user) {
-        console.log(user.name, "Server is available, data loaded:", user);
-        var _id = user.ausgewählteRezepte.find(CheckforDate).rezepte_id;
-        const query = `?Recipe_id=${_id}`;
-        const fetchRez = async () => {
-          try {
-            const response = await fetch(`/api/recipeTest${query}`);
-            const rez = await response.json();
-            setCountText(rez.zutaten.length);
-            console.log(rez);
-          } catch (error) {
-            console.error(error);
-          }
-        };
+        // Condition ? trueAns : falseAns
+        var _id = user.ausgewählteRezepte.find(CheckforDate)
+          ? user.ausgewählteRezepte.find(CheckforDate).rezepte_id
+          : null;
+        if (_id) {
+          const query = `?Recipe_id=${_id}`;
+          const fetchRez = async () => {
+            try {
+              const response = await fetch(`/api/recipeTest${query}`);
+              const rez = await response.json();
+              setCountText(rez.zutaten.length);
+              // console.log(rez);
+            } catch (error) {
+              console.error(error);
+            }
+          };
 
-        fetchRez();
+          fetchRez();
+        } else {
+          setCountText("-- Stück");
+        }
       }
     }
-  }, [isServerAvailable, user]);
+  }, [isServerAvailable, user, date]);
 
   if (!user) {
     return (
@@ -274,37 +330,48 @@ function Count({date = "2024-07-09", name = "dev"}) {
   );
 }
 
-function Time({date = "2024-07-09", name = "dev"}) {
+function Time({ date = "2024-07-09", name = "dev" }) {
   const [TimeText, setTimeText] = useState("-- min");
   // const query = `?name=dev&date=${date || '2024-07-09'}`;
   const query = `?name=dev`;
-  const {data: user, error, isServerAvailable,} = useFetchData(`/api/Test2${query}`);
+  const {
+    data: user,
+    error,
+    isServerAvailable,
+  } = useFetchData(`/api/Test2${query}`);
 
   function CheckforDate(choosenRecipe) {
-    return choosenRecipe.datum === date;
+    return choosenRecipe.datum === dayjs(date).format("YYYY-MM-DD");
   }
 
   useEffect(() => {
     if (isServerAvailable) {
       if (user) {
-        console.log(user.name, "Server is available, data loaded:", user);
-        var _id = user.ausgewählteRezepte.find(CheckforDate).rezepte_id;
-        const query = `?Recipe_id=${_id}`;
-        const fetchRez = async () => {
-          try {
-            const response = await fetch(`/api/recipeTest${query}`);
-            const rez = await response.json();
-            setTimeText(rez.zubreitungszeit);
-            console.log(rez);
-          } catch (error) {
-            console.error(error);
-          }
-        };
+        // Condition ? trueAns : falseAns
+        var _id = user.ausgewählteRezepte.find(CheckforDate)
+          ? user.ausgewählteRezepte.find(CheckforDate).rezepte_id
+          : null;
+        if (_id) {
+          // var _id = user.ausgewählteRezepte.find(CheckforDate).rezepte_id;
+          const query = `?Recipe_id=${_id}`;
+          const fetchRez = async () => {
+            try {
+              const response = await fetch(`/api/recipeTest${query}`);
+              const rez = await response.json();
+              setTimeText(rez.zubreitungszeit);
+              // console.log(rez);
+            } catch (error) {
+              console.error(error);
+            }
+          };
 
-        fetchRez();
+          fetchRez();
+        } else {
+          setTimeText("-- min");
+        }
       }
     }
-  }, [isServerAvailable, user]);
+  }, [isServerAvailable, user, date]);
 
   if (!user) {
     return (
@@ -325,7 +392,6 @@ function Devbtn({ date = "2024-07-09", name = "dev" }) {
   // const query = `?name=dev&date=${date || '2024-07-09'}`;
   const [ButtonText, setButtonText] = useState("Dev Test");
   const query = `?name=dev`;
-
   // Verwende useFetchData einmal, um den Status zu überwachen und die Daten zu laden
   const {
     data: user,
@@ -336,28 +402,36 @@ function Devbtn({ date = "2024-07-09", name = "dev" }) {
   useEffect(() => {
     if (isServerAvailable) {
       if (user)
-        console.log(user.name, "Server is available, data loaded:", user);
+        // console.log(user.name, "Server is available, data loaded:", user);
+        console.log("Loaded data with: ", dayjs(date).format("YYYY-MM-DD"));
     }
-  }, [isServerAvailable, user]);
+  }, [isServerAvailable, user, date]);
 
   function CheckforDate(choosenRecipe) {
-    return choosenRecipe.datum === date;
+    return choosenRecipe.datum === dayjs(date).format("YYYY-MM-DD");
   }
   const devLog = (user) => {
-    var _id = user.ausgewählteRezepte.find(CheckforDate).rezepte_id;
-    const query = `?Recipe_id=${_id}`;
-    const fetchRez = async () => {
-      try {
-        const response = await fetch(`/api/recipeTest${query}`);
-        const rez = await response.json();
-        setButtonText(rez.name);
-        console.log(rez);
-      } catch (error) {
-        console.error(error);
-      }
-    };
+    console.log("Loaded data with: ", dayjs(date).format("YYYY-MM-DD"));
+    var _id = user.ausgewählteRezepte.find(CheckforDate)
+      ? user.ausgewählteRezepte.find(CheckforDate).rezepte_id
+      : null;
+    if (_id) {
+      const query = `?Recipe_id=${_id}`;
+      const fetchRez = async () => {
+        try {
+          const response = await fetch(`/api/recipeTest${query}`);
+          const rez = await response.json();
+          setButtonText(rez.name);
+          // console.log(rez);
+        } catch (error) {
+          console.error(error, "Query: ", query);
+        }
+      };
 
-    fetchRez();
+      fetchRez();
+    } else {
+      setButtonText("No Recipe");
+    }
   };
 
   if (!user) {

@@ -25,23 +25,17 @@ export default function App() {
   const [selectedDate, setSelectedDate] = useState(
     dayjs().format("YYYY-MM-DD")
   ); //ISO8601 2019-01-25 -> 25.01.2019
-  const [selectedIndex, setSelectedIndex] = useState(0); // (0) -> Default value
+  const [selectedIndex, setSelectedIndex] = useState(dayjs().isoWeekday()-1); // (0) -> Default value
   
 
   const changeColor = (index) => {
     setSelectedIndex(index);
-    // console.log("^^^^^^ changeColor ^^^^^^");
-    // console.log(dayjs(String(selectedDate.year())+"-"+String(selectedDate.month()+1)+"-"+selectedDate.isoWeekday(index+1).date()));
-    // console.log("----- changeColor -----");
     setSelectedDate(dayjs(String(dayjs(selectedDate).year())+"-"+String(dayjs(selectedDate).month()+1)+"-"+dayjs(selectedDate).isoWeekday(index+1).date()));
   };
 
   //
-  const onChange = (date, dateString) => {
+  const onChange = (date) => {
     if (date) {
-      // console.log("^^^^^^ OnChange ^^^^^^");
-      // console.log(dayjs(String(date.year())+"-"+String(date.month()+1)+"-"+date.isoWeekday(selectedIndex+1).date()));
-      // console.log("----- OnChange -----");
       setSelectedDate(dayjs(String(date.year())+"-"+String(date.month()+1)+"-"+date.isoWeekday(selectedIndex+1).date()));
     }
   };
@@ -63,8 +57,7 @@ export default function App() {
                 picker="year"
                 value={dayjs(selectedDate)}
               />
-              {/* {Devbtn && <Devbtn date={selectedDate}/>} */}
-              {Devbtn && <Devbtn/>}
+              {Devbtn && <Devbtn date={selectedDate}/>}
           </div>
           <div className="DateBox DaySelection">
             <ul className="week-menu">
@@ -102,24 +95,24 @@ export default function App() {
         </div>
         <Content className="content">
           <div className="food-preview">
-            {Head && <Head />}
+            {Head && <Head date={selectedDate}/>}
             <div className="boxes-container">
               <div className="box box1">
                 <div className="Hbox">
-                  {Count && <Count />}
+                  {Count && <Count date={selectedDate}/>}
                 </div>
-                {List && <List />}
+                {List && <List date={selectedDate}/>}
               </div>
               <div className="box box2">
                 <div className="box-content">
-                  {Pic && <Pic />}
+                  {Pic && <Pic date={selectedDate}/>}
                 </div>
               </div>
               <div className="box box3">
                 <div className="Hbox">
-                  {Time && <Time />}
+                  {Time && <Time date={selectedDate}/>}
                 </div>
-                {ZubSteps && <ZubSteps />}
+                {ZubSteps && <ZubSteps date={selectedDate}/>}
               </div>
             </div>
           </div>
