@@ -1,303 +1,314 @@
 :root {
-    --whiteCream: #ECEBE4;
-    --whiteLight: #F7F6F3;
-    --MenuColor: #ED6A5A;
-    --ContentBoxColor: #153B50; 
-    /*#153B50  */
-  }
-  
-  .layout {
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    background-color: var(--whiteLight) ;
-  }
-  
-  .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background: #153B50;
-    padding: 0 20px;
-  }
-  
-  .CreateRec {
-    color: var(--MenuColor);
-    text-align: left;
-  }
-  
-  .Account {
-    color: var(--MenuColor);
-    text-align: right;
-  }
-  
-  .week-selection {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: var(--whiteCream);
-    margin: 10px;
-    margin-bottom: 5px;
-    border-radius: 20px;
-  }
-  :where(.css-dev-only-do-not-override-1uq9j6g).ant-menu-light, :where(.css-dev-only-do-not-override-1uq9j6g).ant-menu-light > .ant-menu {
-      color: rgba(0, 0, 0, 0.88);
-      background: #ffffff00;
-  }
-  
-  .week-selection .WeekJumper {
-    margin-right: 50px;
-  }
-  .week-menu {
-    display: flex;
-    justify-content: center;
-    list-style-type: none;
-    padding: 15px;
-    margin: 0px;
-  }
-  
-  .week-menu li {
-    padding: 15px;
-    font-weight: 800;
-    font-size: 30px;
-    line-height: 40px;
-    transition: background-color 0.3s ease, color 0.3s ease;
-    border-radius: 20px;
-    border-bottom-left-radius: 0px;
-    border-bottom-right-radius: 0px;
-    border-bottom-width: 1px;
-    border-bottom-style: solid;
-   
-  }
-  
-  .week-menu li:hover {
-    cursor: pointer;
-    line-height: 40px;
-    color: var(--MenuColor);
-  }
-  
-  ul.week-menu li.selected {
-    color: var(--MenuColor);
-    background-color: #eeeeee80;
-  }
-  
-  .content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    flex-grow: 1;
-    padding: 0;
-    overflow: hidden;
-    width: auto;
-    margin: 10px;
-    border-radius: 20px;
-    overflow-y: auto;
-    padding-right: 0; /* remove padding to make room for scrollbar */
-    scrollbar-width: thin;
-    margin-bottom: 0px;
-    background: var(--whiteCream);
-  }
-  
-  .content::-webkit-scrollbar {
-    width: 10px; /* set scrollbar width */
-    height: 10px;
-    background-color: transparent; /* make scrollbar background transparent */
-  }
-  
-  .content::-webkit-scrollbar-thumb {
-    background-color: #ccc; /* set scrollbar thumb color */
-    border-radius: 10px;
-  }
-  
-  .content::-webkit-scrollbar-track {
-    background-color: transparent; /* make scrollbar track transparent */
-  }
-  
-  .food-preview {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-  }
-  
-  .food-image {
-    width: inherit;
-    height: inherit;
-    object-fit: cover;
-    border-radius: 25px;
-    border: 5px solid var(--ContentBoxColor);
-  }
+  --whiteCream: #ecebe4;
+  --whiteLight: #f7f6f3;
+  --MenuColor: #ed6a5a;
+  --ContentBoxColor: #153b50;
+  /*#153B50  */
+}
 
-  .food-image .ant-spin {
-    width: auto;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .food-details {
-    margin: 5px 0;
-    max-width: 800px;
-    width: 100%;
-    color: var(--MenuColor);
-  }
-  
-  .boxes-container {
-    display: flex;
-    justify-content: center;
-    width: 100%;
-    margin: 10px 0;
-  }
-  
-  .box {
-    width: 30%;
-    height: 620px;
-    margin: 0 10px;
-    border-radius: 25px;
-  }
-  
-  .Hbox {
-    height: fit-content;
-    text-align: center;
-    /* font-size: 20px; */
-    color: #f0f2f5;
-    background-color: #429EA6;
-    padding: 2px;
-    border-radius: 15px 15px 0cm 15px;
-  }
-  
-  .Hbox h2,.ant-spin {
-    margin: 6px;
-  }
-  
-  .ZutatenCheck{
-    font-size: 17px;
-    color: #000000;
-    padding-left: 10px;
-    margin-bottom: 1px;
-    background-color: #429EA6;
-    border-radius: 10px;
-    width: 100%;
-  }
+.layout {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--whiteLight);
+}
 
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #153b50;
+  padding: 0 20px;
+}
 
-  .ZutatenCheck:hover{
-    font-size: 16px;
-    color: #000000;
-    padding-left: 10px;
-    margin-bottom: 1px;
-    background-color: #50B0B9;
-    border-radius: 10px;
-    transition: background-color 0.3s ease, 
-      color 0.3s ease, font-size 0.2s ease-in-out;
-  }
-  
-  /* :where(.css-dev-only-do-not-override-1uq9j6g).ant-checkbox + span {
+.CreateRec {
+  color: var(--MenuColor);
+  text-align: left;
+}
+
+.Account {
+  color: var(--MenuColor);
+  text-align: right;
+}
+
+.week-selection {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: var(--whiteCream);
+  margin: 10px;
+  margin-bottom: 5px;
+  border-radius: 20px;
+}
+:where(.css-dev-only-do-not-override-1uq9j6g).ant-menu-light,
+:where(.css-dev-only-do-not-override-1uq9j6g).ant-menu-light > .ant-menu {
+  color: rgba(0, 0, 0, 0.88);
+  background: #ffffff00;
+}
+
+.week-selection .WeekJumper {
+  margin-right: 50px;
+}
+.week-menu {
+  display: flex;
+  justify-content: center;
+  list-style-type: none;
+  padding: 15px;
+  margin: 0px;
+}
+
+.week-menu li {
+  padding: 15px;
+  font-weight: 800;
+  font-size: 30px;
+  line-height: 40px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  border-radius: 20px;
+  border-bottom-left-radius: 0px;
+  border-bottom-right-radius: 0px;
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+}
+
+.week-menu li:hover {
+  cursor: pointer;
+  line-height: 40px;
+  color: var(--MenuColor);
+}
+
+ul.week-menu li.selected {
+  color: var(--MenuColor);
+  background-color: #eeeeee80;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-grow: 1;
+  padding: 0;
+  overflow: hidden;
+  width: auto;
+  margin: 10px;
+  border-radius: 20px;
+  overflow-y: auto;
+  padding-right: 0; /* remove padding to make room for scrollbar */
+  scrollbar-width: thin;
+  margin-bottom: 0px;
+  background: var(--whiteCream);
+}
+
+.content::-webkit-scrollbar {
+  width: 10px; /* set scrollbar width */
+  height: 10px;
+  background-color: transparent; /* make scrollbar background transparent */
+}
+
+.content::-webkit-scrollbar-thumb {
+  background-color: #ccc; /* set scrollbar thumb color */
+  border-radius: 10px;
+}
+
+.content::-webkit-scrollbar-track {
+  background-color: transparent; /* make scrollbar track transparent */
+}
+
+.food-preview {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.food-image {
+  width: inherit;
+  height: inherit;
+  object-fit: cover;
+  border-radius: 25px;
+  border: 5px solid var(--ContentBoxColor);
+}
+
+.food-image .ant-spin {
+  width: auto;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.food-details {
+  margin: 5px 0;
+  max-width: 800px;
+  width: 100%;
+  color: var(--MenuColor);
+}
+
+.boxes-container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin: 10px 0;
+}
+
+.box {
+  width: 30%;
+  height: 620px;
+  margin: 0 10px;
+  border-radius: 25px;
+}
+
+.Hbox {
+  height: fit-content;
+  text-align: center;
+  /* font-size: 20px; */
+  color: #f0f2f5;
+  background-color: #429ea6;
+  padding: 2px;
+  border-radius: 15px 15px 0cm 15px;
+}
+
+.Hbox h2, .ant-spin {
+  margin: 6px;
+}
+
+.ZutatenCheck {
+  font-size: 17px;
+  color: #000000;
+  padding-left: 10px;
+  margin-bottom: 1px;
+  background-color: #429ea6;
+  border-radius: 10px;
+  width: 100%;
+}
+
+.ZutatenCheck:hover {
+  font-size: 16px;
+  color: #000000;
+  padding-left: 10px;
+  margin-bottom: 1px;
+  background-color: #50b0b9;
+  border-radius: 10px;
+  transition: background-color 0.3s ease, color 0.3s ease,
+    font-size 0.2s ease-in-out;
+}
+
+/* :where(.css-dev-only-do-not-override-1uq9j6g).ant-checkbox + span {
     width: 100%;
   } */
-  .ZutatenCheck .ant-checkbox + span {
-    width: 100%;
+.ZutatenCheck .ant-checkbox + span {
+  width: 100%;
 }
-  .ZutatenCheck .checkbox-content {
-    display: grid;
-    grid-template-columns: 40% 1fr; /* Two columns, second column takes remaining space */
-    column-gap: 10px; /* Gap between the columns */
-    align-items: center; /* Align items vertically in the center */
-    width: 100%;
-  }
-  .checkbox-content .second-column {
-    text-align: left; /* Ensure the second column text is left-aligned */
-  }
-  
-  .box3 {
-    background-color: var(--ContentBoxColor);
-    text-align: left;
-    padding-left: 15px;
-    padding-right: 15px;
-    padding: 15px;
-    display: flex;
-    flex-direction: column;
-    font-size: 15px;
-  }
-  
-  .box1 {
-    background-color: var(--ContentBoxColor);
-    text-align: left;
-    padding-left: 15px;
-    padding-right: 15px;
-    padding: 15px;
-    display: flex;
-    flex-direction: column;
-    font-size: 15px;
-  }
-  
-  
-  .box-content {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center; /* Center horizontally */
-    align-items: center;
-  
-  }
-  
-  .box-content2 {
-    width: auto;
-    display: flex;
-    flex: 1;
-    flex-direction: column;
-    justify-content: left;
-    align-items: left;
-    background-color: #429EA6;
-    border-radius: 15px 0px 15px 15px;
-    margin-top: 15px;
-    padding: 15px;
-    overflow-y: auto;
-    scrollbar-width: thin;
-    scrollbar-color: var(--whiteLight) #ffffff00;
-  }
 
-  .box-content2 .ant-spin {
-    display: flex;
-    flex: 1;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .box-content3 {
-    width: auto;
-    display: flex;
-    flex: 1;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: flex-start;
-    background-color: #429EA6;
-    border-radius: 15px;
-    margin-top: 15px;
-    padding: 15px;
-    overflow-y: auto;
-    scrollbar-width: thin;
-    scrollbar-color: var(--whiteLight) #ffffff00;
-  }
+.ZutatenCheck .checkbox-content {
+  display: grid;
+  grid-template-columns: 40% 1fr; /* Two columns, second column takes remaining space */
+  column-gap: 10px; /* Gap between the columns */
+  align-items: center; /* Align items vertically in the center */
+  width: 100%;
+}
+.checkbox-content .second-column {
+  text-align: left; /* Ensure the second column text is left-aligned */
+}
 
-  .fixed-buttons {
-    display: flex;
-    justify-content: flex-start;
-    gap: 10px;
-    position: sticky;
-    bottom: 0;
-    background-color: #429EA6;
-    padding: 10px;
-    border-radius: 15px 0px 15px 15px;
-    margin-top: 15px;
-  }
-  
-  .fixed-buttons button {
-    width: 50%;
-  }
+.box3 {
+  background-color: var(--ContentBoxColor);
+  text-align: left;
+  padding-left: 15px;
+  padding-right: 15px;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  font-size: 15px;
+}
+
+.box1 {
+  background-color: var(--ContentBoxColor);
+  text-align: left;
+  padding-left: 15px;
+  padding-right: 15px;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  font-size: 15px;
+}
+
+.box-content {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center; /* Center horizontally */
+  align-items: center;
+}
+
+.box-content2 {
+  width: auto;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: left;
+  align-items: left;
+  background-color: #429ea6;
+  border-radius: 15px 0px 15px 15px;
+  margin-top: 15px;
+  padding: 15px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--whiteLight) #ffffff00;
+}
+
+.box-content2 .ant-spin {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.box-content3 {
+  width: auto;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  background-color: #429ea6;
+  border-radius: 15px;
+  margin-top: 15px;
+  padding: 15px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--whiteLight) #ffffff00;
+}
+
+.fixed-buttons {
+  display: flex;
+  justify-content: flex-start;
+  gap: 10px;
+  position: sticky;
+  bottom: 0;
+  background-color: #429ea6;
+  padding: 10px;
+  border-radius: 15px 0px 15px 15px;
+  margin-top: 15px;
+}
+
+.fixed-buttons button {
+  width: 50%;
+}
+
+.Mockfixed-buttons {
+  display: flex;
+  justify-content: flex-start;
+  gap: 10px;
+  padding: 10px;
+  border-radius: 15px 0px 15px 15px;
+  margin-top: 15px;
+}
+
+.Mockfixed-buttons button {
+  width: 50%;
+}
 
 .DateSelection {
   display: flex;
@@ -329,10 +340,60 @@
   height: auto;
 }
 
-.YearSelection > Button{
+.YearSelection > Button {
   margin-left: 100px;
 }
 
-:where(.css-dev-only-do-not-override-1pg9a38).ant-picker .ant-picker-input > input {
+:where(.css-dev-only-do-not-override-1pg9a38).ant-picker
+  .ant-picker-input
+  > input {
   font-size: 25px;
+}
+
+.DrawerBox {
+  margin: 5px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  padding: 10px;
+  background-color: var(--whiteCream);
+  border-radius: 12.5px;
+}
+
+.ZutatenDrawer {
+  
+}
+
+.NewZutaten {
+  display: grid;
+}
+
+.NewZutaten h3 {
+  margin: 0;
+}
+
+.NewZutatenContent {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 2px;
+}
+
+.NewZutatenContent button {
+  background-color: red;
+  color: var(--whiteLight);
+}
+
+.Submit {
+  margin-top: 5px;
+  display: flex;
+}
+
+.Submit > Button {
+  margin-left: 5px;
+}
+
+.SubmitUpload{
+  margin-top: 10px;
+  width: 100%;
+  height: 40px;
 }

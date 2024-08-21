@@ -22,6 +22,17 @@ module.exports = {
           },
         },
       },
+      {
+        test: /\.(png|jpe?g|gif)$/i,
+        use: [
+          {
+            loader: "file-loader",
+            options: {
+              name: "images/[name].[hash].[ext]",
+            },
+          },
+        ],
+      },
     ],
   },
   devServer: {
@@ -35,8 +46,8 @@ module.exports = {
     liveReload: false,
     proxy: [
       {
-        context: ['/api'],
-        target: 'http://localhost:3000',
+        context: ["/api"],
+        target: "http://localhost:3000",
       },
     ],
   },

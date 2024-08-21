@@ -1,5 +1,8 @@
 require("dotenv").config();
 const express = require("express");
+const multer = require('multer');
+const path = require('path');
+const fs = require('fs');
 const { MongoClient, ServerApiVersion, ObjectId  } = require("mongodb");
 const app = express();
 const port = 3000; // Port für den Server
@@ -69,6 +72,38 @@ app.post("/api/recipe", async (req, res) => {
 
 app.get('/api/health', (req, res) => {
   res.status(200).send('Server is healthy');
+});
+
+const imagesDir = path.join(__dirname, '../dist/images');
+
+if (!fs.existsSync(imagesDir)) {
+  fs.mkdirSync(imagesDir, { recursive: true });
+}
+
+// Speicherort und -namen festlegen
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, imagesDir);
+  },
+  filename: (req, file, cb) => {
+    const filename = Date.now() + '-' + file.originalname;
+    cb(null, filename);
+  }
+});
+const upload = multer({ storage });
+
+app.post('/api/upload', upload.single('file'), (req, res) => {
+  const filePath = path.join(imagesDir, req.file.filename);
+
+  // Überprüfen, ob die Datei existiert
+  fs.access(filePath, fs.constants.F_OK, (err) => {
+    if (err) {
+      console.error('File does not exist:', filePath);
+      return res.status(500).send('File upload failed: File not found after upload.');
+    }
+
+    res.json({ message: 'File uploaded successfully', filePath: `/images/${req.file.filename}` });
+  });
 });
 
 // Starte den Server

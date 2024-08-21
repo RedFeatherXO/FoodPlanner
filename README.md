@@ -8,6 +8,7 @@ React
 Redux
 MongoDB
 node.js
+multer
 
 # Start
 1. After 3 new test branches back to main to implement what i learned
