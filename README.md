@@ -16,5 +16,5 @@ multer
 
 
 <div style="width:60px; height:60px">
-  ![Site Image](FoodWebsite\DevGithub\WebsiteExample.png?raw=true "Site Image title")
+  ![Site Image](/FoodWebsite/DevGithub/WebsiteExample.png?raw=true "Site Image title")
 </div>
