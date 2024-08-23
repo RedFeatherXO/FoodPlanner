@@ -14,5 +14,5 @@ multer
 1. After 3 new test branches back to main to implement what i learned
 2. 
 
-![Site Image](/FoodWebsite/DevGithub/WebsiteExample.png?raw=true "Site Image title")
+![Site Image](/DevGithub/WebsiteExample.png?raw=true "Site Image title")
 
