@@ -1,11 +1,13 @@
 import React from "react";
 import { useEffect, useState, useReducer } from "react";
-import { Layout, Button, DatePicker, Drawer, Input, Checkbox, Upload, message, Steps } from "antd";
+import { Layout, Button, DatePicker, Drawer, Input, Checkbox, Upload, message, Steps, Card, Avatar, Tooltip } from "antd";
+import { EditOutlined, EllipsisOutlined, SettingOutlined, CheckCircleTwoTone, EditTwoTone } from "@ant-design/icons";
+const { Meta } = Card;
 import "./App.css";
 import dayjs from "dayjs";
 import advancedFormat from "dayjs/plugin/advancedFormat";
 import isoWeek from "dayjs/plugin/isoWeek";
-import { ZubSteps, List, Pic, Head, Count, Time, Devbtn } from "./components/RetrieveData.js";
+import { ZubSteps, List, Pic, Head, Count, Time, Devbtn, ServerInfoAndHeader } from "./components/RetrieveData.js";
 import { GerichtStrings, NewList, NewSteps, NewPic } from "./components/DrawerFunc.js";
 dayjs.extend(advancedFormat); //https://day.js.org/docs/en/plugin/advanced-format
 dayjs.extend(isoWeek);
@@ -23,6 +25,13 @@ export default function App() {
   const [NewStepsArr, setStepsArr] = useState([]);
   const [NewPicPath, setPicPath] = useState("");
   const [NewZutatenArr, setZutatenArr] = useState([]);
+  // State lifting from RetrieveData.js
+  const [ServerInfo, setServerInfo] = useState([{ RecipeAvailable: false, ServerAvailable: false }]);
+
+  const gridStyle = {
+    width: "25%",
+    textAlign: "center",
+  };
 
   const showDrawer = () => {
     setOpen(true);
@@ -33,17 +42,27 @@ export default function App() {
 
   const changeColor = (index) => {
     setSelectedIndex(index);
-    setSelectedDate(
-      dayjs(
-        String(dayjs(selectedDate).year()) +
-          "-" +
-          String(dayjs(selectedDate).month() + 1) +
-          "-" +
-          dayjs(selectedDate)
-            .isoWeekday(index + 1)
-            .date()
-      )
-    );
+    // setSelectedDate(
+    //   dayjs(
+    //     String(dayjs(selectedDate).year()) +
+    //       "-" +
+    //       String(dayjs(selectedDate).month() + 1) +
+    //       "-" +
+    //       dayjs(selectedDate)
+    //         .isoWeekday(index + 1)
+    //         .date()
+    //   )
+    // );
+    const newDate = dayjs(
+      String(dayjs(selectedDate).year()) +
+        "-" +
+        String(dayjs(selectedDate).month() + 1) +
+        "-" +
+        dayjs(selectedDate)
+          .isoWeekday(index + 1)
+          .date()
+    ).format("YYYY-MM-DD");
+    setSelectedDate(newDate);
   };
 
   const onChange = (date) => {
@@ -68,20 +87,20 @@ export default function App() {
         "Zutaten für": NewGerichtStrings.Zutaten_für,
         bild: String(NewPicPath),
         zubereitungsschritte: NewStepsArr,
-        zutaten: NewZutatenArr
-      }
+        zutaten: NewZutatenArr,
+      };
       try {
-        const response = await fetch('/api/recipe', {
-          method: 'POST',
+        const response = await fetch("/api/recipe", {
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json'
+            "Content-Type": "application/json",
           },
-          body: JSON.stringify(ObjectToPush)
+          body: JSON.stringify(ObjectToPush),
         });
 
         if (response.ok) {
           const data = await response.json();
-          console.log('Recipe inserted with ID:', data.id);
+          console.log("Recipe inserted with ID:", data.id);
           message.success("Recipe uploaded successfully!");
 
           // Clear form data
@@ -91,13 +110,12 @@ export default function App() {
           setZutatenArr([]);
         } else {
           message.error("Failed to upload recipe");
-          console.error('Failed to upload recipe:', response.statusText);
+          console.error("Failed to upload recipe:", response.statusText);
         }
       } catch (error) {
-        console.error('Error while uploading recipe:', error);
+        console.error("Error while uploading recipe:", error);
         message.error("Error while uploading recipe");
       }
-
     } else {
       message.error("Alle Inputs müssen ausgefüllt sein");
     }
@@ -130,14 +148,14 @@ export default function App() {
               Create new Recipe
             </Button>
           </div>
-          <h2 style={{ color: "var(--MenuColor)" }}> Food planer </h2>
+          <ServerInfoAndHeader date={selectedDate} value={ServerInfo} setValue={setServerInfo} />
           <div className="Account"> Account</div>
         </Header>
 
         <div className="DateSelection">
           <div className="DateBox YearSelection">
             <DatePicker defaultValue={dayjs()} format="YYYY" onChange={onChange} picker="year" value={dayjs(selectedDate)} />
-            {Devbtn && <Devbtn date={selectedDate} />}
+            {/* {Devbtn && <Devbtn date={selectedDate} />} */}
           </div>
           <div className="DateBox DaySelection">
             <ul className="week-menu">
@@ -157,23 +175,85 @@ export default function App() {
             </div>
           </div>
         </div>
+
         <Content className="content">
-          <div className="food-preview">
-            {Head && <Head date={selectedDate} />}
-            <div className="boxes-container">
-              <div className="box box1">
-                <div className="Hbox">{Count && <Count date={selectedDate} />}</div>
-                {List && <List date={selectedDate} />}
-              </div>
-              <div className="box box2">
-                <div className="box-content">{Pic && <Pic date={selectedDate} />}</div>
-              </div>
-              <div className="box box3">
-                <div className="Hbox">{Time && <Time date={selectedDate} />}</div>
-                {ZubSteps && <ZubSteps date={selectedDate} />}
+          {ServerInfo.RecipeAvailable || !ServerInfo.ServerAvailable ? (
+            <div className="food-preview">
+              {Head && <Head date={selectedDate} />}
+              <div className="boxes-container">
+                <div className="box box1">
+                  <div className="Hbox">{Count && <Count date={selectedDate} />}</div>
+                  {List && <List date={selectedDate} />}
+                </div>
+                <div className="box box2">
+                  <div className="box-content">{Pic && <Pic date={selectedDate} />}</div>
+                </div>
+                <div className="box box3">
+                  <div className="Hbox">{Time && <Time date={selectedDate} />}</div>
+                  {ZubSteps && <ZubSteps date={selectedDate} />}
+                </div>
               </div>
             </div>
-          </div>
+          ) : (
+            <div className="recipe-selection-menu">
+              <h3>No recipe selected for {selectedDate}. Please choose a recipe.</h3>
+              <div className="CardBoxCollection">
+                <Card
+                  style={gridStyle}
+                  cover={<img alt="example" src="/images/Preview_1724375329639.webp" />}
+                  actions={[
+                    <Tooltip title="Select for today">
+                      {/* <CheckCircleTwoTone key="setting" /> */}
+                      <Button className="SelectBtn"> Select Gericht </Button>
+                    </Tooltip>,
+                    <Tooltip title="Edit Recipe">
+                      <EditTwoTone key="edit" />
+                    </Tooltip>,
+                    <Tooltip title="View Details">
+                      <EllipsisOutlined key="ellipsis" />
+                    </Tooltip>,
+                  ]}
+                >
+                  Thai Curry
+                </Card>
+                <Card
+                  style={gridStyle}
+                  cover={<img alt="example" src="/images/Preview_1724375329639.webp" />}
+                  actions={[<SettingOutlined key="setting" />, <EditOutlined key="edit" />, <EllipsisOutlined key="ellipsis" />]}
+                >
+                  Thai Curry
+                </Card>
+                <Card
+                  style={gridStyle}
+                  cover={<img alt="example" src="/images/Preview_1724375329639.webp" />}
+                  actions={[<SettingOutlined key="setting" />, <EditOutlined key="edit" />, <EllipsisOutlined key="ellipsis" />]}
+                >
+                  Thai Curry
+                </Card>
+                <Card
+                  style={gridStyle}
+                  cover={<img alt="example" src="/images/Preview_1724375329639.webp" />}
+                  actions={[<SettingOutlined key="setting" />, <EditOutlined key="edit" />, <EllipsisOutlined key="ellipsis" />]}
+                >
+                  Thai Curry
+                </Card>
+                <Card
+                  style={gridStyle}
+                  cover={<img alt="example" src="/images/Preview_1724375329639.webp" />}
+                  actions={[<SettingOutlined key="setting" />, <EditOutlined key="edit" />, <EllipsisOutlined key="ellipsis" />]}
+                >
+                  Thai Curry
+                </Card>
+                <Card
+                  style={gridStyle}
+                  cover={<img alt="example" src="/images/Preview_1724375329639.webp" />}
+                  actions={[<SettingOutlined key="setting" />, <EditOutlined key="edit" />, <EllipsisOutlined key="ellipsis" />]}
+                >
+                  Thai Curry
+                </Card>
+              </div>
+            </div>
+          )}
         </Content>
       </Layout>
     </>

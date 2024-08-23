@@ -2,7 +2,7 @@
 import React from "react";
 import { useEffect, useState, useReducer } from "react";
 import { LoadingOutlined } from "@ant-design/icons";
-import { Steps, Checkbox, Button, message, Flex, Spin } from "antd";
+import { Steps, Checkbox, Button, message, Flex, Spin, Skeleton } from "antd";
 import dayjs from "dayjs";
 import advancedFormat from "dayjs/plugin/advancedFormat";
 import isoWeek from "dayjs/plugin/isoWeek";
@@ -14,11 +14,7 @@ function Head({ date = "2024-07-09", name = "dev" }) {
   const [HeadText, setHeadText] = useState("-");
   // const query = `?name=dev&date=${date || '2024-07-09'}`;
   const query = `?name=dev`;
-  const {
-    data: user,
-    error,
-    isServerAvailable,
-  } = useFetchData(`/api/Test2${query}`);
+  const { data: user, error, isServerAvailable } = useFetchData(`/api/Test2${query}`);
 
   function CheckforDate(choosenRecipe) {
     return choosenRecipe.datum === dayjs(date).format("YYYY-MM-DD");
@@ -28,9 +24,7 @@ function Head({ date = "2024-07-09", name = "dev" }) {
     if (isServerAvailable) {
       if (user) {
         // Condition ? trueAns : falseAns
-        var _id = user.ausgewählteRezepte.find(CheckforDate)
-          ? user.ausgewählteRezepte.find(CheckforDate).rezepte_id
-          : null;
+        var _id = user.ausgewählteRezepte.find(CheckforDate) ? user.ausgewählteRezepte.find(CheckforDate).rezepte_id : null;
         if (_id) {
           const query = `?Recipe_id=${_id}`;
           const fetchRez = async () => {
@@ -55,7 +49,9 @@ function Head({ date = "2024-07-09", name = "dev" }) {
   if (!user) {
     return (
       <div className="food-details">
-        <Spin indicator={<LoadingOutlined style={{ fontSize: 50 }} spin />} />
+        {/* <Spin indicator={<LoadingOutlined style={{ fontSize: 50 }} spin />} /> */}
+        {/* <Skeleton value="small" active style={{ height: '1px' }}/> */}
+        <Skeleton.Input active size="large" shape="square" />
       </div>
     );
   }
@@ -71,11 +67,7 @@ function ZubSteps({ date = "2024-07-09", name = "dev" }) {
   const [StepsArr, setStepsArr] = useState(["-"]);
   // const query = `?name=dev&date=${date || '2024-07-09'}`;
   const query = `?name=dev`;
-  const {
-    data: user,
-    error,
-    isServerAvailable,
-  } = useFetchData(`/api/Test2${query}`);
+  const { data: user, error, isServerAvailable } = useFetchData(`/api/Test2${query}`);
 
   function CheckforDate(choosenRecipe) {
     return choosenRecipe.datum === dayjs(date).format("YYYY-MM-DD");
@@ -85,9 +77,7 @@ function ZubSteps({ date = "2024-07-09", name = "dev" }) {
     if (isServerAvailable) {
       if (user) {
         // Condition ? trueAns : falseAns
-        var _id = user.ausgewählteRezepte.find(CheckforDate)
-          ? user.ausgewählteRezepte.find(CheckforDate).rezepte_id
-          : null;
+        var _id = user.ausgewählteRezepte.find(CheckforDate) ? user.ausgewählteRezepte.find(CheckforDate).rezepte_id : null;
         if (_id) {
           const query = `?Recipe_id=${_id}`;
           const fetchRez = async () => {
@@ -112,7 +102,8 @@ function ZubSteps({ date = "2024-07-09", name = "dev" }) {
   if (!user) {
     return (
       <div className="box-content3">
-        <Spin indicator={<LoadingOutlined style={{ fontSize: 50 }} spin />} />
+        {/* <Spin indicator={<LoadingOutlined style={{ fontSize: 50 }} spin />} /> */}
+        <Skeleton value="small" active />
       </div>
     );
   }
@@ -141,10 +132,7 @@ function ZubSteps({ date = "2024-07-09", name = "dev" }) {
           </Button>
         )}
         {current === items.length - 1 && (
-          <Button
-            type="primary"
-            onClick={() => message.success("Processing complete!")}
-          >
+          <Button type="primary" onClick={() => message.success("Processing complete!")}>
             Done
           </Button>
         )}
@@ -161,11 +149,7 @@ function Pic({ date = "2024-07-09", name = "dev" }) {
   const [bildUrl, setbildUrl] = useState([{ menge: "-", name: "-" }]);
   // const query = `?name=dev&date=${date || '2024-07-09'}`;
   const query = `?name=dev`;
-  const {
-    data: user,
-    error,
-    isServerAvailable,
-  } = useFetchData(`/api/Test2${query}`);
+  const { data: user, error, isServerAvailable } = useFetchData(`/api/Test2${query}`);
 
   function CheckforDate(choosenRecipe) {
     return choosenRecipe.datum === dayjs(date).format("YYYY-MM-DD");
@@ -175,9 +159,7 @@ function Pic({ date = "2024-07-09", name = "dev" }) {
     if (isServerAvailable) {
       if (user) {
         // Condition ? trueAns : falseAns
-        var _id = user.ausgewählteRezepte.find(CheckforDate)
-          ? user.ausgewählteRezepte.find(CheckforDate).rezepte_id
-          : null;
+        var _id = user.ausgewählteRezepte.find(CheckforDate) ? user.ausgewählteRezepte.find(CheckforDate).rezepte_id : null;
         if (_id) {
           const query = `?Recipe_id=${_id}`;
           const fetchRez = async () => {
@@ -202,7 +184,8 @@ function Pic({ date = "2024-07-09", name = "dev" }) {
   if (!user) {
     return (
       <div className="food-image">
-        <Spin indicator={<LoadingOutlined style={{ fontSize: 148 }} spin />} />
+        {/* <Spin indicator={<LoadingOutlined style={{ fontSize: 148 }} spin />} /> */}
+        <Skeleton.Avatar active size="large" />
       </div>
     );
   }
@@ -214,11 +197,7 @@ function List({ date = "2024-07-09", name = "dev" }) {
   const [ListArr, setListArr] = useState([{ menge: "-", name: "-" }]);
   // const query = `?name=dev&date=${date || '2024-07-09'}`;
   const query = `?name=dev`;
-  const {
-    data: user,
-    error,
-    isServerAvailable,
-  } = useFetchData(`/api/Test2${query}`);
+  const { data: user, error, isServerAvailable } = useFetchData(`/api/Test2${query}`);
 
   function CheckforDate(choosenRecipe) {
     return choosenRecipe.datum === dayjs(date).format("YYYY-MM-DD");
@@ -228,9 +207,7 @@ function List({ date = "2024-07-09", name = "dev" }) {
     if (isServerAvailable) {
       if (user) {
         // Condition ? trueAns : falseAns
-        var _id = user.ausgewählteRezepte.find(CheckforDate)
-          ? user.ausgewählteRezepte.find(CheckforDate).rezepte_id
-          : null;
+        var _id = user.ausgewählteRezepte.find(CheckforDate) ? user.ausgewählteRezepte.find(CheckforDate).rezepte_id : null;
         if (_id) {
           const query = `?Recipe_id=${_id}`;
           const fetchRez = async () => {
@@ -255,7 +232,8 @@ function List({ date = "2024-07-09", name = "dev" }) {
   if (!user) {
     return (
       <div className="box-content2">
-        <Spin indicator={<LoadingOutlined style={{ fontSize: 148 }} spin />} />
+        {/* <Spin indicator={<LoadingOutlined style={{ fontSize: 148 }} spin />} /> */}
+        <Skeleton value="small" active />
       </div>
     );
   }
@@ -277,11 +255,7 @@ function Count({ date = "2024-07-09", name = "dev" }) {
   const [CountText, setCountText] = useState("-- Stück");
   // const query = `?name=dev&date=${date || '2024-07-09'}`;
   const query = `?name=dev`;
-  const {
-    data: user,
-    error,
-    isServerAvailable,
-  } = useFetchData(`/api/Test2${query}`);
+  const { data: user, error, isServerAvailable } = useFetchData(`/api/Test2${query}`);
 
   function CheckforDate(choosenRecipe) {
     return choosenRecipe.datum === dayjs(date).format("YYYY-MM-DD");
@@ -291,9 +265,7 @@ function Count({ date = "2024-07-09", name = "dev" }) {
     if (isServerAvailable) {
       if (user) {
         // Condition ? trueAns : falseAns
-        var _id = user.ausgewählteRezepte.find(CheckforDate)
-          ? user.ausgewählteRezepte.find(CheckforDate).rezepte_id
-          : null;
+        var _id = user.ausgewählteRezepte.find(CheckforDate) ? user.ausgewählteRezepte.find(CheckforDate).rezepte_id : null;
         if (_id) {
           const query = `?Recipe_id=${_id}`;
           const fetchRez = async () => {
@@ -318,7 +290,8 @@ function Count({ date = "2024-07-09", name = "dev" }) {
   if (!user) {
     return (
       <>
-        <Spin indicator={<LoadingOutlined style={{ fontSize: 33 }} spin />} />
+        {/* <Spin indicator={<LoadingOutlined style={{ fontSize: 33 }} spin />} /> */}
+        <Skeleton active />
       </>
     );
   }
@@ -334,11 +307,7 @@ function Time({ date = "2024-07-09", name = "dev" }) {
   const [TimeText, setTimeText] = useState("-- min");
   // const query = `?name=dev&date=${date || '2024-07-09'}`;
   const query = `?name=dev`;
-  const {
-    data: user,
-    error,
-    isServerAvailable,
-  } = useFetchData(`/api/Test2${query}`);
+  const { data: user, error, isServerAvailable } = useFetchData(`/api/Test2${query}`);
 
   function CheckforDate(choosenRecipe) {
     return choosenRecipe.datum === dayjs(date).format("YYYY-MM-DD");
@@ -348,9 +317,7 @@ function Time({ date = "2024-07-09", name = "dev" }) {
     if (isServerAvailable) {
       if (user) {
         // Condition ? trueAns : falseAns
-        var _id = user.ausgewählteRezepte.find(CheckforDate)
-          ? user.ausgewählteRezepte.find(CheckforDate).rezepte_id
-          : null;
+        var _id = user.ausgewählteRezepte.find(CheckforDate) ? user.ausgewählteRezepte.find(CheckforDate).rezepte_id : null;
         if (_id) {
           // var _id = user.ausgewählteRezepte.find(CheckforDate).rezepte_id;
           const query = `?Recipe_id=${_id}`;
@@ -376,7 +343,8 @@ function Time({ date = "2024-07-09", name = "dev" }) {
   if (!user) {
     return (
       <>
-        <Spin indicator={<LoadingOutlined style={{ fontSize: 33 }} spin />} />
+        {/* <Spin indicator={<LoadingOutlined style={{ fontSize: 33 }} spin />} /> */}
+        <Skeleton active />
       </>
     );
   }
@@ -393,11 +361,7 @@ function Devbtn({ date = "2024-07-09", name = "dev" }) {
   const [ButtonText, setButtonText] = useState("Dev Test");
   const query = `?name=dev`;
   // Verwende useFetchData einmal, um den Status zu überwachen und die Daten zu laden
-  const {
-    data: user,
-    error,
-    isServerAvailable,
-  } = useFetchData(`/api/Test2${query}`);
+  const { data: user, error, isServerAvailable } = useFetchData(`/api/Test2${query}`);
 
   useEffect(() => {
     if (isServerAvailable) {
@@ -412,9 +376,7 @@ function Devbtn({ date = "2024-07-09", name = "dev" }) {
   }
   const devLog = (user) => {
     console.log("Loaded data with: ", dayjs(date).format("YYYY-MM-DD"));
-    var _id = user.ausgewählteRezepte.find(CheckforDate)
-      ? user.ausgewählteRezepte.find(CheckforDate).rezepte_id
-      : null;
+    var _id = user.ausgewählteRezepte.find(CheckforDate) ? user.ausgewählteRezepte.find(CheckforDate).rezepte_id : null;
     if (_id) {
       const query = `?Recipe_id=${_id}`;
       const fetchRez = async () => {
@@ -451,7 +413,45 @@ function Devbtn({ date = "2024-07-09", name = "dev" }) {
   );
 }
 
-function useFetchData(url, pollingInterval = 50000) {
+function ServerInfoAndHeader({ date = "2024-07-09", name = "dev", value, setValue }) {
+  // const query = `?name=dev&date=${date || '2024-07-09'}`;
+  const query = `?name=dev`;
+  const { data: user, error, isServerAvailable } = useFetchData(`/api/Test2${query}`);
+
+  function CheckforDate(choosenRecipe) {
+    return choosenRecipe.datum === dayjs(date).format("YYYY-MM-DD");
+  }
+
+  useEffect(() => {
+    if (isServerAvailable) {
+      if (user) {
+        // Condition ? trueAns : falseAns
+        var _id = user.ausgewählteRezepte.find(CheckforDate) ? user.ausgewählteRezepte.find(CheckforDate).rezepte_id : null;
+        var tempServerInfo = { RecipeAvailable: _id, ServerAvailable: isServerAvailable };
+        setValue(tempServerInfo);
+      }
+    } else {
+      var tempServerInfo = { RecipeAvailable: false, ServerAvailable: isServerAvailable };
+      setValue(tempServerInfo);
+    }
+  }, [isServerAvailable, user, date]);
+
+  if (!user) {
+    return (
+      <>
+        <h2 style={{ color: "var(--MenuColor)" }}> Food planer </h2>
+      </>
+    );
+  }
+
+  return (
+    <>
+      <h2 style={{ color: "var(--MenuColor)" }}> Food planer </h2>
+    </>
+  );
+}
+
+function useFetchData(url, pollingInterval = 50000, healthPollingIntervall = 5000) {
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
   const [isServerAvailable, setIsServerAvailable] = useState(false);
@@ -468,9 +468,9 @@ function useFetchData(url, pollingInterval = 50000) {
     };
 
     checkServerStatus();
-    const intervalId = setInterval(checkServerStatus, pollingInterval);
+    const intervalId = setInterval(checkServerStatus, healthPollingIntervall);
     return () => clearInterval(intervalId);
-  }, [pollingInterval]);
+  }, [healthPollingIntervall]);
 
   // Abruf der Daten, wenn der Server verfügbar ist
   useEffect(() => {
@@ -496,4 +496,4 @@ function useFetchData(url, pollingInterval = 50000) {
   return { data, error, isServerAvailable };
 }
 
-export { ZubSteps, List, Pic, Head, Count, Time, Devbtn };
+export { ZubSteps, List, Pic, Head, Count, Time, Devbtn, ServerInfoAndHeader };
