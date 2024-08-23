@@ -14,7 +14,5 @@ multer
 1. After 3 new test branches back to main to implement what i learned
 2. 
 
+![Site Image](/FoodWebsite/DevGithub/WebsiteExample.png?raw=true "Site Image title")
 
-<div style="width:60px; height:60px">
-  ![Site Image](/FoodWebsite/DevGithub/WebsiteExample.png?raw=true "Site Image title")
-</div>
