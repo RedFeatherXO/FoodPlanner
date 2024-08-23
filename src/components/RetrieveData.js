@@ -193,7 +193,7 @@ function Pic({ date = "2024-07-09", name = "dev" }) {
 
           fetchRez();
         } else {
-          setbildUrl("/images/Placeholder.jpg");
+          setbildUrl("/images/Placeholder2.webp");
         }
       }
     }
@@ -358,7 +358,7 @@ function Time({ date = "2024-07-09", name = "dev" }) {
             try {
               const response = await fetch(`/api/recipeTest${query}`);
               const rez = await response.json();
-              setTimeText(rez.zubreitungszeit);
+              setTimeText(rez.zubereitungszeit);
               // console.log(rez);
             } catch (error) {
               console.error(error);

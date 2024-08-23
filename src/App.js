@@ -6,7 +6,7 @@ import dayjs from "dayjs";
 import advancedFormat from "dayjs/plugin/advancedFormat";
 import isoWeek from "dayjs/plugin/isoWeek";
 import { ZubSteps, List, Pic, Head, Count, Time, Devbtn } from "./components/RetrieveData.js";
-import { GerichtName, NewList, NewSteps, NewPic } from "./components/DrawerFunc.js";
+import { GerichtStrings, NewList, NewSteps, NewPic } from "./components/DrawerFunc.js";
 dayjs.extend(advancedFormat); //https://day.js.org/docs/en/plugin/advanced-format
 dayjs.extend(isoWeek);
 const { Header, Content } = Layout;
@@ -18,7 +18,11 @@ export default function App() {
   const [selectedDate, setSelectedDate] = useState(dayjs().format("YYYY-MM-DD")); //ISO8601 2019-01-25 -> 25.01.2019
   const [selectedIndex, setSelectedIndex] = useState(dayjs().isoWeekday() - 1); // (0) -> Default value
 
-  const [gerichtName, setGerichtName] = useState("Gericht Name");
+  // State lifting from DrawerFunc.js
+  const [NewGerichtStrings, setGerichtStrings] = useState({ name: "Gericht Name", zeit: "", Zutaten_für: "" });
+  const [NewStepsArr, setStepsArr] = useState([]);
+  const [NewPicPath, setPicPath] = useState("");
+  const [NewZutatenArr, setZutatenArr] = useState([]);
 
   const showDrawer = () => {
     setOpen(true);
@@ -48,16 +52,77 @@ export default function App() {
     }
   };
 
+  const handleNewGerichtUpload = async () => {
+    // Upload new Gericht to MongoDb
+    if (
+      NewGerichtStrings.name !== "" &&
+      NewGerichtStrings.zeit !== "" &&
+      NewGerichtStrings.Zutaten_für !== "" &&
+      NewPicPath !== "" &&
+      NewZutatenArr.length !== 0 &&
+      NewStepsArr.length !== 0
+    ) {
+      var ObjectToPush = {
+        name: NewGerichtStrings.name,
+        zubereitungszeit: NewGerichtStrings.zeit,
+        "Zutaten für": NewGerichtStrings.Zutaten_für,
+        bild: String(NewPicPath),
+        zubereitungsschritte: NewStepsArr,
+        zutaten: NewZutatenArr
+      }
+      try {
+        const response = await fetch('/api/recipe', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(ObjectToPush)
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          console.log('Recipe inserted with ID:', data.id);
+          message.success("Recipe uploaded successfully!");
+
+          // Clear form data
+          setGerichtStrings({ name: "", zeit: "", Zutaten_für: "" });
+          setPicPath("");
+          setStepsArr([]);
+          setZutatenArr([]);
+        } else {
+          message.error("Failed to upload recipe");
+          console.error('Failed to upload recipe:', response.statusText);
+        }
+      } catch (error) {
+        console.error('Error while uploading recipe:', error);
+        message.error("Error while uploading recipe");
+      }
+
+    } else {
+      message.error("Alle Inputs müssen ausgefüllt sein");
+    }
+  };
+
   return (
     <>
       <Layout className="layout">
-        <Drawer title={gerichtName} onClose={onClose} open={open} placement="left" size="large">
+        <Drawer title={NewGerichtStrings.name} onClose={onClose} open={open} placement="left" size="large">
           {/* State lifting from DrawerFunc.js */}
-          <GerichtName value={gerichtName} setValue={setGerichtName} />
-          <div className="DrawerBox">{NewPic && <NewPic />}</div>
-          <div className="DrawerBox ZutatenDrawer">{NewList && <NewList />}</div>
-          <div className="DrawerBox">{NewSteps && <NewSteps />}</div>
-          <Button className="SubmitUpload" type="primary"> Upload Gericht </Button>
+          <div className="DrawerBox">
+            <GerichtStrings value={NewGerichtStrings} setValue={setGerichtStrings} />
+          </div>
+          <div className="DrawerBox">
+            <NewPic value={NewPicPath} setValue={setPicPath} />
+          </div>
+          <div className="DrawerBox">
+            <NewList value={NewZutatenArr} setValue={setZutatenArr} />
+          </div>
+          <div className="DrawerBox">
+            <NewSteps value={NewStepsArr} setValue={setStepsArr} />
+          </div>
+          <Button className="SubmitUpload" type="primary" onClick={() => handleNewGerichtUpload()}>
+            Upload Gericht zur Datenbank
+          </Button>
         </Drawer>
         <Header className="header">
           <div className="CreateRec">

@@ -359,16 +359,13 @@ ul.week-menu li.selected {
   border-radius: 12.5px;
 }
 
-.ZutatenDrawer {
-  
-}
-
 .NewZutaten {
   display: grid;
 }
 
-.NewZutaten h3 {
+.DrawerBox h3 {
   margin: 0;
+  margin-bottom: 5px;
 }
 
 .NewZutatenContent {
@@ -384,16 +381,29 @@ ul.week-menu li.selected {
 }
 
 .Submit {
-  margin-top: 5px;
+  margin-top: 10px;
   display: flex;
 }
 
-.Submit > Button {
-  margin-left: 5px;
+.Submit Input {
+  margin-right: 5px;
 }
 
 .SubmitUpload{
   margin-top: 10px;
   width: 100%;
   height: 40px;
+}
+
+.newSteps {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 2px;
+}
+
+.newSteps button {
+  background-color: red;
+  margin-top: -15px;
+  color: var(--whiteLight);
 }

@@ -1,0 +1,24 @@
+{
+  "_id": "ObjactId('....')",
+  "name": "Thai Curry",
+  "bild": "BildPfad",
+  "zubereitungsschritte": {
+    "0": "300 ml Wasser im Wasserkocher aufkochen, in einen Topf umfüllen, 0,25 TL Salz zugeben und erneut aufkochen. Reis nach Packungsanweisung ca. 15 Min. zugedeckt darin garen. Inzwischen das Fleisch trocken tupfen, erst in ca. 3 cm dicke Scheiben, dann in ca. 3 cm gro-ße Würfel schneiden. Frühlingszwiebeln putzen, waschen und mit Grün schräg in ca. 3 cm große Stücke schneiden. Paprika waschen, vierteln, putzen und in mundgerechte Streifen schneiden.",
+    "1": "Eine Pfanne mit 1 EL Öl erhitzen, Fleisch ca. 3 Min. darinanbraten. Herausnehmen und übriges Öl 1 EL darin erhitzen,die Paprika ca. 1 Min. darin braten. Currypaste einrühren, ca.5 Sek. mitbraten, dann Fleisch und Kokosmilch zugeben.Aufkochen lassen, die Frühlingszwiebeln zugeben und ca. 4Min. bei schwacher Hitze köcheln. Mit der Sojasauce unddem Limettensaft abschmecken. Koriander waschen undtrocken schütteln, Blättchen abzupfen, klein hacken und überdas Thai-Curry streuen. Mit dem Reis servieren."
+  },
+  "zutaten": [
+    { "menge": "150 g", "name": "Basmatireis" },
+    { "menge": "250 g", "name": "Hähnchenbrustfilet" },
+    { "menge": "4", "name": "Frühlingszwiebeln" },
+    { "menge": "1", "name": "rote Paprika" },
+    { "menge": "2 EL", "name": "Sonnenblumenöl"},
+    { "menge": "1 EL", "name": "rote Thai-Currypaste"},
+    { "menge": "200 g", "name": "Kokosmilch )"},
+    { "menge": "1 EL", "name": "Sojasauce"},
+    { "menge": "1 EL", "name": "Limettensaft"},
+    { "menge": "0,5 Bund", "name": "Koriandergrün"},
+    {"menge": "Nach Geschmack", "name": "Salz & Pfeffer"}
+  ],
+  "zubereitungszeit": "25 min",
+  "Zutaten für": "2 Personen"
+}
