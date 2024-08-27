@@ -1,9 +1,9 @@
 require("dotenv").config();
 const express = require("express");
-const multer = require('multer');
-const path = require('path');
-const fs = require('fs');
-const { MongoClient, ServerApiVersion, ObjectId  } = require("mongodb");
+const multer = require("multer");
+const path = require("path");
+const fs = require("fs");
+const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const app = express();
 const port = 3000; // Port für den Server
 
@@ -27,29 +27,29 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 // Set headers to ensure UTF-8 encoding
 app.use((req, res, next) => {
-  res.setHeader('Content-Type', 'application/json; charset=utf-8');
+  res.setHeader("Content-Type", "application/json; charset=utf-8");
   next();
 });
 
-client.connect()
+client
+  .connect()
   .then(() => {
     db = client.db("Rezeptverwaltung");
-    console.log("connected to Mongodb")
+    console.log("connected to Mongodb");
   })
-  .catch(error => {
+  .catch((error) => {
     console.error("Failed to connect to Mongodb", error);
-    console.log("Server is now shutdown")
+    console.log("Server is now shutdown");
     process.exit(1);
-  })
+  });
 
 // Beispiel-Endpunkt für eine Datenbankabfrage
 app.get("/api/recipe", async (req, res) => {
+  if (!db) return res.status(500).send("Database connection not established");
   try {
     const Rezepte = db.collection("rezepte");
     const query = { name: "Spaghetti Bolognese" };
-    // console.log(Rezepte);
     const rezept = await Rezepte.findOne(query);
-    // console.log('rezept found:', rezept);
     res.json(rezept);
   } catch (error) {
     console.error("Connection failed", error);
@@ -58,6 +58,7 @@ app.get("/api/recipe", async (req, res) => {
 });
 
 app.post("/api/recipe", async (req, res) => {
+  if (!db) return res.status(500).send("Database connection not established");
   try {
     const recipes = db.collection("rezepte");
     const doc = req.body; // Annahme, dass das Rezept im Anfragekörper gesendet wird
@@ -70,11 +71,65 @@ app.post("/api/recipe", async (req, res) => {
   }
 });
 
-app.get('/api/health', (req, res) => {
-  res.status(200).send('Server is healthy');
+app.post("/api/SelectedRecipeForDay", async (req, res) => {
+  if (!db) return res.status(500).send("Database connection not established");
+  try {
+    const userCollection = db.collection("user");
+    const { date, recipeID, userID } = req.body;
+    const userObjectId = new ObjectId(userID);
+    const recipeObjectId = new ObjectId(recipeID);
+    // Suche den Benutzer in der Datenbank
+    const user = await userCollection.findOne({ _id: userObjectId });
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Prüfe, ob bereits ein Rezept für das gegebene Datum existiert
+    const existingRecipeIndex = user.ausgewählteRezepte.findIndex(
+      (entry) => entry.datum === date
+    );
+
+    if (existingRecipeIndex >= 0) {
+      // Wenn bereits ein Rezept für das Datum existiert, aktualisiere es
+      user.ausgewählteRezepte[existingRecipeIndex].rezept_id = recipeObjectId;
+    } else {
+      // Wenn noch kein Rezept für das Datum existiert, füge es hinzu
+      user.ausgewählteRezepte.push({
+        datum: date,
+        rezepte_id: recipeObjectId,
+      });
+    }
+    // Aktualisiere den Nutzerdatensatz in der Datenbank
+    await userCollection.updateOne(
+      { _id: userObjectId },
+      { $set: { ausgewählteRezepte: user.ausgewählteRezepte } }
+    );
+
+    res.status(201).json({ message: "Recipe selected for the day" });
+  } catch (error) {
+    console.error("Connection failed", error);
+    res.status(500).send("Internal Server Error");
+  }
 });
 
-const imagesDir = path.join(__dirname, '../dist/images');
+app.get("/api/GetRecipeCatalog", async (req, res) => {
+  if (!db) return res.status(500).send("Database connection not established");
+  try {
+    const Rezepte = db.collection("rezepte");
+    const rezepteArray = await Rezepte.find({}).toArray();
+    res.json(rezepteArray);
+  } catch (error) {
+    console.error("Connection failed", error);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+app.get("/api/health", (req, res) => {
+  res.status(200).send("Server is healthy");
+});
+
+const imagesDir = path.join(__dirname, "../dist/images");
 
 if (!fs.existsSync(imagesDir)) {
   fs.mkdirSync(imagesDir, { recursive: true });
@@ -88,21 +143,21 @@ const storage = multer.diskStorage({
   filename: (req, file, cb) => {
     const filename = file.originalname;
     cb(null, filename);
-  }
+  },
 });
 const upload = multer({ storage });
 
-app.post('/api/upload', upload.single('file'), (req, res) => {
+app.post("/api/upload", upload.single("file"), (req, res) => {
   const filePath = path.join(imagesDir, req.file.filename);
 
   // Überprüfen, ob die Datei existiert
   fs.access(filePath, fs.constants.F_OK, (err) => {
     if (err) {
-      console.error('File does not exist:', filePath);
-      return res.status(500).send('File upload failed: File not found after upload.');
+      console.error("File does not exist:", filePath);
+      return res.status(500).send("File upload failed: File not found after upload.");
     }
 
-    res.json({ message: 'File uploaded successfully', filePath: `/images/${req.file.filename}` });
+    res.json({ message: "File uploaded successfully", filePath: `/images/${req.file.filename}` });
   });
 });
 
@@ -111,76 +166,60 @@ app.listen(port, () => {
   console.log(`Server läuft auf http://localhost:${port}`);
 });
 
-
-
-
 // ----------------------------------- TEST -----------------------------------------------------
 
-app.get('/api/Test', async (req, res) => {
+app.get("/api/Test", async (req, res) => {
+  if (!db) return res.status(500).send("Database connection not established");
   try {
     const Users = db.collection("user");
-    // console.log("-------------------");
-    // console.log(req.query.name);
     var date = String(req.query.date);
-    // console.log(date);
-    // console.log("-------------------");
     const query = { name: "dev", "ausgewählteRezepte.datum": date };
-    const user = await Users.findOne(query,{
+    const user = await Users.findOne(query, {
       projection: {
-        "ausgewählteRezepte":{ //Durch "$elemMatch" verwendet, um nur das Element in ausgewählteRezepte zurückzugeben, das dem gesuchten Datum entspricht
-          $elemMatch: { "datum": date } 
-        }
-      }
-  });
-    // console.log(user)
+        ausgewählteRezepte: {
+          //Durch "$elemMatch" verwendet, um nur das Element in ausgewählteRezepte zurückzugeben, das dem gesuchten Datum entspricht
+          $elemMatch: { datum: date },
+        },
+      },
+    });
     res.json(user);
-  } catch (error) {
-      console.error("Connection failed", error);
-      res.status(500).send("Internal Server Error");
-  }
-});
-
-app.get('/api/Test2', async (req, res) => {
-  try {
-    const Users = db.collection("user");
-    // console.log("-------------------");
-    // console.log(req.query.name);
-    // console.log("-------------------");
-    const query = { name: "dev"};
-    const user = await Users.findOne(query);
-    // console.log(user)
-    res.json(user);
-  } catch (error) {
-      console.error("Connection failed", error);
-      res.status(500).send("Internal Server Error");
-  }
-});
-
-app.get("/api/recipeTest", async (req, res) => {
-  try {
-    const Rezepte = db.collection("rezepte");
-    var Recipe_id = String(req.query.Recipe_id);
-    var x = new ObjectId(Recipe_id);
-    console.log(typeof(Recipe_id));
-    console.log(typeof('66af31e4f75170870ed2fe78'));
-    const query = { _id: x };
-    console.log(query)
-    const rezept = await Rezepte.findOne(x);
-    console.log('rezept found:', rezept);
-  // const user = await Users.findOne(query,{
-  //     projection: {
-  //       "ausgewählteRezepte":{ //Durch "$elemMatch" verwendet, um nur das Element in ausgewählteRezepte zurückzugeben, das dem gesuchten Datum entspricht
-  //         $elemMatch: { "datum": date } 
-  //       }
-  //     }
-  // });
-    res.json(rezept);
   } catch (error) {
     console.error("Connection failed", error);
     res.status(500).send("Internal Server Error");
   }
 });
 
+app.get("/api/Test2", async (req, res) => {
+  if (!db) return res.status(500).send("Database connection not established");
+  try {
+    const Users = db.collection("user");
+    const query = { name: "dev" };
+    const user = await Users.findOne(query);
+    res.json(user);
+  } catch (error) {
+    console.error("Connection failed", error);
+    res.status(500).send("Internal Server Error");
+  }
+});
 
-
-
+app.get("/api/recipeTest", async (req, res) => {
+  if (!db) return res.status(500).send("Database connection not established");
+  try {
+    const Rezepte = db.collection("rezepte");
+    var Recipe_id = String(req.query.Recipe_id);
+    var x = new ObjectId(Recipe_id);
+    const query = { _id: x };
+    const rezept = await Rezepte.findOne(x);
+    // const user = await Users.findOne(query,{
+    //     projection: {
+    //       "ausgewählteRezepte":{ //Durch "$elemMatch" verwendet, um nur das Element in ausgewählteRezepte zurückzugeben, das dem gesuchten Datum entspricht
+    //         $elemMatch: { "datum": date }
+    //       }
+    //     }
+    // });
+    res.json(rezept);
+  } catch (error) {
+    console.error("Connection failed", error);
+    res.status(500).send("Internal Server Error");
+  }
+});

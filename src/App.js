@@ -1,58 +1,33 @@
 import React from "react";
 import { useEffect, useState, useReducer } from "react";
-import { Layout, Button, DatePicker, Drawer, Input, Checkbox, Upload, message, Steps, Card, Avatar, Tooltip } from "antd";
-import { EditOutlined, EllipsisOutlined, SettingOutlined, CheckCircleTwoTone, EditTwoTone } from "@ant-design/icons";
-const { Meta } = Card;
+import { Layout, Button, DatePicker, message, Tooltip } from "antd";
 import "./App.css";
 import dayjs from "dayjs";
 import advancedFormat from "dayjs/plugin/advancedFormat";
 import isoWeek from "dayjs/plugin/isoWeek";
 import { ZubSteps, List, Pic, Head, Count, Time, Devbtn, ServerInfoAndHeader } from "./components/RetrieveData.js";
-import { GerichtStrings, NewList, NewSteps, NewPic } from "./components/DrawerFunc.js";
+import { RecipeCardBox } from "./components/SelectRecipeDay.js";
+import { UploadDrawer } from "./components/GerichtUpload.js";
 dayjs.extend(advancedFormat); //https://day.js.org/docs/en/plugin/advanced-format
 dayjs.extend(isoWeek);
 const { Header, Content } = Layout;
 
 const days = ["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"];
+const user = {name:"dev", _id: "66b38186803417ea7bcad6f3" };
 
 export default function App() {
   const [open, setOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState(dayjs().format("YYYY-MM-DD")); //ISO8601 2019-01-25 -> 25.01.2019
   const [selectedIndex, setSelectedIndex] = useState(dayjs().isoWeekday() - 1); // (0) -> Default value
-
-  // State lifting from DrawerFunc.js
-  const [NewGerichtStrings, setGerichtStrings] = useState({ name: "Gericht Name", zeit: "", Zutaten_für: "" });
-  const [NewStepsArr, setStepsArr] = useState([]);
-  const [NewPicPath, setPicPath] = useState("");
-  const [NewZutatenArr, setZutatenArr] = useState([]);
   // State lifting from RetrieveData.js
   const [ServerInfo, setServerInfo] = useState([{ RecipeAvailable: false, ServerAvailable: false }]);
-
-  const gridStyle = {
-    width: "25%",
-    textAlign: "center",
-  };
 
   const showDrawer = () => {
     setOpen(true);
   };
-  const onClose = () => {
-    setOpen(false);
-  };
 
   const changeColor = (index) => {
     setSelectedIndex(index);
-    // setSelectedDate(
-    //   dayjs(
-    //     String(dayjs(selectedDate).year()) +
-    //       "-" +
-    //       String(dayjs(selectedDate).month() + 1) +
-    //       "-" +
-    //       dayjs(selectedDate)
-    //         .isoWeekday(index + 1)
-    //         .date()
-    //   )
-    // );
     const newDate = dayjs(
       String(dayjs(selectedDate).year()) +
         "-" +
@@ -71,77 +46,10 @@ export default function App() {
     }
   };
 
-  const handleNewGerichtUpload = async () => {
-    // Upload new Gericht to MongoDb
-    if (
-      NewGerichtStrings.name !== "" &&
-      NewGerichtStrings.zeit !== "" &&
-      NewGerichtStrings.Zutaten_für !== "" &&
-      NewPicPath !== "" &&
-      NewZutatenArr.length !== 0 &&
-      NewStepsArr.length !== 0
-    ) {
-      var ObjectToPush = {
-        name: NewGerichtStrings.name,
-        zubereitungszeit: NewGerichtStrings.zeit,
-        "Zutaten für": NewGerichtStrings.Zutaten_für,
-        bild: String(NewPicPath),
-        zubereitungsschritte: NewStepsArr,
-        zutaten: NewZutatenArr,
-      };
-      try {
-        const response = await fetch("/api/recipe", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(ObjectToPush),
-        });
-
-        if (response.ok) {
-          const data = await response.json();
-          console.log("Recipe inserted with ID:", data.id);
-          message.success("Recipe uploaded successfully!");
-
-          // Clear form data
-          setGerichtStrings({ name: "", zeit: "", Zutaten_für: "" });
-          setPicPath("");
-          setStepsArr([]);
-          setZutatenArr([]);
-        } else {
-          message.error("Failed to upload recipe");
-          console.error("Failed to upload recipe:", response.statusText);
-        }
-      } catch (error) {
-        console.error("Error while uploading recipe:", error);
-        message.error("Error while uploading recipe");
-      }
-    } else {
-      message.error("Alle Inputs müssen ausgefüllt sein");
-    }
-  };
-
   return (
     <>
       <Layout className="layout">
-        <Drawer title={NewGerichtStrings.name} onClose={onClose} open={open} placement="left" size="large">
-          {/* State lifting from DrawerFunc.js */}
-          <div className="DrawerBox">
-            <GerichtStrings value={NewGerichtStrings} setValue={setGerichtStrings} />
-          </div>
-          <div className="DrawerBox">
-            <NewPic value={NewPicPath} setValue={setPicPath} />
-          </div>
-          <div className="DrawerBox">
-            <NewList value={NewZutatenArr} setValue={setZutatenArr} />
-          </div>
-          <div className="DrawerBox">
-            <NewSteps value={NewStepsArr} setValue={setStepsArr} />
-          </div>
-          <Button className="SubmitUpload" type="primary" onClick={() => handleNewGerichtUpload()}>
-            Upload Gericht zur Datenbank
-          </Button>
-        </Drawer>
+        {UploadDrawer && <UploadDrawer open={open} setOpen={setOpen} />}
         <Header className="header">
           <div className="CreateRec">
             <Button type="primary" onClick={showDrawer}>
@@ -155,7 +63,7 @@ export default function App() {
         <div className="DateSelection">
           <div className="DateBox YearSelection">
             <DatePicker defaultValue={dayjs()} format="YYYY" onChange={onChange} picker="year" value={dayjs(selectedDate)} />
-            {/* {Devbtn && <Devbtn date={selectedDate} />} */}
+            {Devbtn && <Devbtn date={selectedDate} ServerInfo={ServerInfo}/>}
           </div>
           <div className="DateBox DaySelection">
             <ul className="week-menu">
@@ -195,64 +103,7 @@ export default function App() {
               </div>
             </div>
           ) : (
-            <div className="recipe-selection-menu">
-              <h3>No recipe selected for {selectedDate}. Please choose a recipe.</h3>
-              <div className="CardBoxCollection">
-                <Card
-                  style={gridStyle}
-                  cover={<img alt="example" src="/images/Preview_1724375329639.webp" />}
-                  actions={[
-                    <Tooltip title="Select for today">
-                      {/* <CheckCircleTwoTone key="setting" /> */}
-                      <Button className="SelectBtn"> Select Gericht </Button>
-                    </Tooltip>,
-                    <Tooltip title="Edit Recipe">
-                      <EditTwoTone key="edit" />
-                    </Tooltip>,
-                    <Tooltip title="View Details">
-                      <EllipsisOutlined key="ellipsis" />
-                    </Tooltip>,
-                  ]}
-                >
-                  Thai Curry
-                </Card>
-                <Card
-                  style={gridStyle}
-                  cover={<img alt="example" src="/images/Preview_1724375329639.webp" />}
-                  actions={[<SettingOutlined key="setting" />, <EditOutlined key="edit" />, <EllipsisOutlined key="ellipsis" />]}
-                >
-                  Thai Curry
-                </Card>
-                <Card
-                  style={gridStyle}
-                  cover={<img alt="example" src="/images/Preview_1724375329639.webp" />}
-                  actions={[<SettingOutlined key="setting" />, <EditOutlined key="edit" />, <EllipsisOutlined key="ellipsis" />]}
-                >
-                  Thai Curry
-                </Card>
-                <Card
-                  style={gridStyle}
-                  cover={<img alt="example" src="/images/Preview_1724375329639.webp" />}
-                  actions={[<SettingOutlined key="setting" />, <EditOutlined key="edit" />, <EllipsisOutlined key="ellipsis" />]}
-                >
-                  Thai Curry
-                </Card>
-                <Card
-                  style={gridStyle}
-                  cover={<img alt="example" src="/images/Preview_1724375329639.webp" />}
-                  actions={[<SettingOutlined key="setting" />, <EditOutlined key="edit" />, <EllipsisOutlined key="ellipsis" />]}
-                >
-                  Thai Curry
-                </Card>
-                <Card
-                  style={gridStyle}
-                  cover={<img alt="example" src="/images/Preview_1724375329639.webp" />}
-                  actions={[<SettingOutlined key="setting" />, <EditOutlined key="edit" />, <EllipsisOutlined key="ellipsis" />]}
-                >
-                  Thai Curry
-                </Card>
-              </div>
-            </div>
+            <div className="recipe-selection-menu">{RecipeCardBox && <RecipeCardBox date={selectedDate} user={user}/>}</div>
           )}
         </Content>
       </Layout>

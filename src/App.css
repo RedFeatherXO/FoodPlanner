@@ -3,6 +3,7 @@
   --whiteLight: #f7f6f3;
   --MenuColor: #ed6a5a;
   --ContentBoxColor: #153b50;
+  --SubmitBtn: #034732;
   /*#153B50  */
 }
 
@@ -420,7 +421,38 @@ ul.week-menu li.selected {
   margin: 5px;
 }
 
+.CardBoxCollection ul {
+  justify-content: center;
+  align-items: center;
+}
+
 .SelectBtn {
-  background-color:#024488;
+  background-color:var(--SubmitBtn);
   color: var(--whiteLight);
+  font-weight: 600;
+}
+
+.recipe-selection-menu {
+  width: 100%;
+}
+
+.CardDivImg {
+    display: grid;
+    width: 100%;
+    height: 0;
+    padding-bottom: 75%;
+    overflow: hidden;
+    position: relative;
+    justify-content: center;
+    align-items: center;
+}
+
+.CardDivImg img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }

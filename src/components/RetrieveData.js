@@ -6,6 +6,7 @@ import { Steps, Checkbox, Button, message, Flex, Spin, Skeleton } from "antd";
 import dayjs from "dayjs";
 import advancedFormat from "dayjs/plugin/advancedFormat";
 import isoWeek from "dayjs/plugin/isoWeek";
+import { useFetchData } from "./FetchData";
 
 dayjs.extend(advancedFormat); //https://day.js.org/docs/en/plugin/advanced-format
 dayjs.extend(isoWeek);
@@ -356,63 +357,6 @@ function Time({ date = "2024-07-09", name = "dev" }) {
   );
 }
 
-function Devbtn({ date = "2024-07-09", name = "dev" }) {
-  // const query = `?name=dev&date=${date || '2024-07-09'}`;
-  const [ButtonText, setButtonText] = useState("Dev Test");
-  const query = `?name=dev`;
-  // Verwende useFetchData einmal, um den Status zu überwachen und die Daten zu laden
-  const { data: user, error, isServerAvailable } = useFetchData(`/api/Test2${query}`);
-
-  useEffect(() => {
-    if (isServerAvailable) {
-      if (user)
-        // console.log(user.name, "Server is available, data loaded:", user);
-        console.log("Loaded data with: ", dayjs(date).format("YYYY-MM-DD"));
-    }
-  }, [isServerAvailable, user, date]);
-
-  function CheckforDate(choosenRecipe) {
-    return choosenRecipe.datum === dayjs(date).format("YYYY-MM-DD");
-  }
-  const devLog = (user) => {
-    console.log("Loaded data with: ", dayjs(date).format("YYYY-MM-DD"));
-    var _id = user.ausgewählteRezepte.find(CheckforDate) ? user.ausgewählteRezepte.find(CheckforDate).rezepte_id : null;
-    if (_id) {
-      const query = `?Recipe_id=${_id}`;
-      const fetchRez = async () => {
-        try {
-          const response = await fetch(`/api/recipeTest${query}`);
-          const rez = await response.json();
-          setButtonText(rez.name);
-          // console.log(rez);
-        } catch (error) {
-          console.error(error, "Query: ", query);
-        }
-      };
-
-      fetchRez();
-    } else {
-      setButtonText("No Recipe");
-    }
-  };
-
-  if (!user) {
-    return (
-      <>
-        <Spin indicator={<LoadingOutlined style={{ fontSize: 33 }} spin />} />
-      </>
-    );
-  }
-
-  return (
-    <>
-      <Button type="primary" onClick={() => devLog(user)}>
-        {ButtonText}
-      </Button>
-    </>
-  );
-}
-
 function ServerInfoAndHeader({ date = "2024-07-09", name = "dev", value, setValue }) {
   // const query = `?name=dev&date=${date || '2024-07-09'}`;
   const query = `?name=dev`;
@@ -428,6 +372,7 @@ function ServerInfoAndHeader({ date = "2024-07-09", name = "dev", value, setValu
         // Condition ? trueAns : falseAns
         var _id = user.ausgewählteRezepte.find(CheckforDate) ? user.ausgewählteRezepte.find(CheckforDate).rezepte_id : null;
         var tempServerInfo = { RecipeAvailable: _id, ServerAvailable: isServerAvailable };
+        console.log("TempServerInfo: ",user.ausgewählteRezepte);
         setValue(tempServerInfo);
       }
     } else {
@@ -451,49 +396,62 @@ function ServerInfoAndHeader({ date = "2024-07-09", name = "dev", value, setValu
   );
 }
 
-function useFetchData(url, pollingInterval = 50000, healthPollingIntervall = 5000) {
-  const [data, setData] = useState(null);
-  const [error, setError] = useState(null);
-  const [isServerAvailable, setIsServerAvailable] = useState(false);
+function Devbtn({ date = "2024-07-09", name = "dev", ServerInfo=null }) {
+  // const query = `?name=dev&date=${date || '2024-07-09'}`;
+  const [ButtonText, setButtonText] = useState("Dev Test");
+  const query = `?name=dev`;
+  // Verwende useFetchData einmal, um den Status zu überwachen und die Daten zu laden
+  const { data: user, error, isServerAvailable } = useFetchData(`/api/Test2${query}`);
 
-  // Überprüfung des Serverstatus
-  useEffect(() => {
-    const checkServerStatus = async () => {
-      try {
-        const response = await fetch("/api/health");
-        setIsServerAvailable(response.ok);
-      } catch (error) {
-        setIsServerAvailable(false);
-      }
-    };
-
-    checkServerStatus();
-    const intervalId = setInterval(checkServerStatus, healthPollingIntervall);
-    return () => clearInterval(intervalId);
-  }, [healthPollingIntervall]);
-
-  // Abruf der Daten, wenn der Server verfügbar ist
   useEffect(() => {
     if (isServerAvailable) {
-      const fetchData = async () => {
-        try {
-          const response = await fetch(url);
-          if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-          }
-          const result = await response.json();
-          setData(result);
-        } catch (error) {
-          setError(error.toString());
-        }
-      };
-      fetchData();
-      const intervalId = setInterval(fetchData, pollingInterval); // Regelmäßiger Abruf der Daten
-      return () => clearInterval(intervalId); // Aufräumen bei Unmount
+      if (user)
+        // console.log(user.name, "Server is available, data loaded:", user);
+        console.log("Loaded data with: ", dayjs(date).format("YYYY-MM-DD"));
     }
-  }, [isServerAvailable, url, pollingInterval]);
+  }, [isServerAvailable, user, date]);
 
-  return { data, error, isServerAvailable };
+  function CheckforDate(choosenRecipe) {
+    return choosenRecipe.datum === dayjs(date).format("YYYY-MM-DD");
+  }
+  const devLog = (user) => {
+    console.log("Loaded data with: ", dayjs(date).format("YYYY-MM-DD"));
+    console.log(ServerInfo);
+    // var _id = user.ausgewählteRezepte.find(CheckforDate) ? user.ausgewählteRezepte.find(CheckforDate).rezepte_id : null;
+    // if (_id) {
+    //   const query = `?Recipe_id=${_id}`;
+    //   const fetchRez = async () => {
+    //     try {
+    //       const response = await fetch(`/api/recipeTest${query}`);
+    //       const rez = await response.json();
+    //       setButtonText(rez.name);
+    //       // console.log(rez);
+    //     } catch (error) {
+    //       console.error(error, "Query: ", query);
+    //     }
+    //   };
+
+    //   fetchRez();
+    // } else {
+    //   setButtonText("No Recipe");
+    // }
+  };
+
+  if (!user) {
+    return (
+      <>
+        <Spin indicator={<LoadingOutlined style={{ fontSize: 33 }} spin />} />
+      </>
+    );
+  }
+
+  return (
+    <>
+      <Button type="primary" onClick={() => devLog(user)}>
+        {ButtonText}
+      </Button>
+    </>
+  );
 }
 
 export { ZubSteps, List, Pic, Head, Count, Time, Devbtn, ServerInfoAndHeader };
