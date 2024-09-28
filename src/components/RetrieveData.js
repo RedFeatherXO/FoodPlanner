@@ -8,12 +8,14 @@ import advancedFormat from "dayjs/plugin/advancedFormat";
 import isoWeek from "dayjs/plugin/isoWeek";
 import { useFetchData } from "./FetchData";
 
+
 dayjs.extend(advancedFormat); //https://day.js.org/docs/en/plugin/advanced-format
 dayjs.extend(isoWeek);
 
 function Head({ date = "2024-07-09", name = "dev" }) {
   const [HeadText, setHeadText] = useState("-");
   // const query = `?name=dev&date=${date || '2024-07-09'}`;
+  
   const query = `?name=dev`;
   const { data: user, error, isServerAvailable } = useFetchData(`/api/Test2${query}`);
 

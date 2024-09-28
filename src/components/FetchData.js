@@ -1,10 +1,12 @@
-import { useEffect, useState, useCallback } from "react";
+import { useContext,useEffect, useState, useCallback } from "react";
+import { GlobalStateContext } from '../context/GlobalStateContext';
 
 export function useFetchData(url, pollingInterval = 50000, healthPollingInterval = 5000) {
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
   const [isServerAvailable, setIsServerAvailable] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const { globalState, setGlobalState } = useContext(GlobalStateContext);
 
   // Server status check
   useEffect(() => {
@@ -40,7 +42,7 @@ export function useFetchData(url, pollingInterval = 50000, healthPollingInterval
     } finally {
       setIsLoading(false);
     }
-  }, [isServerAvailable, url]);
+  }, [isServerAvailable, url, globalState.update]);
 
   // Automatic polling
   useEffect(() => {

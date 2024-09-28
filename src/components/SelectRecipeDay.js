@@ -1,20 +1,30 @@
 import React from "react";
-import { useEffect, useState, useReducer } from "react";
+import { useContext,useEffect, useState, useReducer } from "react";
 import { Button, DatePicker, Drawer, Input, Checkbox, Upload, message, Steps, Card, Avatar, Tooltip } from "antd";
 import { EditOutlined, EllipsisOutlined, SettingOutlined, CheckCircleTwoTone, EditTwoTone } from "@ant-design/icons";
 import dayjs from "dayjs";
 import advancedFormat from "dayjs/plugin/advancedFormat";
 import isoWeek from "dayjs/plugin/isoWeek";
 import { useFetchData } from "./FetchData";
+import { GlobalStateContext } from '../context/GlobalStateContext';
 
 dayjs.extend(advancedFormat); //https://day.js.org/docs/en/plugin/advanced-format
 dayjs.extend(isoWeek);
 
 function RecipeCardBox({date = "", user={name:"dev",_id:"66b38186803417ea7bcad6f3"}}) { //Default userID is from dev user
   const { data: recipeCatalog, error, isServerAvailable, isLoading, refetch } = useFetchData(`/api/GetRecipeCatalog`);
-  
+  const { globalState, setGlobalState } = useContext(GlobalStateContext);
+
   const handleRefresh = () => {
     refetch();
+  };
+
+  const handleUpdate = () => {
+    setGlobalState((prevState) => ({
+      ...prevState,
+      update: prevState.update + 1,
+    }));
+    console.log(globalState.update)
   };
 
   const SelectRecipeForDay = async (recipe) => {
@@ -32,7 +42,7 @@ function RecipeCardBox({date = "", user={name:"dev",_id:"66b38186803417ea7bcad6f
     } catch(error) {
       console.log("Error");
     }
-    handleRefresh();
+    handleUpdate();
   }
 
   return (

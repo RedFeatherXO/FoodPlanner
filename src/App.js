@@ -8,6 +8,7 @@ import isoWeek from "dayjs/plugin/isoWeek";
 import { ZubSteps, List, Pic, Head, Count, Time, Devbtn, ServerInfoAndHeader } from "./components/RetrieveData.js";
 import { RecipeCardBox } from "./components/SelectRecipeDay.js";
 import { UploadDrawer } from "./components/GerichtUpload.js";
+import { GlobalStateProvider } from './context/GlobalStateContext';
 dayjs.extend(advancedFormat); //https://day.js.org/docs/en/plugin/advanced-format
 dayjs.extend(isoWeek);
 const { Header, Content } = Layout;
@@ -47,7 +48,7 @@ export default function App() {
   };
 
   return (
-    <>
+    <GlobalStateProvider>
       <Layout className="layout">
         {UploadDrawer && <UploadDrawer open={open} setOpen={setOpen} />}
         <Header className="header">
@@ -107,6 +108,6 @@ export default function App() {
           )}
         </Content>
       </Layout>
-    </>
+    </GlobalStateProvider>
   );
 }
