@@ -59,6 +59,10 @@ export default function App() {
             <Button type="primary" onClick={showDrawer}>
               Create new Recipe
             </Button>
+            
+          </div>
+          <div>
+            <h2 style={{ color: "var(--MenuColor)" }}> Food planer </h2>
           </div>
           <div className="Account"> Account</div>
         </Header>
