@@ -1,56 +1,41 @@
-import React from "react";
-import { useContext,useEffect, useState, useReducer } from "react";
-import { Button, DatePicker, Drawer, Input, Checkbox, Upload, message, Steps, Card, Avatar, Tooltip } from "antd";
-import { EditOutlined, EllipsisOutlined, SettingOutlined, CheckCircleTwoTone, EditTwoTone } from "@ant-design/icons";
-import dayjs from "dayjs";
-import advancedFormat from "dayjs/plugin/advancedFormat";
-import isoWeek from "dayjs/plugin/isoWeek";
-import { useFetchData } from "./FetchData";
+import React, { useContext, useEffect } from "react";
+import { Button, Card, Tooltip, message } from "antd";
+import { EditTwoTone, EllipsisOutlined } from "@ant-design/icons";
 import { GlobalStateContext } from '../context/GlobalStateContext';
+import { useFetchData } from "./FetchData";
 
-dayjs.extend(advancedFormat); //https://day.js.org/docs/en/plugin/advanced-format
-dayjs.extend(isoWeek);
-
-function RecipeCardBox({date = "", user={name:"dev",_id:"66b38186803417ea7bcad6f3"}}) { //Default userID is from dev user
-  const { data: recipeCatalog, error, isServerAvailable, isLoading, refetch } = useFetchData(`/api/GetRecipeCatalog`);
-  const { globalState, setGlobalState } = useContext(GlobalStateContext);
-
-  const handleRefresh = () => {
-    refetch();
-  };
-
-  const handleUpdate = () => {
-    setGlobalState((prevState) => ({
-      ...prevState,
-      update: prevState.update + 1,
-    }));
-    console.log(globalState.update)
-  };
+function RecipeCardBox({user={name:"dev",_id:"66b38186803417ea7bcad6f3"}}) {
+  const { data: recipeCatalog, refetch } = useFetchData(`/api/GetRecipeCatalog`);
+  const { globalState, forceUpdate } = useContext(GlobalStateContext);
 
   const SelectRecipeForDay = async (recipe) => {
-    console.log(recipe._id);
     try {
       const response = await fetch("/api/SelectedRecipeForDay", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({date, recipeID: recipe._id, userID: user._id}),
-
+        body: JSON.stringify({date: globalState.selectedDate, recipeID: recipe._id, userID: user._id}),
       });
-      message.success("Erfolgreich Gericht für", {date}, "ausgewählt");
-    } catch(error) {
-      console.log("Error");
-    }
-    handleUpdate();
-  }
 
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }      
+      message.success(`Erfolgreich Gericht für ${globalState.selectedDate} ausgewählt`, 3);
+
+      forceUpdate()
+    } catch(error) {
+      console.error("Error:", error);
+      message.error(`Fehler beim Auswählen des Gerichts: ${error.message}`, 3);
+    }
+  }
   return (
     <>
-      <h3>No recipe selected for {date.date}. Please choose a recipe.</h3>
+      {/* {contextHolder} */}
+      <h3>No recipe selected for {globalState.selectedDate}. Please choose a recipe.</h3>
       <div className="CardBoxCollection">
-        {recipeCatalog &&
-          recipeCatalog.map((item, index) => (
+        {globalState.data_catalog &&
+          globalState.data_catalog.map((item, index) => (
             <Card
               style={{ width: "25%", textAlign: "center" }}
               cover={
@@ -61,8 +46,7 @@ function RecipeCardBox({date = "", user={name:"dev",_id:"66b38186803417ea7bcad6f
               key={index}
               actions={[
                 <Button className="SelectBtn" style={{ marginBottom: "10px" }} onClick={() => SelectRecipeForDay(item)}>
-                  {" "}
-                  Select Gericht{" "}
+                  Select Gericht
                 </Button>,
                 <Tooltip title="Edit Recipe">
                   <EditTwoTone key="edit" />

@@ -1,55 +1,48 @@
 // src/components/days/Mo.js
 import React from "react";
-import { useEffect, useState, useReducer } from "react";
+import { useContext,useEffect, useState, useReducer } from "react";
 import { LoadingOutlined } from "@ant-design/icons";
 import { Steps, Checkbox, Button, message, Flex, Spin, Skeleton } from "antd";
 import dayjs from "dayjs";
 import advancedFormat from "dayjs/plugin/advancedFormat";
 import isoWeek from "dayjs/plugin/isoWeek";
 import { useFetchData } from "./FetchData";
+import { GlobalStateContext } from '../context/GlobalStateContext';
 
 
 dayjs.extend(advancedFormat); //https://day.js.org/docs/en/plugin/advanced-format
 dayjs.extend(isoWeek);
 
-function Head({ date = "2024-07-09", name = "dev" }) {
+function Head({name = "dev" }) {
   const [HeadText, setHeadText] = useState("-");
+  const { globalState, forceUpdate } = useContext(GlobalStateContext);
   // const query = `?name=dev&date=${date || '2024-07-09'}`;
-  
+
   const query = `?name=dev`;
-  const { data: user, error, isServerAvailable } = useFetchData(`/api/Test2${query}`);
 
   function CheckforDate(choosenRecipe) {
-    return choosenRecipe.datum === dayjs(date).format("YYYY-MM-DD");
+    return choosenRecipe.datum === dayjs(globalState.selectedDate).format("YYYY-MM-DD");
   }
 
   useEffect(() => {
-    if (isServerAvailable) {
-      if (user) {
+    if (globalState.data_choosen) {
+      if (globalState.data_choosen.ausgewählteRezepte) {
         // Condition ? trueAns : falseAns
-        var _id = user.ausgewählteRezepte.find(CheckforDate) ? user.ausgewählteRezepte.find(CheckforDate).rezepte_id : null;
+        var _id = globalState.data_choosen.ausgewählteRezepte.find(CheckforDate) ? globalState.data_choosen.ausgewählteRezepte.find(CheckforDate).rezepte_id : null;
         if (_id) {
-          const query = `?Recipe_id=${_id}`;
-          const fetchRez = async () => {
-            try {
-              const response = await fetch(`/api/recipeTest${query}`);
-              const rez = await response.json();
-              setHeadText(rez.name);
-              // console.log(rez);
-            } catch (error) {
-              console.error(error);
-            }
-          };
-
-          fetchRez();
+          const rez = globalState.data_catalog.find((e)=> e._id == _id)
+          setHeadText(rez.name);
+          // console.log(rez);
         } else {
           setHeadText("Kein Gericht für diesen Tag");
         }
+      } else {
+        setHeadText("Kein Gericht für diesen Tag");
       }
     }
-  }, [isServerAvailable, user, date]);
+  }, [globalState.selectedDate , globalState.data_choosen]);
 
-  if (!user) {
+  if (!globalState.data_choosen) {
     return (
       <div className="food-details">
         {/* <Spin indicator={<LoadingOutlined style={{ fontSize: 50 }} spin />} /> */}
@@ -65,44 +58,32 @@ function Head({ date = "2024-07-09", name = "dev" }) {
   );
 }
 
-function ZubSteps({ date = "2024-07-09", name = "dev" }) {
+function ZubSteps({ name = "dev" }) {
   const [current, setCurrent] = useState(0); //Hook muss immer ausgeführt werden sonst kommt fehler da sich die Hooks anzahl in verschieden Rendern ändert
   const [StepsArr, setStepsArr] = useState(["-"]);
   // const query = `?name=dev&date=${date || '2024-07-09'}`;
-  const query = `?name=dev`;
-  const { data: user, error, isServerAvailable } = useFetchData(`/api/Test2${query}`);
+  const { globalState } = useContext(GlobalStateContext);
 
   function CheckforDate(choosenRecipe) {
-    return choosenRecipe.datum === dayjs(date).format("YYYY-MM-DD");
+    return choosenRecipe.datum === dayjs(globalState.selectedDate).format("YYYY-MM-DD");
   }
 
   useEffect(() => {
-    if (isServerAvailable) {
-      if (user) {
+    if (globalState.data_choosen) {
+      if (globalState.data_choosen.ausgewählteRezepte) {
         // Condition ? trueAns : falseAns
-        var _id = user.ausgewählteRezepte.find(CheckforDate) ? user.ausgewählteRezepte.find(CheckforDate).rezepte_id : null;
+        var _id = globalState.data_choosen.ausgewählteRezepte.find(CheckforDate) ? globalState.data_choosen.ausgewählteRezepte.find(CheckforDate).rezepte_id : null;
         if (_id) {
-          const query = `?Recipe_id=${_id}`;
-          const fetchRez = async () => {
-            try {
-              const response = await fetch(`/api/recipeTest${query}`);
-              const rez = await response.json();
-              setStepsArr(rez.zubereitungsschritte);
-              // console.log(rez);
-            } catch (error) {
-              console.error(error);
-            }
-          };
-
-          fetchRez();
+          const rez = globalState.data_catalog.find((e)=> e._id == _id)
+          setStepsArr(rez.zubereitungsschritte);
         } else {
           setStepsArr(["-"]);
         }
       }
     }
-  }, [isServerAvailable, user, date]);
+  }, [globalState.data_choosen, globalState.selectedDate]);
 
-  if (!user) {
+  if (!globalState.data_choosen) {
     return (
       <div className="box-content3">
         {/* <Spin indicator={<LoadingOutlined style={{ fontSize: 50 }} spin />} /> */}
@@ -148,43 +129,28 @@ function ZubSteps({ date = "2024-07-09", name = "dev" }) {
   );
 }
 
-function Pic({ date = "2024-07-09", name = "dev" }) {
-  const [bildUrl, setbildUrl] = useState([{ menge: "-", name: "-" }]);
-  // const query = `?name=dev&date=${date || '2024-07-09'}`;
-  const query = `?name=dev`;
-  const { data: user, error, isServerAvailable } = useFetchData(`/api/Test2${query}`);
+function Pic({name = "dev" }) {
+  const [bildUrl, setbildUrl] = useState("/images/Placeholder2.webp");
+  const { globalState } = useContext(GlobalStateContext);
 
   function CheckforDate(choosenRecipe) {
-    return choosenRecipe.datum === dayjs(date).format("YYYY-MM-DD");
+    return choosenRecipe.datum === dayjs(globalState.selectedDate).format("YYYY-MM-DD");
   }
 
   useEffect(() => {
-    if (isServerAvailable) {
-      if (user) {
+    if (globalState.data_choosen) {
+      if (globalState.data_choosen.ausgewählteRezepte) {
         // Condition ? trueAns : falseAns
-        var _id = user.ausgewählteRezepte.find(CheckforDate) ? user.ausgewählteRezepte.find(CheckforDate).rezepte_id : null;
+        var _id = globalState.data_choosen.ausgewählteRezepte.find(CheckforDate) ? globalState.data_choosen.ausgewählteRezepte.find(CheckforDate).rezepte_id : null;
         if (_id) {
-          const query = `?Recipe_id=${_id}`;
-          const fetchRez = async () => {
-            try {
-              const response = await fetch(`/api/recipeTest${query}`);
-              const rez = await response.json();
-              setbildUrl(rez.bild);
-              // console.log(rez);
-            } catch (error) {
-              console.error(error);
-            }
-          };
-
-          fetchRez();
-        } else {
-          setbildUrl("/images/Placeholder2.webp");
+          const rez = globalState.data_catalog.find((e)=> e._id == _id)
+          setbildUrl(rez.bild);
         }
       }
     }
-  }, [isServerAvailable, user, date]);
+  }, [globalState.data_choosen, globalState.selectedDate]);
 
-  if (!user) {
+  if (!globalState.data_choosen) {
     return (
       <div className="food-image">
         {/* <Spin indicator={<LoadingOutlined style={{ fontSize: 148 }} spin />} /> */}
@@ -196,43 +162,31 @@ function Pic({ date = "2024-07-09", name = "dev" }) {
   return <img className="food-image" alt="Food" src={imagePath} />;
 }
 
-function List({ date = "2024-07-09", name = "dev" }) {
+function List({name = "dev" }) {
   const [ListArr, setListArr] = useState([{ menge: "-", name: "-" }]);
   // const query = `?name=dev&date=${date || '2024-07-09'}`;
-  const query = `?name=dev`;
-  const { data: user, error, isServerAvailable } = useFetchData(`/api/Test2${query}`);
+  const { globalState } = useContext(GlobalStateContext);
 
   function CheckforDate(choosenRecipe) {
-    return choosenRecipe.datum === dayjs(date).format("YYYY-MM-DD");
+    return choosenRecipe.datum === dayjs(globalState.selectedDate).format("YYYY-MM-DD");
   }
 
   useEffect(() => {
-    if (isServerAvailable) {
-      if (user) {
+    if (globalState.data_choosen) {
+      if (globalState.data_choosen.ausgewählteRezepte) {
         // Condition ? trueAns : falseAns
-        var _id = user.ausgewählteRezepte.find(CheckforDate) ? user.ausgewählteRezepte.find(CheckforDate).rezepte_id : null;
+        var _id = globalState.data_choosen.ausgewählteRezepte.find(CheckforDate) ? globalState.data_choosen.ausgewählteRezepte.find(CheckforDate).rezepte_id : null;
         if (_id) {
-          const query = `?Recipe_id=${_id}`;
-          const fetchRez = async () => {
-            try {
-              const response = await fetch(`/api/recipeTest${query}`);
-              const rez = await response.json();
-              setListArr(rez.zutaten);
-              // console.log(rez);
-            } catch (error) {
-              console.error(error);
-            }
-          };
-
-          fetchRez();
+          const rez = globalState.data_catalog.find((e)=> e._id == _id)
+          setListArr(rez.zutaten);
         } else {
           setListArr([{ menge: "-", name: "-" }]);
         }
       }
     }
-  }, [isServerAvailable, user, date]);
+  }, [globalState.data_choosen, globalState.selectedDate]);
 
-  if (!user) {
+  if (!globalState.data_choosen) {
     return (
       <div className="box-content2">
         {/* <Spin indicator={<LoadingOutlined style={{ fontSize: 148 }} spin />} /> */}
@@ -254,43 +208,31 @@ function List({ date = "2024-07-09", name = "dev" }) {
   );
 }
 
-function Count({ date = "2024-07-09", name = "dev" }) {
+function Count({name = "dev" }) {
   const [CountText, setCountText] = useState("-- Stück");
   // const query = `?name=dev&date=${date || '2024-07-09'}`;
-  const query = `?name=dev`;
-  const { data: user, error, isServerAvailable } = useFetchData(`/api/Test2${query}`);
+  const { globalState } = useContext(GlobalStateContext);
 
   function CheckforDate(choosenRecipe) {
-    return choosenRecipe.datum === dayjs(date).format("YYYY-MM-DD");
+    return choosenRecipe.datum === dayjs(globalState.selectedDate).format("YYYY-MM-DD");
   }
 
   useEffect(() => {
-    if (isServerAvailable) {
-      if (user) {
+    if (globalState.data_choosen) {
+      if (globalState.data_choosen.ausgewählteRezepte) {
         // Condition ? trueAns : falseAns
-        var _id = user.ausgewählteRezepte.find(CheckforDate) ? user.ausgewählteRezepte.find(CheckforDate).rezepte_id : null;
+        var _id = globalState.data_choosen.ausgewählteRezepte.find(CheckforDate) ? globalState.data_choosen.ausgewählteRezepte.find(CheckforDate).rezepte_id : null;
         if (_id) {
-          const query = `?Recipe_id=${_id}`;
-          const fetchRez = async () => {
-            try {
-              const response = await fetch(`/api/recipeTest${query}`);
-              const rez = await response.json();
-              setCountText(rez.zutaten.length);
-              // console.log(rez);
-            } catch (error) {
-              console.error(error);
-            }
-          };
-
-          fetchRez();
+          const rez = globalState.data_catalog.find((e)=> e._id == _id)
+          setCountText(rez.zutaten.length);
         } else {
           setCountText("-- Stück");
         }
       }
     }
-  }, [isServerAvailable, user, date]);
+  }, [globalState.data_choosen, globalState.selectedDate]);
 
-  if (!user) {
+  if (!globalState.data_choosen) {
     return (
       <>
         {/* <Spin indicator={<LoadingOutlined style={{ fontSize: 33 }} spin />} /> */}
@@ -306,44 +248,32 @@ function Count({ date = "2024-07-09", name = "dev" }) {
   );
 }
 
-function Time({ date = "2024-07-09", name = "dev" }) {
+function Time({name = "dev" }) {
   const [TimeText, setTimeText] = useState("-- min");
   // const query = `?name=dev&date=${date || '2024-07-09'}`;
-  const query = `?name=dev`;
-  const { data: user, error, isServerAvailable } = useFetchData(`/api/Test2${query}`);
+  const { globalState } = useContext(GlobalStateContext);
 
   function CheckforDate(choosenRecipe) {
-    return choosenRecipe.datum === dayjs(date).format("YYYY-MM-DD");
+    return choosenRecipe.datum === dayjs(globalState.selectedDate).format("YYYY-MM-DD");
   }
 
   useEffect(() => {
-    if (isServerAvailable) {
-      if (user) {
+    if (globalState.data_choosen) {
+      if (globalState.data_choosen.ausgewählteRezepte) {
         // Condition ? trueAns : falseAns
-        var _id = user.ausgewählteRezepte.find(CheckforDate) ? user.ausgewählteRezepte.find(CheckforDate).rezepte_id : null;
+        var _id = globalState.data_choosen.ausgewählteRezepte.find(CheckforDate) ? globalState.data_choosen.ausgewählteRezepte.find(CheckforDate).rezepte_id : null;
         if (_id) {
-          // var _id = user.ausgewählteRezepte.find(CheckforDate).rezepte_id;
-          const query = `?Recipe_id=${_id}`;
-          const fetchRez = async () => {
-            try {
-              const response = await fetch(`/api/recipeTest${query}`);
-              const rez = await response.json();
-              setTimeText(rez.zubereitungszeit);
-              // console.log(rez);
-            } catch (error) {
-              console.error(error);
-            }
-          };
-
-          fetchRez();
+          const rez = globalState.data_catalog.find((e)=> e._id == _id)
+          setTimeText(rez.zubereitungszeit);
+          // console.log(rez);
         } else {
           setTimeText("-- min");
         }
       }
     }
-  }, [isServerAvailable, user, date]);
+  }, [globalState.data_choosen, globalState.selectedDate]);
 
-  if (!user) {
+  if (!globalState.data_choosen) {
     return (
       <>
         {/* <Spin indicator={<LoadingOutlined style={{ fontSize: 33 }} spin />} /> */}
@@ -359,66 +289,24 @@ function Time({ date = "2024-07-09", name = "dev" }) {
   );
 }
 
-function ServerInfoAndHeader({ date = "2024-07-09", name = "dev", value, setValue }) {
-  // const query = `?name=dev&date=${date || '2024-07-09'}`;
-  const query = `?name=dev`;
-  const { data: user, error, isServerAvailable } = useFetchData(`/api/Test2${query}`);
-
-  function CheckforDate(choosenRecipe) {
-    return choosenRecipe.datum === dayjs(date).format("YYYY-MM-DD");
-  }
-
-  useEffect(() => {
-    if (isServerAvailable) {
-      if (user) {
-        // Condition ? trueAns : falseAns
-        var _id = user.ausgewählteRezepte.find(CheckforDate) ? user.ausgewählteRezepte.find(CheckforDate).rezepte_id : null;
-        var tempServerInfo = { RecipeAvailable: _id, ServerAvailable: isServerAvailable };
-        console.log("TempServerInfo: ",user.ausgewählteRezepte);
-        setValue(tempServerInfo);
-      }
-    } else {
-      var tempServerInfo = { RecipeAvailable: false, ServerAvailable: isServerAvailable };
-      setValue(tempServerInfo);
-    }
-  }, [isServerAvailable, user, date]);
-
-  if (!user) {
-    return (
-      <>
-        <h2 style={{ color: "var(--MenuColor)" }}> Food planer </h2>
-      </>
-    );
-  }
-
-  return (
-    <>
-      <h2 style={{ color: "var(--MenuColor)" }}> Food planer </h2>
-    </>
-  );
-}
-
 function Devbtn({ date = "2024-07-09", name = "dev", ServerInfo=null }) {
   // const query = `?name=dev&date=${date || '2024-07-09'}`;
   const [ButtonText, setButtonText] = useState("Dev Test");
-  const query = `?name=dev`;
   // Verwende useFetchData einmal, um den Status zu überwachen und die Daten zu laden
-  const { data: user, error, isServerAvailable } = useFetchData(`/api/Test2${query}`);
+  const { globalState } = useContext(GlobalStateContext);
 
   useEffect(() => {
-    if (isServerAvailable) {
-      if (user)
+    if (globalState.isServerAvailable) {
+      if (globalState.data_catalog)
         // console.log(user.name, "Server is available, data loaded:", user);
-        console.log("Loaded data with: ", dayjs(date).format("YYYY-MM-DD"));
+        console.log("Loaded data with: ", dayjs(globalState.selectedDate).format("YYYY-MM-DD"));
     }
-  }, [isServerAvailable, user, date]);
+  }, [globalState.isServerAvailable, globalState.data_catalog, globalState.update]);
 
-  function CheckforDate(choosenRecipe) {
-    return choosenRecipe.datum === dayjs(date).format("YYYY-MM-DD");
-  }
-  const devLog = (user) => {
-    console.log("Loaded data with: ", dayjs(date).format("YYYY-MM-DD"));
-    console.log(ServerInfo);
+  
+  const devLog = () => {
+    console.log("Loaded data with: ", dayjs(globalState.selectedDate).format("YYYY-MM-DD"));
+    console.log("isServerAvailable: ",globalState.isServerAvailable," isRecipeAvailable: ",globalState.isRecipeAvailable);
     // var _id = user.ausgewählteRezepte.find(CheckforDate) ? user.ausgewählteRezepte.find(CheckforDate).rezepte_id : null;
     // if (_id) {
     //   const query = `?Recipe_id=${_id}`;
@@ -439,7 +327,7 @@ function Devbtn({ date = "2024-07-09", name = "dev", ServerInfo=null }) {
     // }
   };
 
-  if (!user) {
+  if (!globalState.data_catalog) {
     return (
       <>
         <Spin indicator={<LoadingOutlined style={{ fontSize: 33 }} spin />} />
@@ -449,11 +337,12 @@ function Devbtn({ date = "2024-07-09", name = "dev", ServerInfo=null }) {
 
   return (
     <>
-      <Button type="primary" onClick={() => devLog(user)}>
+      <Button type="primary" onClick={() => devLog()}>
         {ButtonText}
       </Button>
     </>
   );
 }
 
-export { ZubSteps, List, Pic, Head, Count, Time, Devbtn, ServerInfoAndHeader };
+export { ZubSteps, List, Pic, Head, Count, Time, Devbtn };
+
