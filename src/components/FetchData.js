@@ -48,8 +48,6 @@ export function useFetchData(url, pollingInterval = 50000, healthPollingInterval
       if (globalState.result_catalog !== result_catalog && globalState.result_choosen !== result_choosen) {
         updateGlobalData(result_catalog,result_choosen);  // Call updateGlobalState only when needed
       }
-
-      console.log(globalState.data_catalog)  
       
     } catch (error) {
       setError(error.toString());

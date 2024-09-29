@@ -295,13 +295,13 @@ function Devbtn({ date = "2024-07-09", name = "dev", ServerInfo=null }) {
   // Verwende useFetchData einmal, um den Status zu überwachen und die Daten zu laden
   const { globalState } = useContext(GlobalStateContext);
 
-  useEffect(() => {
-    if (globalState.isServerAvailable) {
-      if (globalState.data_catalog)
-        // console.log(user.name, "Server is available, data loaded:", user);
-        console.log("Loaded data with: ", dayjs(globalState.selectedDate).format("YYYY-MM-DD"));
-    }
-  }, [globalState.isServerAvailable, globalState.data_catalog, globalState.update]);
+  // useEffect(() => {
+  //   if (globalState.isServerAvailable) {
+  //     if (globalState.data_catalog)
+  //       // console.log(user.name, "Server is available, data loaded:", user);
+  //       console.log("Loaded data with: ", dayjs(globalState.selectedDate).format("YYYY-MM-DD"));
+  //   }
+  // }, [globalState.isServerAvailable, globalState.data_catalog, globalState.update]);
 
   
   const devLog = () => {
