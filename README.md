@@ -10,6 +10,10 @@ MongoDB
 node.js
 multer
 
+#Dev Start
+node .\src\server.js
+ npm start
+
 # Start
 1. After 3 new test branches back to main to implement what i learned
 2. 

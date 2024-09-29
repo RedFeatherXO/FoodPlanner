@@ -1,24 +1,38 @@
 // src/components/days/Mo.js
 import React from "react";
-import { useContext,useEffect, useState, useReducer } from "react";
-import { LoadingOutlined } from "@ant-design/icons";
-import { Steps, Checkbox, Button, message, Flex, Spin, Skeleton } from "antd";
+import { useContext, useEffect, useState, useReducer } from "react";
+import { LoadingOutlined, DeleteOutlined } from "@ant-design/icons";
+import { Steps, Checkbox, Button, message, Flex, Spin, Skeleton, Modal } from "antd";
 import dayjs from "dayjs";
 import advancedFormat from "dayjs/plugin/advancedFormat";
 import isoWeek from "dayjs/plugin/isoWeek";
 import { useFetchData } from "./FetchData";
-import { GlobalStateContext } from '../context/GlobalStateContext';
-
+import { GlobalStateContext } from "../context/GlobalStateContext";
 
 dayjs.extend(advancedFormat); //https://day.js.org/docs/en/plugin/advanced-format
 dayjs.extend(isoWeek);
 
-function Head({name = "dev" }) {
+function Head({ name = "dev" }) {
   const [HeadText, setHeadText] = useState("-");
   const { globalState, forceUpdate } = useContext(GlobalStateContext);
-  // const query = `?name=dev&date=${date || '2024-07-09'}`;
-
-  const query = `?name=dev`;
+  const [open, setOpen] = useState(false);
+  const [confirmLoading, setConfirmLoading] = useState(false);
+  const [modalText, setModalText] = useState('Willst du das Rezept für diesen Tag Löschen?');
+  const showModal = () => {
+    setOpen(true);
+  };
+  const handleOk = () => {
+    setModalText('Willst du das Rezept für diesen Tag Löschen?');
+    setConfirmLoading(true);
+    setTimeout(() => {
+      setOpen(false);
+      setConfirmLoading(false);
+    }, 2000);
+  };
+  const handleCancel = () => {
+    console.log('Clicked cancel button');
+    setOpen(false);
+  };
 
   function CheckforDate(choosenRecipe) {
     return choosenRecipe.datum === dayjs(globalState.selectedDate).format("YYYY-MM-DD");
@@ -30,7 +44,7 @@ function Head({name = "dev" }) {
         // Condition ? trueAns : falseAns
         var _id = globalState.data_choosen.ausgewählteRezepte.find(CheckforDate) ? globalState.data_choosen.ausgewählteRezepte.find(CheckforDate).rezepte_id : null;
         if (_id) {
-          const rez = globalState.data_catalog.find((e)=> e._id == _id)
+          const rez = globalState.data_catalog.find((e) => e._id == _id);
           setHeadText(rez.name);
           // console.log(rez);
         } else {
@@ -40,7 +54,7 @@ function Head({name = "dev" }) {
         setHeadText("Kein Gericht für diesen Tag");
       }
     }
-  }, [globalState.selectedDate , globalState.data_choosen]);
+  }, [globalState.selectedDate, globalState.data_choosen]);
 
   if (!globalState.data_choosen) {
     return (
@@ -52,8 +66,28 @@ function Head({name = "dev" }) {
     );
   }
   return (
-    <div className="food-details">
-      <h1>{HeadText}</h1>
+    <div className="food-details boxes-container">
+      <div className="box_Head"></div>
+      <div className="box_Head">
+        <h1>{HeadText}</h1>
+      </div>
+      <div className="box_Head box_delete">
+        <Button shape="circle" icon={<DeleteOutlined />} size="large" onClick={showModal}>
+          
+        </Button>
+        <Modal
+          title="Löschen vom Rezept"
+          open={open}
+          onOk={handleOk}
+          confirmLoading={confirmLoading}
+          onCancel={handleCancel}
+          okButtonProps={{
+            danger: true,
+          }}
+        >
+          <p>{modalText}</p>
+        </Modal>
+      </div>
     </div>
   );
 }
@@ -74,7 +108,7 @@ function ZubSteps({ name = "dev" }) {
         // Condition ? trueAns : falseAns
         var _id = globalState.data_choosen.ausgewählteRezepte.find(CheckforDate) ? globalState.data_choosen.ausgewählteRezepte.find(CheckforDate).rezepte_id : null;
         if (_id) {
-          const rez = globalState.data_catalog.find((e)=> e._id == _id)
+          const rez = globalState.data_catalog.find((e) => e._id == _id);
           setStepsArr(rez.zubereitungsschritte);
         } else {
           setStepsArr(["-"]);
@@ -129,7 +163,7 @@ function ZubSteps({ name = "dev" }) {
   );
 }
 
-function Pic({name = "dev" }) {
+function Pic({ name = "dev" }) {
   const [bildUrl, setbildUrl] = useState("/images/Placeholder2.webp");
   const { globalState } = useContext(GlobalStateContext);
 
@@ -143,7 +177,7 @@ function Pic({name = "dev" }) {
         // Condition ? trueAns : falseAns
         var _id = globalState.data_choosen.ausgewählteRezepte.find(CheckforDate) ? globalState.data_choosen.ausgewählteRezepte.find(CheckforDate).rezepte_id : null;
         if (_id) {
-          const rez = globalState.data_catalog.find((e)=> e._id == _id)
+          const rez = globalState.data_catalog.find((e) => e._id == _id);
           setbildUrl(rez.bild);
         }
       }
@@ -162,7 +196,7 @@ function Pic({name = "dev" }) {
   return <img className="food-image" alt="Food" src={imagePath} />;
 }
 
-function List({name = "dev" }) {
+function List({ name = "dev" }) {
   const [ListArr, setListArr] = useState([{ menge: "-", name: "-" }]);
   // const query = `?name=dev&date=${date || '2024-07-09'}`;
   const { globalState } = useContext(GlobalStateContext);
@@ -177,7 +211,7 @@ function List({name = "dev" }) {
         // Condition ? trueAns : falseAns
         var _id = globalState.data_choosen.ausgewählteRezepte.find(CheckforDate) ? globalState.data_choosen.ausgewählteRezepte.find(CheckforDate).rezepte_id : null;
         if (_id) {
-          const rez = globalState.data_catalog.find((e)=> e._id == _id)
+          const rez = globalState.data_catalog.find((e) => e._id == _id);
           setListArr(rez.zutaten);
         } else {
           setListArr([{ menge: "-", name: "-" }]);
@@ -208,7 +242,7 @@ function List({name = "dev" }) {
   );
 }
 
-function Count({name = "dev" }) {
+function Count({ name = "dev" }) {
   const [CountText, setCountText] = useState("-- Stück");
   // const query = `?name=dev&date=${date || '2024-07-09'}`;
   const { globalState } = useContext(GlobalStateContext);
@@ -223,7 +257,7 @@ function Count({name = "dev" }) {
         // Condition ? trueAns : falseAns
         var _id = globalState.data_choosen.ausgewählteRezepte.find(CheckforDate) ? globalState.data_choosen.ausgewählteRezepte.find(CheckforDate).rezepte_id : null;
         if (_id) {
-          const rez = globalState.data_catalog.find((e)=> e._id == _id)
+          const rez = globalState.data_catalog.find((e) => e._id == _id);
           setCountText(rez.zutaten.length);
         } else {
           setCountText("-- Stück");
@@ -248,7 +282,7 @@ function Count({name = "dev" }) {
   );
 }
 
-function Time({name = "dev" }) {
+function Time({ name = "dev" }) {
   const [TimeText, setTimeText] = useState("-- min");
   // const query = `?name=dev&date=${date || '2024-07-09'}`;
   const { globalState } = useContext(GlobalStateContext);
@@ -263,7 +297,7 @@ function Time({name = "dev" }) {
         // Condition ? trueAns : falseAns
         var _id = globalState.data_choosen.ausgewählteRezepte.find(CheckforDate) ? globalState.data_choosen.ausgewählteRezepte.find(CheckforDate).rezepte_id : null;
         if (_id) {
-          const rez = globalState.data_catalog.find((e)=> e._id == _id)
+          const rez = globalState.data_catalog.find((e) => e._id == _id);
           setTimeText(rez.zubereitungszeit);
           // console.log(rez);
         } else {
@@ -289,7 +323,7 @@ function Time({name = "dev" }) {
   );
 }
 
-function Devbtn({ date = "2024-07-09", name = "dev", ServerInfo=null }) {
+function Devbtn({ date = "2024-07-09", name = "dev", ServerInfo = null }) {
   // const query = `?name=dev&date=${date || '2024-07-09'}`;
   const [ButtonText, setButtonText] = useState("Dev Test");
   // Verwende useFetchData einmal, um den Status zu überwachen und die Daten zu laden
@@ -303,10 +337,9 @@ function Devbtn({ date = "2024-07-09", name = "dev", ServerInfo=null }) {
   //   }
   // }, [globalState.isServerAvailable, globalState.data_catalog, globalState.update]);
 
-  
   const devLog = () => {
     console.log("Loaded data with: ", dayjs(globalState.selectedDate).format("YYYY-MM-DD"));
-    console.log("isServerAvailable: ",globalState.isServerAvailable," isRecipeAvailable: ",globalState.isRecipeAvailable);
+    console.log("isServerAvailable: ", globalState.isServerAvailable, " isRecipeAvailable: ", globalState.isRecipeAvailable);
     // var _id = user.ausgewählteRezepte.find(CheckforDate) ? user.ausgewählteRezepte.find(CheckforDate).rezepte_id : null;
     // if (_id) {
     //   const query = `?Recipe_id=${_id}`;
@@ -345,4 +378,3 @@ function Devbtn({ date = "2024-07-09", name = "dev", ServerInfo=null }) {
 }
 
 export { ZubSteps, List, Pic, Head, Count, Time, Devbtn };
-
