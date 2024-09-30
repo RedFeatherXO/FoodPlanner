@@ -17,26 +17,42 @@ function Head({ name = "dev" }) {
   const { globalState, forceUpdate } = useContext(GlobalStateContext);
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
-  const [modalText, setModalText] = useState('Willst du das Rezept für diesen Tag Löschen?');
+  const [modalText, setModalText] = useState("Willst du das Rezept für diesen Tag Löschen?");
   const showModal = () => {
     setOpen(true);
-  };
-  const handleOk = () => {
-    setModalText('Willst du das Rezept für diesen Tag Löschen?');
-    setConfirmLoading(true);
-    setTimeout(() => {
-      setOpen(false);
-      setConfirmLoading(false);
-    }, 2000);
-  };
-  const handleCancel = () => {
-    console.log('Clicked cancel button');
-    setOpen(false);
   };
 
   function CheckforDate(choosenRecipe) {
     return choosenRecipe.datum === dayjs(globalState.selectedDate).format("YYYY-MM-DD");
   }
+
+  const handleOk = async () => {
+    setModalText("Willst du das Rezept für diesen Tag Löschen?");
+    setConfirmLoading(true);
+    try {
+      const recipe_id = globalState.data_choosen.ausgewählteRezepte.find(CheckforDate) ? globalState.data_choosen.ausgewählteRezepte.find(CheckforDate).rezepte_id : null;
+      if (recipe_id != null) {
+        const response = await fetch(`/api/DeleteRecipe/${recipe_id}/${globalState.selectedDate}`, { method: "DELETE" });
+
+        if (response.ok) {
+          // console.log("Rezept erfolgreich gelöscht");
+          forceUpdate();
+        } else {
+          console.error("Fehler beim Löschen des Rezepts: ", response.statusText);
+        }
+      }
+    } catch (error) {
+      console.error("Error while deleting: ", error);
+    }
+    setTimeout(() => {
+      setOpen(false);
+      setConfirmLoading(false);
+    }, 2500);
+  };
+  const handleCancel = () => {
+    console.log("Clicked cancel button");
+    setOpen(false);
+  };
 
   useEffect(() => {
     if (globalState.data_choosen) {
@@ -72,9 +88,7 @@ function Head({ name = "dev" }) {
         <h1>{HeadText}</h1>
       </div>
       <div className="box_Head box_delete">
-        <Button shape="circle" icon={<DeleteOutlined />} size="large" onClick={showModal}>
-          
-        </Button>
+        <Button shape="circle" icon={<DeleteOutlined />} size="large" onClick={showModal}></Button>
         <Modal
           title="Löschen vom Rezept"
           open={open}

@@ -43,6 +43,44 @@ client
     process.exit(1);
   });
 
+app.delete("/api/DeleteRecipe/:id/:date", async (req, res) => {
+  if (!db) return res.status(500).send("Database connection not established");
+  try {
+    const Users = db.collection("user");
+    const username = { name: "dev" };
+    const user = await Users.findOne(username);
+    const date_string = req.params.date;
+    const recipeId_string = req.params.id;
+    const recipeId = new ObjectId(recipeId_string);
+
+    if (!user) {
+      return res.status(404).send("User not found");
+    }
+
+    // Lösche das Rezept aus dem Array
+    const result = await Users.updateOne(
+      { name: username.name }, // Filter
+      {
+        $pull: {
+          ausgewählteRezepte: {
+            datum: date_string, // Datum
+            rezepte_id: recipeId, // Rezept-ID
+          },
+        },
+      }
+    );
+
+    if (result.modifiedCount === 1) {
+      res.status(200).send("Recipe deleted successfully");
+    } else {
+      res.status(404).send("Recipe not found");
+    }
+  } catch (error) {
+    console.error("Error deleting recipe", error);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
 // Beispiel-Endpunkt für eine Datenbankabfrage
 app.get("/api/recipe", async (req, res) => {
   if (!db) return res.status(500).send("Database connection not established");
@@ -86,9 +124,7 @@ app.post("/api/SelectedRecipeForDay", async (req, res) => {
     }
 
     // Prüfe, ob bereits ein Rezept für das gegebene Datum existiert
-    const existingRecipeIndex = user.ausgewählteRezepte.findIndex(
-      (entry) => entry.datum === date
-    );
+    const existingRecipeIndex = user.ausgewählteRezepte.findIndex((entry) => entry.datum === date);
 
     if (existingRecipeIndex >= 0) {
       // Wenn bereits ein Rezept für das Datum existiert, aktualisiere es
@@ -101,10 +137,7 @@ app.post("/api/SelectedRecipeForDay", async (req, res) => {
       });
     }
     // Aktualisiere den Nutzerdatensatz in der Datenbank
-    await userCollection.updateOne(
-      { _id: userObjectId },
-      { $set: { ausgewählteRezepte: user.ausgewählteRezepte } }
-    );
+    await userCollection.updateOne({ _id: userObjectId }, { $set: { ausgewählteRezepte: user.ausgewählteRezepte } });
 
     res.status(201).json({ message: "Recipe selected for the day" });
   } catch (error) {

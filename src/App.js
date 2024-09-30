@@ -30,19 +30,16 @@ export default function App() {
 
   const changeColor = (index) => {
     setSelectedIndex(index);
-    const newDate = dayjs(
-      String(dayjs(globalState.selectedDate).year()) +
-        "-" +
-        String(dayjs(globalState.selectedDate).month() + 1) +
-        "-" +
-        dayjs(globalState.selectedDate)
-          .isoWeekday(index + 1)
-          .date()
-    ).format("YYYY-MM-DD");
-    // setSelectedDate(newDate);
-    updateSelectedDate(newDate);
+
+    const currentDate = dayjs(globalState.selectedDate);
+    let newDate = dayjs(currentDate).isoWeekday(index + 1); // +1 weil Montag bei 1 anfängt
+    const formattedDate = newDate.format("YYYY-MM-DD");
+
+    updateSelectedDate(formattedDate);
+    console.log(formattedDate,globalState.data_choosen);
     forceUpdate();
   };
+  
 
   const onChange = (date) => {
     if (date) {
