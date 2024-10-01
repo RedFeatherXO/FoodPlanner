@@ -1,12 +1,15 @@
-import React, { useContext, useEffect } from "react";
-import { Button, Card, Tooltip, message } from "antd";
+import React, { useContext, useEffect, useState } from "react";
+import { Button, Card, Tooltip, message,Drawer } from "antd";
 import { EditTwoTone, EllipsisOutlined } from "@ant-design/icons";
 import { GlobalStateContext } from '../context/GlobalStateContext';
 import { useFetchData } from "./FetchData";
+import { EditName_Time_Count,EditPicture } from "./GerichtEdit";
 
 function RecipeCardBox({user={name:"dev",_id:"66b38186803417ea7bcad6f3"}}) {
   const { data: recipeCatalog, refetch } = useFetchData(`/api/GetRecipeCatalog`);
   const { globalState, forceUpdate } = useContext(GlobalStateContext);
+  const [visible, setVisible] = useState(false);
+  const [EditID, setEditID] = useState("");
 
   const SelectRecipeForDay = async (recipe) => {
     try {
@@ -29,9 +32,27 @@ function RecipeCardBox({user={name:"dev",_id:"66b38186803417ea7bcad6f3"}}) {
       message.error(`Fehler beim Auswählen des Gerichts: ${error.message}`, 3);
     }
   }
+
+  const OpenCard = (item) => {
+    setEditID(item._id);
+    setVisible(true)
+  }
+
+  const onClose = () => {
+    setVisible(false);
+  }
+
   return (
     <>
       {/* {contextHolder} */}
+      <Drawer title={"Gericht Edit Drawer"} onClose={onClose} open={visible} placement="right" size="large">
+        <div className="DrawerBox">
+          <EditName_Time_Count _id={EditID}/>
+        </div>
+        <div className="DrawerBox">
+          <EditPicture _id={EditID} />
+        </div>
+      </Drawer>
       <h3>No recipe selected for {globalState.selectedDate}. Please choose a recipe.</h3>
       <div className="CardBoxCollection">
         {globalState.data_catalog &&
@@ -49,7 +70,7 @@ function RecipeCardBox({user={name:"dev",_id:"66b38186803417ea7bcad6f3"}}) {
                   Select Gericht
                 </Button>,
                 <Tooltip title="Edit Recipe">
-                  <EditTwoTone key="edit" />
+                  <EditTwoTone key="edit" onClick={() => OpenCard(item)} />
                 </Tooltip>,
                 <Tooltip title="View Details">
                   <EllipsisOutlined key="ellipsis" />
