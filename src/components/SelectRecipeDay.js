@@ -1,12 +1,11 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Button, Card, Tooltip, message,Drawer } from "antd";
+import { Button, Card, Tooltip, message, Drawer } from "antd";
 import { EditTwoTone, EllipsisOutlined } from "@ant-design/icons";
-import { GlobalStateContext } from '../context/GlobalStateContext';
+import { GlobalStateContext } from "../context/GlobalStateContext";
 import { useFetchData } from "./FetchData";
-import { EditName_Time_Count,EditPicture } from "./GerichtEdit";
+import { EditName_Time_Count, EditPicture, EditZutaten, EditNewSteps } from "./GerichtEdit";
 
-function RecipeCardBox({user={name:"dev",_id:"66b38186803417ea7bcad6f3"}}) {
-  const { data: recipeCatalog, refetch } = useFetchData(`/api/GetRecipeCatalog`);
+function RecipeCardBox({ user = { name: "dev", _id: "66b38186803417ea7bcad6f3" } }) {
   const { globalState, forceUpdate } = useContext(GlobalStateContext);
   const [visible, setVisible] = useState(false);
   const [EditID, setEditID] = useState("");
@@ -18,39 +17,45 @@ function RecipeCardBox({user={name:"dev",_id:"66b38186803417ea7bcad6f3"}}) {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({date: globalState.selectedDate, recipeID: recipe._id, userID: user._id}),
+        body: JSON.stringify({ date: globalState.selectedDate, recipeID: recipe._id, userID: user._id }),
       });
 
       if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }      
+        throw new Error("Network response was not ok");
+      }
       message.success(`Erfolgreich Gericht für ${globalState.selectedDate} ausgewählt`, 3);
 
-      forceUpdate()
-    } catch(error) {
+      forceUpdate();
+    } catch (error) {
       console.error("Error:", error);
       message.error(`Fehler beim Auswählen des Gerichts: ${error.message}`, 3);
     }
-  }
+  };
 
   const OpenCard = (item) => {
     setEditID(item._id);
-    setVisible(true)
-  }
+    setVisible(true);
+  };
 
   const onClose = () => {
     setVisible(false);
-  }
+  };
 
   return (
     <>
       {/* {contextHolder} */}
       <Drawer title={"Gericht Edit Drawer"} onClose={onClose} open={visible} placement="right" size="large">
         <div className="DrawerBox">
-          <EditName_Time_Count _id={EditID}/>
+          <EditName_Time_Count _id={EditID} />
         </div>
         <div className="DrawerBox">
           <EditPicture _id={EditID} />
+        </div>
+        <div className="DrawerBox">
+          <EditZutaten _id={EditID} />
+        </div>
+        <div className="DrawerBox">
+          <EditNewSteps _id={EditID} />          
         </div>
       </Drawer>
       <h3>No recipe selected for {globalState.selectedDate}. Please choose a recipe.</h3>

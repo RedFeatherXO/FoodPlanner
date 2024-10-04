@@ -404,6 +404,55 @@ ul.week-menu li.selected {
   color: var(--whiteLight);
 }
 
+.ChangeStepsContent {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 2px;
+}
+
+.ChangeStepsContent button:first-of-type {
+  background-color: green;
+  color: var(--whiteLight);
+}
+
+.ChangeStepsContent button:last-of-type {
+  background-color: red;
+  color: var(--whiteLight);
+}
+
+.ChangeStepsContent div:first-of-type {
+  flex-grow: 1; /* Element nimmt den verfügbaren Platz ein */
+  flex-shrink: 0; /* Verhindert, dass das Element kleiner wird */
+}
+
+.ChangedStepsButton {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-left: 10px;
+}
+
+.ChangeZutatenContent {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 2px;
+}
+
+.ChangeZutatenContent button:first-of-type {
+  background-color: green;
+  color: var(--whiteLight);
+  margin-right: 10px;
+}
+
+.ChangeZutatenContent button:last-of-type {
+  background-color: red;
+  color: var(--whiteLight);
+}
+
 .Submit {
   margin-top: 10px;
   display: flex;
@@ -429,6 +478,22 @@ ul.week-menu li.selected {
 .newSteps button {
   background-color: red;
   margin-top: -15px;
+  color: var(--whiteLight);
+}
+
+.ChangedSteps {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 2px;
+}
+
+.ChangedStepsButton {
+  display: flex;
+  flex-direction: column; /* Stapele die Buttons vertikal */
+  align-items: center; /* Zentriere die Buttons horizontal */
+  justify-content: center; /* Zentriere die Buttons vertikal */
+  gap: 10px; /* Abstand zwischen den Buttons */
   color: var(--whiteLight);
 }
 
@@ -478,3 +543,132 @@ ul.week-menu li.selected {
   left: 50%;
   transform: translate(-50%, -50%);
 }
+
+@media (max-width: 768px) {
+  /* Allgemeine Anpassungen für mobile Geräte */
+  
+  .layout {
+    height: auto;
+    flex-direction: column;
+    padding: 10px;
+  }
+
+  .header {
+    flex-direction: column;
+    padding: 10px;
+  }
+
+  .CreateRec, .Account {
+    text-align: center; /* Zentriere die Texte in der Kopfzeile */
+  }
+
+  .week-selection {
+    flex-direction: column;
+    margin: 5px 0;
+  }
+
+  .week-menu li {
+    font-size: 20px; /* Kleinere Schriftgröße für die Woche-Auswahl */
+    padding: 10px;
+  }
+
+  .content {
+    padding: 5px;
+    margin: 5px;
+    border-radius: 15px;
+  }
+
+  .boxes-container {
+    flex-direction: column; /* Staple die Boxen untereinander */
+    width: 100%;
+    margin: 5px 0;
+  }
+
+  .box {
+    width: 100%;
+    margin: 10px 0; /* Vergrößere den Abstand zwischen den Boxen */
+    height: auto; /* Passe die Höhe dynamisch an */
+  }
+
+  .Hbox {
+    font-size: 16px;
+    padding: 5px;
+  }
+
+  .box-content, .box-content2, .box-content3 {
+    padding: 10px;
+  }
+
+  .fixed-buttons {
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .fixed-buttons button {
+    width: 100%;
+  }
+
+  .CardBoxCollection .ant-card {
+    width: 100%; /* Lasse Karten 100% der Breite einnehmen */
+    margin: 10px 0;
+  }
+
+  .DateBox {
+    width: 100%;
+  }
+
+  .Submit, .SubmitUpload {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .ChangedStepsButton, .Mockfixed-buttons, .ChangedSteps {
+    flex-direction: row;
+    gap: 5px;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Für sehr kleine Bildschirme wie Smartphones */
+  
+  .week-menu li {
+    font-size: 18px; /* Noch kleinere Schriftgröße */
+    padding: 8px;
+  }
+
+  .Hbox {
+    font-size: 14px; /* Kleinere Überschrift */
+  }
+
+  .box-content, .box-content2, .box-content3 {
+    padding: 8px;
+  }
+
+  .fixed-buttons button, .Mockfixed-buttons button {
+    width: 100%; /* Buttons sollen 100% Breite einnehmen */
+  }
+}
+
+@media (max-width: 768px) {
+  .boxes-container {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .box {
+    width: 100%; /* Boxen nehmen die volle Breite ein */
+    margin-bottom: 10px;
+  }
+
+  .CardBoxCollection {
+    display: grid;
+    grid-template-columns: 1fr; /* Eine Spalte auf mobilen Geräten */
+    gap: 10px;
+  }
+
+  .CardBoxCollection .ant-card {
+    width: 100%; /* Karten nehmen die volle Breite ein */
+  }
+}
+
+

@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState, useReducer } from "react";
-import { Layout, Button, DatePicker, message, Tooltip } from "antd";
+import { Layout, Button, DatePicker, message, Tooltip,Spin } from "antd";
+import { LoadingOutlined } from "@ant-design/icons";
 import "./App.css";
 import dayjs from "dayjs";
 import advancedFormat from "dayjs/plugin/advancedFormat";
@@ -87,27 +88,35 @@ export default function App() {
             </div>
           </div>
         </div>
+        
+        
 
         <Content className="content">
-          {globalState.isRecipeAvailable || !globalState.isServerAvailable ? (
-            <div className="food-preview">
-              {Head && <Head/>}
-              <div className="boxes-container">
-                <div className="box box1">
-                  <div className="Hbox">{Count && <Count/>}</div>
-                  {List && <List/>}
-                </div>
-                <div className="box box2">
-                  <div className="box-content">{Pic && <Pic/>}</div>
-                </div>
-                <div className="box box3">
-                  <div className="Hbox">{Time && <Time/>}</div>
-                  {ZubSteps && <ZubSteps/>}
+          {!globalState.data_catalog ? (
+            <Spin indicator={<LoadingOutlined style={{ fontSize: 33 }} spin />} />
+          ) : (
+            !globalState.isRecipeAvailable || globalState.isServerAvailable ? (
+              <div className="recipe-selection-menu">
+                {RecipeCardBox && <RecipeCardBox user={user} />}
+              </div>
+            ) : (
+              <div className="food-preview">
+                {Head && <Head />}
+                <div className="boxes-container">
+                  <div className="box box1">
+                    <div className="Hbox">{Count && <Count />}</div>
+                    {List && <List />}
+                  </div>
+                  <div className="box box2">
+                    <div className="box-content">{Pic && <Pic />}</div>
+                  </div>
+                  <div className="box box3">
+                    <div className="Hbox">{Time && <Time />}</div>
+                    {ZubSteps && <ZubSteps />}
+                  </div>
                 </div>
               </div>
-            </div>
-          ) : (
-            <div className="recipe-selection-menu">{RecipeCardBox && <RecipeCardBox user={user}/>}</div>
+            )
           )}
         </Content>
       </Layout>
