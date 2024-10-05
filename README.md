@@ -5,10 +5,8 @@ A Website to see the food you want to cook. Food gets randomly selected or you c
 React
     dayjs -> For Date processing
     antd -> Templates
-Redux
 MongoDB
 node.js
-multer
 
 #Dev Start
 node .\src\server.js
@@ -18,59 +16,12 @@ node .\src\server.js
 1. After 3 new test branches back to main to implement what i learned
 2. 
 
+## Todo
+[] Store images in MongoDB or other
+[] Mobile website adjustments
+[] Account Usage. Currently the dev User is used so there is no functionality for Users Accounts
+[] Is a Recipe browser needed or is the browser when there is nothing choosen enough?
+[] Implemnet "View Details" (3 dots in the Recipe Browser) 
+
 ![Site Image](/DevGithub/WebsiteExample.png?raw=true "Site Image title")
 ![Site Image](/DevGithub/WebsiteExample2.png?raw=true "Site2 Image title")
-
-
-```
-FoodWebsite
-├─ .git
-│  ...
-├─ .github
-│  └─ ISSUE_TEMPLATE
-│     ├─ bug_report.md
-│     ├─ custom.md
-│     └─ feature_request.md
-├─ .gitignore
-├─ babel.config.json
-├─ basicsetup.txt
-├─ DevGithub
-│  ├─ WebsiteExample.png
-│  └─ WebsiteExample2.png
-├─ dist
-│  ├─ bundle.js
-│  ├─ bundle.js.LICENSE.txt
-│  ├─ images
-│  │  ├─ Placeholder.webp
-│  │  ├─ Placeholder2.webp
-│  │  ├─ Preview_1724375329639.webp
-│  │  ├─ Preview_1724643574655.jpg
-│  │  ├─ Preview_1724644696508.jpg
-│  │  ├─ Preview_1724645234712.jpg
-│  │  ├─ README.md
-│  │  └─ Spaghetti Bolognese.jpg
-│  └─ index.html
-├─ LICENSE
-├─ package-lock.json
-├─ package.json
-├─ README.md
-├─ src
-│  ├─ App.css
-│  ├─ App.js
-│  ├─ components
-│  │  ├─ DrawerFunc.js
-│  │  ├─ FetchData.js
-│  │  ├─ GerichtUpload.js
-│  │  ├─ Mo.js
-│  │  ├─ RetrieveData.js
-│  │  ├─ SelectRecipeDay.js
-│  │  └─ Test.html
-│  ├─ index.css
-│  ├─ index.js
-│  ├─ server.js
-│  └─ Structure
-│     ├─ RecipeTemplate.json
-│     └─ UserTemplate.json
-└─ webpack.config.js
-
-```
