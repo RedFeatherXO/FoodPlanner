@@ -113,7 +113,6 @@ function RecipeCardBox({ user = { name: "dev", _id: "66b38186803417ea7bcad6f3" }
 
           if (response.ok) {
             const data = await response.json();
-            console.log("Recipe updated with ID:", data.id);
             message.success("Recipe uploaded successfully!");
 
             // Clear form data

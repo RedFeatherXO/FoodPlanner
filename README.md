@@ -23,5 +23,5 @@ node .\src\server.js
 - [ ] Is a Recipe browser needed or is the browser when there is nothing chosen enough?
 - [ ] Implement "View Details" (3 dots in the Recipe Browser)
 
-![Site Image](/DevGithub/WebsiteExample.png?raw=true "Site Image title")
-![Site Image](/DevGithub/WebsiteExample2.png?raw=true "Site2 Image title")
+![Site Image](/DevGithub/WebsiteExample_RecipeBrowser.png?raw=true "Recipe Browser")
+![Site Image](/DevGithub/WebsiteExample_ChoosenRecipe.png?raw=true "Selected Recipe for Saturday")
