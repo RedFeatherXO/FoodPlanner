@@ -383,6 +383,12 @@ ul.week-menu li.selected {
   border-radius: 12.5px;
 }
 
+.SubmitBtn button:first-of-type {
+  width: 100%; 
+  background-color: green;
+  color: var(--whiteLight);
+}
+
 .NewZutaten {
   display: grid;
 }
@@ -544,6 +550,23 @@ ul.week-menu li.selected {
   transform: translate(-50%, -50%);
 }
 
+.DrawerBox .ant-upload-wrapper {
+  height: 100%;
+}
+
+.EditPicUpload .ant-upload-list {
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.EditPicUploadBtn {
+  border: 0;
+  background-color: none;
+  width: 100%;
+  height: 100%;
+}
+
 @media (max-width: 768px) {
   /* Allgemeine Anpassungen für mobile Geräte */
   
@@ -670,5 +693,7 @@ ul.week-menu li.selected {
     width: 100%; /* Karten nehmen die volle Breite ein */
   }
 }
+
+
 
 

@@ -77,7 +77,7 @@ export function useFetchData(url, pollingInterval = 50000, healthPollingInterval
         updateRecipeAvailable(false); // Nur aktualisieren, wenn der Status sich wirklich ändert
       }
     }
-  }, [globalState.data_choosen, globalState.selectedDate, globalState.isRecipeAvailable]); // Richtige Abhängigkeiten angeben
+  }, [globalState.data_choosen, globalState.selectedDate, globalState.isRecipeAvailable, globalState.update]); // Richtige Abhängigkeiten angeben
   
   // Automatic polling
   useEffect(() => {

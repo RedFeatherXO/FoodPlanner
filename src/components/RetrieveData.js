@@ -6,7 +6,6 @@ import { Steps, Checkbox, Button, message, Flex, Spin, Skeleton, Modal } from "a
 import dayjs from "dayjs";
 import advancedFormat from "dayjs/plugin/advancedFormat";
 import isoWeek from "dayjs/plugin/isoWeek";
-import { useFetchData } from "./FetchData";
 import { GlobalStateContext } from "../context/GlobalStateContext";
 
 dayjs.extend(advancedFormat); //https://day.js.org/docs/en/plugin/advanced-format

@@ -8,7 +8,12 @@ import { EditName_Time_Count, EditPicture, EditZutaten, EditNewSteps } from "./G
 function RecipeCardBox({ user = { name: "dev", _id: "66b38186803417ea7bcad6f3" } }) {
   const { globalState, forceUpdate } = useContext(GlobalStateContext);
   const [visible, setVisible] = useState(false);
-  const [EditID, setEditID] = useState("");
+  const [foundItem, setFoundItem] = useState(null);
+
+  const [NewGerichtStrings, setGerichtStrings] = useState({ name: "Gericht Name", zubereitungszeit: "", zutatenFuer: "" });
+  const [NewStepsArr, setStepsArr] = useState([]);
+  const [NewPicPath, setPicPath] = useState("");
+  const [NewZutatenArr, setZutatenArr] = useState([]);
 
   const SelectRecipeForDay = async (recipe) => {
     try {
@@ -32,32 +37,125 @@ function RecipeCardBox({ user = { name: "dev", _id: "66b38186803417ea7bcad6f3" }
     }
   };
 
+  useEffect(() => {
+    if (foundItem) {
+      setPicPath(foundItem.bild);
+      setGerichtStrings({ name: foundItem.name, zubereitungszeit: foundItem.zubereitungszeit, zutatenFuer: foundItem["Zutaten für"] })
+      // Erstelle eine tiefe Kopie der Zutaten, um foundItem nicht zu verändern
+      const zutatenCopy = JSON.parse(JSON.stringify(foundItem.zutaten));
+      setZutatenArr(zutatenCopy);
+    }
+  }, [foundItem]);
+
   const OpenCard = (item) => {
-    setEditID(item._id);
+    setFoundItem(globalState.data_catalog.find((i) => i._id === item._id));
     setVisible(true);
   };
 
   const onClose = () => {
     setVisible(false);
+    setFoundItem(null);
+  };
+
+  const hasChanges = (original, updated) => {
+    // console.log("Original values:", original);
+    // console.log("Name:", original.name);
+    // console.log("Zubereitungszeit:", original.zubereitungszeit);
+    // console.log("Zutaten für:", original["Zutaten für"]);
+    // console.log("Bild:", original.bild);
+    // console.log("Zubereitungsschritte:", original.zubereitungsschritte);
+    // console.log("Zutaten:", original.zutaten);
+
+    // console.log("Updated values:",updated);
+    // console.log("Name:", updated.name);
+    // console.log("Zubereitungszeit:", updated.zubereitungszeit);
+    // console.log("Zutaten für:", updated["Zutaten für"]);
+    // console.log("Bild:", updated.bild);
+    // console.log("Zubereitungsschritte:", updated.zubereitungsschritte);
+    // console.log("Zutaten:", updated.zutaten);
+    return (
+      original.name !== updated.name ||
+      original.zubereitungszeit !== updated.zubereitungszeit ||
+      original["Zutaten für"] !== updated["Zutaten für"] ||
+      original.bild !== updated.bild ||
+      JSON.stringify(original.zubereitungsschritte) !== JSON.stringify(updated.zubereitungsschritte) ||
+      JSON.stringify(original.zutaten) !== JSON.stringify(updated.zutaten)
+    );
+  };
+
+  const UploadEdit = async () => {
+    
+    if (
+      NewGerichtStrings.name !== "" &&
+      NewGerichtStrings.zubereitungszeit !== "" &&
+      NewGerichtStrings.zutatenFuer !== "" &&
+      NewPicPath !== "" &&
+      NewZutatenArr.length !== 0 &&
+      NewStepsArr.length !== 0
+    ) {
+      var ObjectToPush = {
+        name: NewGerichtStrings.name,
+        zubereitungszeit: NewGerichtStrings.zubereitungszeit,
+        "Zutaten für": NewGerichtStrings.zutatenFuer,
+        bild: String(NewPicPath),
+        zubereitungsschritte: NewStepsArr,
+        zutaten: NewZutatenArr,
+      };
+      if (hasChanges(foundItem, ObjectToPush)) {
+        try {
+          const response = await fetch(`/api/UpdateRecipe/${foundItem._id}`, {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(ObjectToPush),
+          });
+
+          if (response.ok) {
+            const data = await response.json();
+            console.log("Recipe updated with ID:", data.id);
+            message.success("Recipe uploaded successfully!");
+
+            // Clear form data
+            setFoundItem(null);
+            forceUpdate();
+          } else {
+            message.error("Failed to upload recipe");
+            console.error("Failed to upload recipe:", response.statusText);
+          }
+        } catch (error) {
+          console.error("Error while uploading recipe:", error);
+          message.error("Error while uploading recipe");
+        }
+      } else {
+        message.info("Keine Änderungen vorgenommen.");
+      }
+    } else {
+      message.error("Alle Inputs müssen ausgefüllt sein");
+    }
   };
 
   return (
     <>
-      {/* {contextHolder} */}
-      <Drawer title={"Gericht Edit Drawer"} onClose={onClose} open={visible} placement="right" size="large">
-        <div className="DrawerBox">
-          <EditName_Time_Count _id={EditID} />
-        </div>
-        <div className="DrawerBox">
-          <EditPicture _id={EditID} />
-        </div>
-        <div className="DrawerBox">
-          <EditZutaten _id={EditID} />
-        </div>
-        <div className="DrawerBox">
-          <EditNewSteps _id={EditID} />          
-        </div>
-      </Drawer>
+      {foundItem && (
+        <Drawer title={"Gericht Edit Drawer"} onClose={onClose} open={visible} placement="right" size="large">
+          <div className="DrawerBox SubmitBtn">
+            <Button onClick={UploadEdit}> Gericht Ändern </Button>
+          </div>
+          <div className="DrawerBox">
+            <EditName_Time_Count foundItem={foundItem} value={NewGerichtStrings} setValue={setGerichtStrings} />
+          </div>
+          <div className="DrawerBox">
+            <EditPicture foundItem={foundItem} value={NewPicPath} setValue={setPicPath} />
+          </div>
+          <div className="DrawerBox">
+            <EditZutaten foundItem={foundItem} value={NewZutatenArr} setValue={setZutatenArr} />
+          </div>
+          <div className="DrawerBox">
+            <EditNewSteps foundItem={foundItem} value={NewStepsArr} setValue={setStepsArr} />
+          </div>
+        </Drawer>
+      )}
       <h3>No recipe selected for {globalState.selectedDate}. Please choose a recipe.</h3>
       <div className="CardBoxCollection">
         {globalState.data_catalog &&

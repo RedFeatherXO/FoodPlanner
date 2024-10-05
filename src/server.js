@@ -43,6 +43,37 @@ client
     process.exit(1);
   });
 
+  app.put("/api/UpdateRecipe/:id", async (req, res) => {
+    if (!db) return res.status(500).send("Database connection not established");
+    
+    try {
+      const recipeId_string = req.params.id;
+      const recipeId = new ObjectId(recipeId_string); // Umwandeln in ObjectId für MongoDB
+      
+      // Neue Rezeptdaten aus dem Request-Body
+      const updatedRecipe = req.body;
+  
+      // Hole die Rezepte-Kollektion
+      const Rezepte = db.collection("rezepte");
+  
+      // Aktualisiere das Rezept mit der entsprechenden ID
+      const result = await Rezepte.updateOne(
+        { _id: recipeId }, // Filter: Finde das Rezept mit der ID
+        { $set: updatedRecipe } // Setze die neuen Rezeptdaten
+      );
+  
+      // Überprüfe, ob das Rezept erfolgreich aktualisiert wurde
+      if (result.modifiedCount === 1) {
+        res.status(200).json({ message: "Recipe updated successfully", id: recipeId_string });
+      } else {
+        res.status(404).json({ message: "Recipe not found" });
+      }
+    } catch (error) {
+      console.error("Error updating recipe", error);
+      res.status(500).json({ message: "Internal Server Error" });
+    }
+  });
+
 app.delete("/api/DeleteRecipe/:id/:date", async (req, res) => {
   if (!db) return res.status(500).send("Database connection not established");
   try {

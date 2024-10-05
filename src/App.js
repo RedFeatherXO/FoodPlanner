@@ -37,7 +37,6 @@ export default function App() {
     const formattedDate = newDate.format("YYYY-MM-DD");
 
     updateSelectedDate(formattedDate);
-    console.log(formattedDate,globalState.data_choosen);
     forceUpdate();
   };
   
@@ -92,10 +91,10 @@ export default function App() {
         
 
         <Content className="content">
-          {!globalState.data_catalog ? (
+          {!globalState.data_catalog || !globalState.isServerAvailable ? (
             <Spin indicator={<LoadingOutlined style={{ fontSize: 33 }} spin />} />
           ) : (
-            !globalState.isRecipeAvailable || globalState.isServerAvailable ? (
+            !globalState.isRecipeAvailable ?(
               <div className="recipe-selection-menu">
                 {RecipeCardBox && <RecipeCardBox user={user} />}
               </div>
