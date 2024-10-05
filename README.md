@@ -15,13 +15,13 @@ node .\src\server.js
 # Start
 1. After 3 new test branches back to main to implement what i learned
 2. 
-
 ## Todo
-[] Store images in MongoDB or other
-[] Mobile website adjustments
-[] Account Usage. Currently the dev User is used so there is no functionality for Users Accounts
-[] Is a Recipe browser needed or is the browser when there is nothing choosen enough?
-[] Implemnet "View Details" (3 dots in the Recipe Browser) 
+- [x] Core functionalities implemented -> Site on Big Screen is usable 
+- [ ] Store images in MongoDB or other
+- [ ] Mobile website adjustments
+- [ ] Account Usage. Currently the dev User is used so there is no functionality for Users Accounts
+- [ ] Is a Recipe browser needed or is the browser when there is nothing chosen enough?
+- [ ] Implement "View Details" (3 dots in the Recipe Browser)
 
 ![Site Image](/DevGithub/WebsiteExample.png?raw=true "Site Image title")
 ![Site Image](/DevGithub/WebsiteExample2.png?raw=true "Site2 Image title")
