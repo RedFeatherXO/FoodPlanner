@@ -22,6 +22,7 @@ node .\src\server.js
 - [ ] Account Usage. Currently the dev User is used so there is no functionality for Users Accounts
 - [ ] Is a Recipe browser needed or is the browser when there is nothing chosen enough?
 - [ ] Implement "View Details" (3 dots in the Recipe Browser)
+- [ ] Maybe add security feature, idk never did anything in cyber sec.
 
 ![Site Image](/DevGithub/WebsiteExample_RecipeBrowser.png?raw=true "Recipe Browser")
 ![Site Image](/DevGithub/WebsiteExample_ChoosenRecipe.png?raw=true "Selected Recipe for Saturday")
