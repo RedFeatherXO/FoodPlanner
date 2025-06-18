@@ -14,9 +14,12 @@ export function useFetchData(url, pollingInterval = 50000, healthPollingInterval
   useEffect(() => {
     const checkServerStatus = async () => {
       try {
+        console.log("Checking server health...");
         const response = await fetch("/api/health");
+        console.log("Server health response:", response);
         updateServerHealth(response.ok);
       } catch (error) {
+        console.error("Error checking server health:", error);
         updateServerHealth(false);
       }
     };
@@ -31,6 +34,7 @@ export function useFetchData(url, pollingInterval = 50000, healthPollingInterval
     if (!globalState.isServerAvailable) return;
     setIsLoading(true);
     try {
+      console.log("Fetching data from server...");
       const query = `?name=dev`;
       const response_choosen = await fetch(`/api/Test2${query}`);
       const response_catalog = await fetch(`/api/GetRecipeCatalog`)

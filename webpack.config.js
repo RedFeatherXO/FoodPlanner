@@ -41,15 +41,15 @@ module.exports = {
     },
     compress: true,
     port: 9000,
-    open: true,
+    open: false,
     hot: true, //auto reload
     liveReload: false,
-    proxy: [
+    /*proxy: [
       {
         context: ["/api"],
         target: "http://localhost:3000",
       },
-    ],
+    ],*/
   },
   performance: {
     //https://stackoverflow.com/questions/49348365/webpack-4-size-exceeds-the-recommended-limit-244-kib
