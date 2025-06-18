@@ -25,3 +25,51 @@ node .\src\server.js
 
 ![Site Image](/DevGithub/WebsiteExample_RecipeBrowser.png?raw=true "Recipe Browser")
 ![Site Image](/DevGithub/WebsiteExample_ChoosenRecipe.png?raw=true "Selected Recipe for Saturday")
+ 
+```
+FoodWebsite
+├─ babel.config.json
+├─ basicsetup.txt
+├─ DevGithub
+│  ├─ WebsiteExample_ChoosenRecipe.png
+│  └─ WebsiteExample_RecipeBrowser.png
+├─ dist
+│  ├─ bundle.js
+│  ├─ bundle.js.LICENSE.txt
+│  ├─ images
+│  │  ├─ Placeholder.webp
+│  │  ├─ Placeholder2.webp
+│  │  ├─ Preview_1724375329639.webp
+│  │  ├─ Preview_1724643574655.jpg
+│  │  ├─ Preview_1724645234712.jpg
+│  │  ├─ Preview_1728141738252.jpg
+│  │  ├─ README.md
+│  │  └─ Spaghetti Bolognese.jpg
+│  └─ index.html
+├─ LICENSE
+├─ package-lock.json
+├─ package.json
+├─ README.md
+├─ src
+│  ├─ App.css
+│  ├─ App.js
+│  ├─ components
+│  │  ├─ DrawerFunc.js
+│  │  ├─ FetchData.js
+│  │  ├─ GerichtEdit.js
+│  │  ├─ GerichtUpload.js
+│  │  ├─ Mo.js
+│  │  ├─ RetrieveData.js
+│  │  ├─ SelectRecipeDay.js
+│  │  └─ Test.html
+│  ├─ context
+│  │  └─ GlobalStateContext.js
+│  ├─ index.css
+│  ├─ index.js
+│  ├─ server.js
+│  └─ Structure
+│     ├─ RecipeTemplate.json
+│     └─ UserTemplate.json
+└─ webpack.config.js
+
+```
