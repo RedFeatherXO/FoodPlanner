@@ -1,4 +1,6 @@
 const path = require("path");
+const webpack = require('webpack');
+require('dotenv').config({ path: './.env.local' });
 module.exports = {
   entry: "./src/index.js",
   mode: "development",
@@ -35,6 +37,12 @@ module.exports = {
       },
     ],
   },
+  // 3. Den 'plugins'-Abschnitt hinzufügen
+  plugins: [
+    new webpack.DefinePlugin({
+      'process.env.REACT_APP_SITE_PASSWORD': JSON.stringify(process.env.REACT_APP_SITE_PASSWORD)
+    })
+  ],
   devServer: {
     static: {
       directory: path.join(__dirname, "dist"),
